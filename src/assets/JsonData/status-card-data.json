@@ -1,0 +1,32 @@
+[
+  {
+    "icon": "bx bx-package",
+    "count": "201",
+    "title": "Daily Rides"
+  },
+  {
+    "icon": "bx bx-car",
+    "count": "1,995",
+    "title": "Total Rides"
+  },
+  {
+    "icon": "bx bx-calculator",
+    "count": "26",
+    "title": "Average Rides"
+  },
+  {
+    "icon": "bx bx-money",
+    "count": "$8,711",
+    "title": "Total Earnings"
+  },
+  {
+    "icon": "bx bx-dollar",
+    "count": "$832",
+    "title": "Total Commission"
+  },
+  {
+    "icon": "bx bx-minus-circle",
+    "count": "$2,868",
+    "title": "Net Income"
+  }
+]
