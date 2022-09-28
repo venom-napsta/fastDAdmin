@@ -36,8 +36,8 @@ function Signin() {
   const onSubmitHandler = async (data) => {
     console.log('sign in details', data);
     // auth.login(data.email, data.password);
-    dispatch(login(data));
-    // dispatch(loginStatusChange(true));
+    // dispatch(login(data));
+    dispatch(loginStatusChange(true));
     history.replace('/dashboard');
     reset();
   };
