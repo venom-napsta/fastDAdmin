@@ -1,23 +1,24 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useEffect } from 'react';
 
 import './topnav.css';
 
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
 import Dropdown from '../dropdown/Dropdown';
 
-import ThemeMenu from '../thememenu/ThemeMenu';
+// import ThemeMenu from '../thememenu/ThemeMenu';
 
 import notifications from '../../assets/JsonData/notification.json';
 
 import user_image from '../../assets/images/tuat.png';
 
-import user_menu from '../../assets/JsonData/user_menus.json';
-
-const curr_user = {
-  display_name: 'Napsta',
-  image: user_image,
-};
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  // getUserProfile,
+  loginStatusChange,
+  // logout,
+} from '../../features/slice/authSlice';
+import { Dropdown as DrpDwn } from 'flowbite-react/lib/esm/components/Dropdown';
 
 const renderNotificationItem = (item, index) => (
   <Fragment key={index}>
@@ -28,25 +29,26 @@ const renderNotificationItem = (item, index) => (
   </Fragment>
 );
 
-const renderUserToggle = (user) => (
-  <div className="topnav__right-user">
-    <div className="topnav__right-user__image">
-      <img src={user.image} alt="" />
-    </div>
-    <div className="topnav__right-user__name">{user.display_name}</div>
-  </div>
-);
-
-const renderUserMenu = (item, index) => (
-  <Link to="/" key={index}>
-    <div className="notification-item">
-      <i className={item.icon}></i>
-      <span>{item.content}</span>
-    </div>
-  </Link>
-);
-
 const Topnav = () => {
+  const dispatch = useDispatch();
+  const history = useHistory();
+  const { user } = useSelector((state) => state.auth);
+
+  useEffect(() => {
+    // if (user.token) {
+    //   dispatch(getUserProfile());
+    // }
+  }, [user, dispatch]);
+
+  const curr_user = {
+    display_name: 'Napsta',
+    image: user_image,
+  };
+  // redux/db
+  // const curr_user = {
+  //   display_name: user.displayName,
+  //   image: user.user_image,
+  // };
   return (
     <div className="topnav">
       <div className="bg-white-200">
@@ -59,11 +61,33 @@ const Topnav = () => {
       <div className="topnav__right">
         <div className="topnav__right-item">
           {/* dropdown here */}
-          <Dropdown
-            customToggle={() => renderUserToggle(curr_user)}
-            contentData={user_menu}
-            renderItems={(item, index) => renderUserMenu(item, index)}
-          />
+
+          <DrpDwn
+            color="inherit"
+            label={
+              <div className="topnav__right-user">
+                <div className="topnav__right-user__image">
+                  <img src={curr_user.image} alt="usr" />
+                </div>
+                <div className="topnav__right-user__name">
+                  {curr_user.display_name}
+                </div>
+              </div>
+            }
+          >
+            <Link to="/settings">
+              <DrpDwn.Item>Settings</DrpDwn.Item>
+            </Link>
+            <DrpDwn.Item
+              onClick={() => {
+                // dispatch(logout());
+                dispatch(loginStatusChange(false));
+                history.replace('/login');
+              }}
+            >
+              Sign out
+            </DrpDwn.Item>
+          </DrpDwn>
         </div>
         <div className="topnav__right-item">
           <Dropdown
@@ -78,9 +102,10 @@ const Topnav = () => {
             )}
           />
         </div>
+        {/* 
         <div className="topnav__right-item">
           <ThemeMenu />
-        </div>
+        </div> */}
       </div>
     </div>
   );

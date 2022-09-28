@@ -11,18 +11,15 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 
 import { login, loginStatusChange } from '../features/slice/authSlice';
-import auth from '../services/authService';
+// import auth from '../services/authService';
 
 import logo from '../assets/Logo.png';
-import logger from '../services/logService';
-import { toast } from 'react-toastify';
-// import axios from 'axios';
 
 function Signin() {
   const dispatch = useDispatch();
   const history = useHistory();
 
-  const { user, isAuthD, loading, error } = useSelector((state) => state.user);
+  const { user, isAuthD, loading, error } = useSelector((state) => state.auth);
 
   const schema = yup.object().shape({
     email: yup.string().email().required(),
@@ -38,20 +35,24 @@ function Signin() {
   /* Form Sublmision */
   const onSubmitHandler = async (data) => {
     console.log('sign in details', data);
+    // auth.login(data.email, data.password);
     dispatch(login(data));
-    // reset();
+    // dispatch(loginStatusChange(true));
+    history.replace('/dashboard');
+    reset();
   };
   // console.log("form err", errors);
 
-  // useEffect(() => {
-  //   if (isAuthD) {
-  //     console.log('User Logged In', user);
-  //   }
+  useEffect(() => {
+    if (isAuthD) {
+      console.log('User Logged In', user);
+      // <Redirect to={'/dashboard'} />;
+      history.replace('/dashboard');
+      // window.location.pathname = '/dashboard';
+    }
 
-  //   if (!isAuthD) {
-  //     history.push('/login');
-  //   }
-  // }, [isAuthD, user, loading, error, history]);
+    // if(isAuthD) &&<Redirect to={'/dashboard'} />;
+  }, [isAuthD, user, loading, error, history]);
 
   return (
     <div className="mx-auto flex min-h-screen w-full items-center justify-center bg-[#f3f3f3]">
@@ -96,8 +97,10 @@ function Signin() {
             <small className="text-red-600">{errors.password?.message}</small>
           </div>
 
+          {error && <p className="text-red-600 mb-5">{error}</p>}
           <button
             type="submit"
+            disabled={loading}
             className="button w-full transform rounded-md bg-[#010080] py-2 font-bold duration-300 hover:text-[#FF6D1C]"
           >
             LOG IN

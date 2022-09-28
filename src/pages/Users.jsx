@@ -6,6 +6,14 @@ import Table from '../components/table/Table';
 import Dropdown from '../components/dropdown/Dropdown';
 
 import userList from '../assets/JsonData/users.json';
+import { Dropdown as DrpDwn } from 'flowbite-react/lib/esm/components/Dropdown';
+import { useDispatch } from 'react-redux';
+
+import {
+  filterUserProfile,
+  // getAllUsers,
+  // searchUserProfile,
+} from '../features/slice/userSlice';
 
 const renderHead = (item, index) => <th key={index}>{item}</th>;
 
@@ -60,6 +68,9 @@ function Users() {
     },
   ];
 
+  const dispatch = useDispatch();
+  // const { users, loading, error } = useSelector((state) => state.user);
+
   return (
     <div>
       <div className="flex">
@@ -80,6 +91,25 @@ function Users() {
                     contentData={filterCriteria}
                     renderItems={(item, index) => renderMenu(item, index)}
                   />
+                  <DrpDwn
+                    color="inherit"
+                    label={
+                      <div className="topnav__right-user">
+                        <i className="fa fa-filter" />
+                      </div>
+                    }
+                  >
+                    <Link to="/settings">
+                      <DrpDwn.Item>Zimbabwe</DrpDwn.Item>
+                    </Link>
+                    <DrpDwn.Item
+                      onClick={() => {
+                        dispatch(filterUserProfile('criteria'));
+                      }}
+                    >
+                      South Africa
+                    </DrpDwn.Item>
+                  </DrpDwn>
                 </div>
 
                 <div className="topnav__search">

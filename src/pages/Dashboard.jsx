@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, Redirect, useHistory } from 'react-router-dom';
 import Chart from 'react-apexcharts';
 
 import StatusCard from '../components/status-card/StatusCard';
@@ -165,8 +165,17 @@ const renderdriverBody = (item, index) => (
 );
 
 const Dashboard = () => {
-  // const themeReducer = useSelector((state) => state.ThemeReducer.mode);
+  const { user, isAuthD, loading, error } = useSelector((state) => state.auth);
   const history = useHistory();
+
+  if (!isAuthD) {
+  }
+  useEffect(() => {
+    if (!isAuthD) {
+      history.replace('/login');
+    }
+  }, [isAuthD, user, loading, error, history]);
+  // const themeReducer = useSelector((state) => state.ThemeReducer.mode);
   return (
     <div>
       <h2 className="page-header">Dashboard</h2>

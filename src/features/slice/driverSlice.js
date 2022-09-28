@@ -1,18 +1,17 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
+import http from '../../services/httpService';
 
-const baseURL = 'http://194.163.132.169:5000';
+// const baseURL = 'http://194.163.132.169:5000';
 
 // Get All Drivers /drivers  GET
-export const getDrivers = createAsyncThunk(
-  'driver/AllDrivers',
-  async ({ data }, { rejectWithValue }) => {
+export const getAllDrivers = createAsyncThunk(
+  'driver/getAllDrivers',
+  async ({ rejectWithValue }) => {
     try {
-      const res = await axios.get(`${baseURL}/drivers}`, { data });
+      const res = await http.get(`/drivers}`);
       return res.data;
     } catch (error) {
       console.log(error);
-      // toast ..
       return rejectWithValue(error);
     }
   }
@@ -20,14 +19,13 @@ export const getDrivers = createAsyncThunk(
 
 // Get Driver By Id /driver/":"driverId GET
 export const getDriver = createAsyncThunk(
-  'driver/DriverById',
+  'driver/getDriverById',
   async ({ id }, { rejectWithValue }) => {
     try {
-      const res = await axios.get(`${baseURL}/drivers/${id}}`);
+      const res = await http.get(`/drivers/${id}`);
       return res.data;
     } catch (error) {
       console.log(error);
-      // toast ..
       return rejectWithValue(error);
     }
   }
@@ -36,88 +34,132 @@ export const getDriver = createAsyncThunk(
 // Add Driver Veichles ---> driver/":"driverId/vehicles POST
 export const addDriver = createAsyncThunk(
   'driver/addDriverVehicles',
-  async ({ id, data }, { rejectWithValue }) => {
+  async ({ driverId, data }, { rejectWithValue }) => {
     try {
-      const res = await axios.post(`${baseURL}/drivers/${id}/vehicles}`, {
+      const res = await http.post(`/drivers/${driverId}/vehicles}`, {
+        driverId,
         data,
       });
       return res.data;
     } catch (error) {
       console.log(error);
-      // toast ..
       return rejectWithValue(error);
     }
   }
 );
 
-// Get Driver By Id /driver/":"driverId GET
+// Get Driver Vehicles By Id /driver/":"driverId GET
 export const getDriverVehicles = createAsyncThunk(
   'driver/getDriverVehicles',
-  async ({ id, data }, { rejectWithValue }) => {
+  async ({ driverId }, { rejectWithValue }) => {
     try {
-      const res = await axios.get(`${baseURL}/drivers/${id}/vehicles}`);
+      const res = await http.get(`/drivers/${driverId}/vehicles}`);
       return res.data;
     } catch (error) {
       console.log(error);
-      // toast ..
       return rejectWithValue(error);
     }
   }
 );
 
-export const getDriverDocs = createAsyncThunk(
-  'driver/getDriverVehicles',
+export const getDriverDocuments = createAsyncThunk(
+  'driver/getDriverDocuments',
   async ({ id, data }, { rejectWithValue }) => {
     try {
-      const res = await axios.get(`${baseURL}/drivers/${id}/documents}`);
+      const res = await http.get(`/driver/${id}/documents}`);
       return res.data;
     } catch (error) {
       console.log(error);
-      // toast ..
-      return rejectWithValue(error);
-    }
-  }
-);
-
-export const getDriverVehiclesId = createAsyncThunk(
-  'driver/getDriverVehicles',
-  async ({ id, data }, { rejectWithValue }) => {
-    try {
-      const res = await axios.get(`${baseURL}/drivers/${id}/vehicles}`);
-      return res.data;
-    } catch (error) {
-      console.log(error);
-      // toast ..
       return rejectWithValue(error);
     }
   }
 );
 
 const driverSlice = createSlice({
-  name: 'driver',
+  name: 'drivers',
   initialState: {
     driver: {},
+    drivers: [],
+    documents: [],
     loading: false,
     error: null,
   },
   reducers: {
-    // Reducers eg Filtering
+    // search driver
+    searchDriver(state, { payload }) {
+      const updatedDrivers = state.users.map((driver) =>
+        driver._id === payload._id ? payload : driver
+      );
+      state.users = updatedDrivers;
+    },
   },
   extraReducers: {
-    [getDriver.pending]: (state, action) => {
+    // get drivers
+    [getAllDrivers.pending]: (state) => {
+      state.loading = true;
+    },
+    [getAllDrivers.fulfilled]: (state, action) => {
+      state.loading = false;
+      state.drivers = action.payload;
+    },
+    [getAllDrivers.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+
+    // get driver
+    [getDriver.pending]: (state) => {
       state.loading = true;
     },
     [getDriver.fulfilled]: (state, action) => {
       state.loading = false;
-      state.user = { email: 'napsta@nap.sta' };
-      // state.user = action.payload;
+      state.driver = action.payload;
     },
     [getDriver.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+
+    // add driver
+    [addDriver.pending]: (state) => {
       state.loading = true;
+    },
+    [addDriver.fulfilled]: (state, action) => {
+      state.loading = false;
+      state.driver = action.payload;
+    },
+    [addDriver.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+
+    // get driver vehicles
+    [getDriverVehicles.pending]: (state) => {
+      state.loading = true;
+    },
+    [getDriverVehicles.fulfilled]: (state, action) => {
+      state.loading = false;
+      state.driver = action.payload;
+    },
+    [getDriverVehicles.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+
+    // get driver documents
+    [getDriverDocuments.pending]: (state) => {
+      state.loading = true;
+    },
+    [getDriverDocuments.fulfilled]: (state, action) => {
+      state.loading = false;
+      state.documents = action.payload;
+    },
+    [getDriverDocuments.rejected]: (state, action) => {
+      state.loading = false;
       state.error = action.payload;
     },
   },
 });
 
-export const { logout, loginStatus, loginStatusChange } = driverSlice.actions;
+export const { searchDriver } = driverSlice.actions;
 export default driverSlice.reducer;

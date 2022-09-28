@@ -6,13 +6,19 @@ import Sidebar from '../sidebar/Sidebar';
 import TopNav from '../topnav/TopNav';
 import Routes from '../Routes';
 
-import { BrowserRouter, Route, Switch, useHistory } from 'react-router-dom';
+import {
+  BrowserRouter,
+  Redirect,
+  Route,
+  Switch,
+  useHistory,
+} from 'react-router-dom';
 
 import { useSelector, useDispatch } from 'react-redux';
 
 // import ThemeAction from '../../redux/actions/ThemeAction';
 import Signin from '../../pages/Signin';
-// import NotFound from '../../pages/NotFound';
+import NotFound from '../../pages/NotFound';
 
 const Layout = () => {
   // const themeReducer = useSelector((state) => state.ThemeReducer);
@@ -30,17 +36,19 @@ const Layout = () => {
   //   dispatch(ThemeAction.setColor(colorClass));
   // }, [dispatch]);
 
-  const { user, isAuthD, loading, error } = useSelector((state) => state.user);
+  const { user, isAuthD, loading, error } = useSelector((state) => state.auth);
 
   useEffect(() => {
     if (!isAuthD) {
-      history.push('/login');
+      <Redirect to="/login" push />;
     }
   }, [isAuthD, user, loading, error, history]);
+
   return (
     <BrowserRouter>
       <Switch>
         <Route
+          exact
           path="/login"
           render={(props) => (
             <div>
@@ -48,8 +56,9 @@ const Layout = () => {
             </div>
           )}
         />
-        {/* <Route path="*" component={NotFound} /> */}
+
         <Route
+          exact
           render={(props) => (
             <div className={`layout theme-mode-light theme-mode-light`}>
               <Sidebar {...props} />
@@ -62,6 +71,7 @@ const Layout = () => {
             </div>
           )}
         />
+        <Route path="*" component={NotFound} />
       </Switch>
     </BrowserRouter>
   );

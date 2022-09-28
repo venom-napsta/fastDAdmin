@@ -1,8 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
-
+import { toast } from 'react-toastify';
 import http from '../../services/httpService';
-// const baseURL = 'http://194.163.132.169:5000';
 
 export const login = createAsyncThunk(
   'auth/Login',
@@ -13,8 +11,8 @@ export const login = createAsyncThunk(
       },
     };
     try {
-      const { data } = await axios.post(
-        '/auth/login',
+      const { data } = await http.post(
+        'auth/login',
         {
           email,
           password,
@@ -25,27 +23,39 @@ export const login = createAsyncThunk(
       localStorage.setItem('user', JSON.stringify(data));
       return data;
     } catch (error) {
-      console.log(error);
-      // toast ..
-      return rejectWithValue(error);
+      console.log('Redux Res', error);
+      toast(`Bammer! ${error.response.data.errors.message}`);
+      return rejectWithValue(error.response.data.errors.message);
     }
   }
 );
 
-// // Get User Profile /profile GET
-// export const getUserProfile = createAsyncThunk(
-//   'get/UserProfile',
-//   async ({ rejectWithValue }) => {
-//     try {
-//       const response = await axios.get(`${baseURL}/profile`);
-//       return response.data;
-//     } catch (error) {
-//       console.log('Request Error', error.message);
-//       return rejectWithValue(error.response.data);
-//     }
-//   }
-// );
+// Get User Profile /profile GET
+export const getUserProfile = createAsyncThunk(
+  'auth/getUserProfile',
+  async (arg, { getState, rejectWithValue }) => {
+    try {
+      // get user data from store
+      const { user } = getState();
+      // config headers
+      const config = {
+        headers: {
+          Authorization: `Bearer ${user.userToken}`,
+        },
+      };
+      const { data } = await http.get(`/profile`, config);
+      return data;
+    } catch (error) {
+      console.log('Request Error', error.message);
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
 
+// initialize userToken from local storage
+// const userToken = localStorage.getItem('userToken')
+//   ? localStorage.getItem('userToken')
+//   : null
 const authSlice = createSlice({
   name: 'auth',
   initialState: {
@@ -59,24 +69,40 @@ const authSlice = createSlice({
       state.user = JSON.parse(localStorage.getItem('fastd_auth_token'));
     },
     logout: (state, action) => {
-      // state.user = null;
+      state.isAuthD = false;
+      // window.location.pathname = '/login';
       // localStorage.removeItem('token');
     },
+    // fake login
     loginStatusChange: (state, action) => {
       state.isAuthD = action.payload;
     },
   },
   extraReducers: {
-    [login.pending]: (state, action) => {
+    [login.pending]: (state) => {
       state.loading = true;
     },
     [login.fulfilled]: (state, { payload }) => {
       state.loading = false;
       state.user = payload;
+      state.isAuthD = true;
     },
-    [login.rejected]: (state, action) => {
+    [login.rejected]: (state, { payload }) => {
       state.loading = false;
-      state.error = action.payload;
+      state.error = payload;
+    },
+
+    // get user profile
+    [getUserProfile.pending]: (state) => {
+      state.loading = true;
+    },
+    [getUserProfile.fulfilled]: (state, { payload }) => {
+      state.loading = false;
+      state.user = payload;
+    },
+    [getUserProfile.rejected]: (state, { payload }) => {
+      state.loading = false;
+      state.error = payload;
     },
   },
 });

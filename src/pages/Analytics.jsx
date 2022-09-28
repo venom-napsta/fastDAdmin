@@ -52,7 +52,7 @@ const chartOptions = {
 };
 
 const Analytics = () => {
-  const themeReducer = useSelector((state) => state.ThemeReducer.mode);
+  // const themeReducer = useSelector((state) => state.ThemeReducer.mode);
   const history = useHistory();
   return (
     <div>
@@ -74,7 +74,7 @@ const Analytics = () => {
         <div onClick={() => history.push('/analytics')} className="col-12">
           <div className="card full-height">
             {/* chart */}
-            <Chart
+            {/* <Chart
               options={
                 themeReducer === 'theme-mode-dark'
                   ? {
@@ -89,7 +89,7 @@ const Analytics = () => {
               series={chartOptions.series}
               type="line"
               height="100%"
-            />
+            /> */}
           </div>
         </div>
       </div>

@@ -1,66 +1,73 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
-import { Profiler } from 'react';
+import http from '../../services/httpService';
 
-const baseURL = 'http://194.163.132.169:5000';
-
-// Users Get
-export const login = createAsyncThunk(
-  'users/Login',
-  async ({ rejectWithValue }) => {
+// Get Users
+export const getAllUsers = createAsyncThunk(
+  'users/getAllUsers',
+  async ({ userId }, { rejectWithValue }) => {
     try {
-      const res = await axios.post(`${baseURL}/users}`);
+      const res = await http.get(`/users/${userId}`);
       return res.data;
     } catch (error) {
       console.log(error);
-      // toast ..
       return rejectWithValue(error);
     }
   }
 );
 
-// Get User /user GET
-export const getUserProfile = createAsyncThunk(
-  'get/UserProfile',
-  async ({ rejectWithValue }) => {
-    try {
-      const response = await axios.get(`${baseURL}/profile`);
-      return response.data;
-    } catch (error) {
-      console.log('Request Error', error.message);
-      return rejectWithValue(error.response.data);
-    }
-  }
-);
+// // Get User /user GET
+// export const getUserProfile = createAsyncThunk(
+//   'users/getUserProfile',
+//   async ({ rejectWithValue }) => {
+//     try {
+//       const response = await http.get(`/profile`);
+//       return response.data;
+//     } catch (error) {
+//       console.log('Request Error', error.message);
+//       return rejectWithValue(error.response.data);
+//     }
+//   }
+// );
 
-const authSlice = createSlice({
-  name: 'user',
+const userSlice = createSlice({
+  name: 'users',
   initialState: {
-    user: {},
-    isAuthD: false,
+    users: [],
     loading: false,
     error: null,
   },
   reducers: {
-    getUserProfile: (state) => {
-      state.user = JSON.parse(localStorage.getItem('fastd_auth_token'));
+    // filter users
+    filterUserProfile(state, { payload }) {
+      const updatedUsers = state.users.map((user) =>
+        user._id !== payload._id ? payload : user
+      );
+      state.users = updatedUsers;
+    },
+
+    // search user
+    searchUserProfile(state, { payload }) {
+      const updatedUsers = state.users.map((user) =>
+        user._id === payload._id ? payload : user
+      );
+      state.users = updatedUsers;
     },
   },
+
   extraReducers: {
-    [getUserProfile.pending]: (state, action) => {
+    [getAllUsers.pending]: (state, action) => {
       state.loading = true;
     },
-    [getUserProfile.fulfilled]: (state, action) => {
+    [getAllUsers.fulfilled]: (state, action) => {
       state.loading = false;
-      state.user = { email: 'napsta@nap.sta' };
-      // state.user = action.payload;
+      state.users = action.payload;
     },
-    [getUserProfile.rejected]: (state, action) => {
-      state.loading = true;
+    [getAllUsers.rejected]: (state, action) => {
+      state.loading = false;
       state.error = action.payload;
     },
   },
 });
 
-export const { logout, loginStatus, loginStatusChange } = authSlice.actions;
-export default authSlice.reducer;
+export const { filterUserProfile, searchUserProfile } = userSlice.actions;
+export default userSlice.reducer;
