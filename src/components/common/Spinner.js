@@ -1,14 +1,12 @@
 import React from 'react';
-import spinner from './spinner.gif';
+// import spinner from './spinner.gif';
 
 const Spinner = () => (
-  <>
-    <img
-      src={spinner}
-      alt="Loading..."
-      style={{ width: '200px', margin: 'auto', display: 'block' }}
-    />
-  </>
+  <div className="flex flex-col gap-2">
+    <div className="text-center">
+      <Spinner aria-label="Center-aligned spinner example" />
+    </div>
+  </div>
 );
 
 export default Spinner;

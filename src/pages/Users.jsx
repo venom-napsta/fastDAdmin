@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { FaEdit, FaTrashAlt } from 'react-icons/fa';
 
@@ -6,6 +6,10 @@ import Table from '../components/table/Table';
 
 import { Dropdown as DrpDwn } from 'flowbite-react/lib/esm/components/Dropdown';
 import { useDispatch, useSelector } from 'react-redux';
+import { getAllUsers, saveUsers } from '../features/slice/userSlice';
+import Spinner from '../components/common/Spinner';
+import http from '../services/httpService';
+// import { Table as TableComponent } from 'flowbite-react/lib/esm/components/Table';
 
 /* import {
   // getAllUsers,
@@ -41,22 +45,51 @@ const renderBody = (item, index) => (
 
 const userTableHead = ['id', 'Name', 'email', 'contact', 'is_verified', 'role'];
 function Users() {
-  // const dispatch = useDispatch();
-  const { users } = useSelector((state) => state.users);
-
   function handleFilter(nyika) {
     console.log(users.filter((user) => user.country === nyika));
   }
 
   const { userInfo, userToken, loading } = useSelector((state) => state.auth);
+  const {
+    users,
+    loading: userLoading,
+    error: userError,
+  } = useSelector((state) => state.users);
   const history = useHistory();
   const dispatch = useDispatch();
 
+  const [usrLoading, setUsrLoading] = useState(true);
+
   useEffect(() => {
+    http
+      .get('/users')
+      .then(({ data }) => {
+        console.log('Axios data', data.data);
+        dispatch(saveUsers(data.data));
+        // setUserList(data.data);
+      })
+      .catch((err) => {
+        console.log('axios err', err);
+      })
+      .finally(() => setUsrLoading(false));
+  });
+
+  useEffect(() => {
+    // dispatch(getAllUsers());
     if (!userToken) {
       history.replace('/login');
     }
-  }, [loading, userInfo, userToken, history]);
+  }, [loading, userInfo, users, userToken, history, dispatch]);
+
+  if (usrLoading) {
+    return (
+      <div className="flex flex-col gap-2">
+        <div className="text-center">
+          <Spinner size="xl" aria-label="Center-aligned spinner example" />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div>

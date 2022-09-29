@@ -15,6 +15,7 @@ import user_image from '../../assets/images/tuat.png';
 import { useDispatch, useSelector } from 'react-redux';
 import { getUserProfile, logout } from '../../features/slice/authSlice';
 import { Dropdown as DrpDwn } from 'flowbite-react/lib/esm/components/Dropdown';
+import { Avatar } from 'flowbite-react/lib/cjs/components/Avatar';
 
 const renderNotificationItem = (item, index) => (
   <Fragment key={index}>
@@ -32,12 +33,12 @@ const Topnav = () => {
 
   useEffect(() => {
     if (userToken) {
-      dispatch(getUserProfile());
+      // dispatch(getUserProfile());
     }
   }, [userToken, dispatch]);
 
   const curr_user = {
-    display_name: 'Napsta',
+    display_name: userInfo.firstname,
     image: user_image,
   };
   // redux/db
@@ -63,7 +64,8 @@ const Topnav = () => {
             label={
               <div className="topnav__right-user">
                 <div className="topnav__right-user__image">
-                  <img src={curr_user.image} alt="usr" />
+                  <Avatar rounded />
+                  {/* <img src={curr_user.image} alt="usr" /> */}
                 </div>
                 <div className="topnav__right-user__name">
                   {curr_user.display_name}

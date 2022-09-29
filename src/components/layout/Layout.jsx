@@ -6,25 +6,17 @@ import Sidebar from '../sidebar/Sidebar';
 import TopNav from '../topnav/TopNav';
 import Routes from '../Routes';
 
-import {
-  BrowserRouter,
-  Redirect,
-  Route,
-  Switch,
-  useHistory,
-} from 'react-router-dom';
+import { BrowserRouter, Route, Switch, useHistory } from 'react-router-dom';
 
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 // import ThemeAction from '../../redux/actions/ThemeAction';
 import Signin from '../../pages/Signin';
 import NotFound from '../../pages/NotFound';
-import PrivateRoute from '../../PrivateRoute';
 
 const Layout = () => {
   // const themeReducer = useSelector((state) => state.ThemeReducer);
 
-  const dispatch = useDispatch();
   const history = useHistory();
 
   // useEffect(() => {

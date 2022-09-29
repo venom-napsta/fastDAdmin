@@ -5,6 +5,7 @@ import { Link, useHistory } from 'react-router-dom';
 import Table from '../components/table/Table';
 import Dropdown from '../components/dropdown/Dropdown';
 import { useDispatch, useSelector } from 'react-redux';
+import { getAllDrivers } from '../features/slice/driverSlice';
 
 const renderUserToggle = (user) => (
   <div className="topnav__right-user">
@@ -242,6 +243,7 @@ const Transactions = () => {
   ];
 
   const { userInfo, userToken, loading } = useSelector((state) => state.auth);
+
   const history = useHistory();
   const dispatch = useDispatch();
 

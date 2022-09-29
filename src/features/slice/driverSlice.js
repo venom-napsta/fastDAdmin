@@ -10,7 +10,7 @@ export const getAllDrivers = createAsyncThunk(
   async (id = null, { rejectWithValue }) => {
     try {
       const res = await http.get(`/drivers`);
-      console.log('res drvr', res);
+      console.log('res drvr', res.data);
       return res.data;
     } catch (error) {
       console.log(error);
@@ -81,12 +81,15 @@ const driverSlice = createSlice({
   name: 'drivers',
   initialState: {
     driver: {},
-    drivers: driverList,
+    drivers: [],
     documents: [],
     loading: false,
     error: null,
   },
   reducers: {
+    saveDrivers(state, { payload }) {
+      state.drivers = payload;
+    },
     // search driver
     searchDriver(state, { payload }) {
       const updatedDrivers = state.drivers.map((driver) =>
@@ -163,5 +166,5 @@ const driverSlice = createSlice({
   },
 });
 
-export const { searchDriver } = driverSlice.actions;
+export const { searchDriver, saveDrivers } = driverSlice.actions;
 export default driverSlice.reducer;

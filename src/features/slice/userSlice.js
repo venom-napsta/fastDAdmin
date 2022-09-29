@@ -1,14 +1,13 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import http from '../../services/httpService';
-import userList from '../../assets/JsonData/users.json';
 
 // Get Users
 export const getAllUsers = createAsyncThunk(
   'users/getAllUsers',
   async (arg, { rejectWithValue }) => {
     try {
-      const res = await http.get(`/users/`);
-      return res.data;
+      const res = await http.get(`/users`);
+      return res.data.data;
     } catch (error) {
       console.log(error);
       return rejectWithValue(error);
@@ -33,11 +32,14 @@ export const getAllUsers = createAsyncThunk(
 const userSlice = createSlice({
   name: 'users',
   initialState: {
-    users: userList,
+    users: [],
     loading: false,
     error: null,
   },
   reducers: {
+    saveUsers(state, { payload }) {
+      state.users = payload;
+    },
     // filter users
     filterUserProfile(state, { payload }) {
       const updatedUsers = state.users.map((user) =>
@@ -70,5 +72,6 @@ const userSlice = createSlice({
   },
 });
 
-export const { filterUserProfile, searchUserProfile } = userSlice.actions;
+export const { filterUserProfile, saveUsers, searchUserProfile } =
+  userSlice.actions;
 export default userSlice.reducer;

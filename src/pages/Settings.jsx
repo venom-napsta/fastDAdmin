@@ -12,7 +12,31 @@ function Settings() {
       history.replace('/login');
     }
   }, [loading, userInfo, userToken, history]);
-  return <div>Settings</div>;
+  return (
+    <div>
+      <h2 className="page-header">Dashboard</h2>
+      <div className="row">
+        <div className="col-12">
+          <div className="col-6">
+            <div className="card">
+              <div className="card__header">
+                <h3>top Drivers</h3>
+              </div>
+              <div className="card__body"></div>
+            </div>
+          </div>
+          <div className="col-6">
+            <div className="card">
+              <div className="card__header">
+                <h3>top Drivers</h3>
+              </div>
+              <div className="card__body"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 export default Settings;
