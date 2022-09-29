@@ -19,7 +19,10 @@ export default configureStore({
     trans: transactionSlice,
   },
 
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+    }).concat(logger),
 
   // middleware: [
   //   // (getDefaultMiddleware) => getDefaultMiddleware().concat(ReduxLogger),

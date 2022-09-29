@@ -13,11 +13,7 @@ import notifications from '../../assets/JsonData/notification.json';
 import user_image from '../../assets/images/tuat.png';
 
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  // getUserProfile,
-  loginStatusChange,
-  // logout,
-} from '../../features/slice/authSlice';
+import { getUserProfile, logout } from '../../features/slice/authSlice';
 import { Dropdown as DrpDwn } from 'flowbite-react/lib/esm/components/Dropdown';
 
 const renderNotificationItem = (item, index) => (
@@ -32,13 +28,13 @@ const renderNotificationItem = (item, index) => (
 const Topnav = () => {
   const dispatch = useDispatch();
   const history = useHistory();
-  const { user } = useSelector((state) => state.auth);
+  const { userInfo, userToken } = useSelector((state) => state.auth);
 
   useEffect(() => {
-    // if (user.token) {
-    //   dispatch(getUserProfile());
-    // }
-  }, [user, dispatch]);
+    if (userToken) {
+      dispatch(getUserProfile());
+    }
+  }, [userToken, dispatch]);
 
   const curr_user = {
     display_name: 'Napsta',
@@ -81,8 +77,7 @@ const Topnav = () => {
             <DrpDwn.Item
               onClick={() => {
                 // dispatch(logout());
-                dispatch(loginStatusChange(false));
-                history.replace('/login');
+                dispatch(logout());
               }}
             >
               Sign out

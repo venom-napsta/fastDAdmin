@@ -1,18 +1,20 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import http from '../../services/httpService';
-
+// import customerList from '../ ../assets/JsonData/customers-list.json';
+import driverList from '../../assets/JsonData/customers-list.json';
 // const baseURL = 'http://194.163.132.169:5000';
 
 // Get All Drivers /drivers  GET
 export const getAllDrivers = createAsyncThunk(
   'driver/getAllDrivers',
-  async ({ rejectWithValue }) => {
+  async (id = null, { rejectWithValue }) => {
     try {
-      const res = await http.get(`/drivers}`);
+      const res = await http.get(`/drivers`);
+      console.log('res drvr', res);
       return res.data;
     } catch (error) {
       console.log(error);
-      return rejectWithValue(error);
+      return rejectWithValue(error.response.data.errors.message);
     }
   }
 );
@@ -26,7 +28,7 @@ export const getDriver = createAsyncThunk(
       return res.data;
     } catch (error) {
       console.log(error);
-      return rejectWithValue(error);
+      return rejectWithValue(error.response.data);
     }
   }
 );
@@ -43,7 +45,7 @@ export const addDriver = createAsyncThunk(
       return res.data;
     } catch (error) {
       console.log(error);
-      return rejectWithValue(error);
+      return rejectWithValue(error.response.data);
     }
   }
 );
@@ -57,7 +59,7 @@ export const getDriverVehicles = createAsyncThunk(
       return res.data;
     } catch (error) {
       console.log(error);
-      return rejectWithValue(error);
+      return rejectWithValue(error.response.data);
     }
   }
 );
@@ -70,7 +72,7 @@ export const getDriverDocuments = createAsyncThunk(
       return res.data;
     } catch (error) {
       console.log(error);
-      return rejectWithValue(error);
+      return rejectWithValue(error.response.data);
     }
   }
 );
@@ -79,7 +81,7 @@ const driverSlice = createSlice({
   name: 'drivers',
   initialState: {
     driver: {},
-    drivers: [],
+    drivers: driverList,
     documents: [],
     loading: false,
     error: null,
@@ -87,10 +89,10 @@ const driverSlice = createSlice({
   reducers: {
     // search driver
     searchDriver(state, { payload }) {
-      const updatedDrivers = state.users.map((driver) =>
-        driver._id === payload._id ? payload : driver
+      const updatedDrivers = state.drivers.map((driver) =>
+        driver._id === payload._id ? payload : state.drivers
       );
-      state.users = updatedDrivers;
+      state.drivers = updatedDrivers;
     },
   },
   extraReducers: {

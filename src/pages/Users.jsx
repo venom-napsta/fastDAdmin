@@ -3,74 +3,50 @@ import { Link } from 'react-router-dom';
 import { FaEdit, FaTrashAlt } from 'react-icons/fa';
 
 import Table from '../components/table/Table';
-import Dropdown from '../components/dropdown/Dropdown';
 
-import userList from '../assets/JsonData/users.json';
 import { Dropdown as DrpDwn } from 'flowbite-react/lib/esm/components/Dropdown';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
-import {
-  filterUserProfile,
+/* import {
   // getAllUsers,
   // searchUserProfile,
-} from '../features/slice/userSlice';
+} from '../features/slice/userSlice'; */
 
 const renderHead = (item, index) => <th key={index}>{item}</th>;
 
 const renderBody = (item, index) => (
   <tr key={index}>
     <td>{item.id}</td>
-    <td>{item.name}</td>
+    <td>
+      {item.firstname}&nbsp;{item.lastname}
+    </td>
     <td>{item.email}</td>
-    <td>{item.phone}</td>
-    <td>{item.userType}</td>
-    <tr>
+    <td>{item.contact}</td>
+    <td>{item.is_verified}</td>
+    <td>{item.role}</td>
+    <>
       {
-        <tr>
+        <>
           <td>
             <FaEdit color="green" size={20} />
           </td>
           <td>
             <FaTrashAlt color="brown" size={20} />
           </td>
-        </tr>
+        </>
       }
-    </tr>
+    </>
   </tr>
 );
 
-const renderUserToggle = () => (
-  <div className="topnav__right-user">
-    <button className="button">
-      <i className="bx bx-filter"></i>&nbsp;Filter
-    </button>
-  </div>
-);
-
-const renderMenu = (item, index) => (
-  <Link to="/" key={index}>
-    <div className="notification-item">
-      {/* <i className={item.icon}></i> */}
-      <span>{item.content}</span>
-    </div>
-  </Link>
-);
-const userTableHead = ['', 'name', 'email', 'phone', 'Type', 'Action'];
+const userTableHead = ['id', 'Name', 'email', 'contact', 'is_verified', 'role'];
 function Users() {
-  const filterCriteria = [
-    {
-      icon: 'fa fa-heart',
-      content: 'Zimbabwe',
-    },
-    {
-      icon: 'bx bx-cog',
-      content: 'South Africa',
-    },
-  ];
+  // const dispatch = useDispatch();
+  const { users } = useSelector((state) => state.users);
 
-  const dispatch = useDispatch();
-  // const { users, loading, error } = useSelector((state) => state.user);
-
+  function handleFilter(nyika) {
+    console.log(users.filter((user) => user.country === nyika));
+  }
   return (
     <div>
       <div className="flex">
@@ -86,30 +62,33 @@ function Users() {
               <div className="filter">
                 <div className="topnav__right-item">
                   {/* dropdown here */}
-                  <Dropdown
-                    customToggle={() => renderUserToggle(filterCriteria)}
-                    contentData={filterCriteria}
-                    renderItems={(item, index) => renderMenu(item, index)}
-                  />
-                  <DrpDwn
-                    color="inherit"
-                    label={
-                      <div className="topnav__right-user">
-                        <i className="fa fa-filter" />
-                      </div>
-                    }
+
+                  <div
+                    style={{
+                      backgroundColor: '#455560',
+                      color: 'white',
+                      padding: '8px',
+                      borderRadius: '50px',
+                    }}
+                    className="dropdown dropdown__toggle"
                   >
-                    <Link to="/settings">
-                      <DrpDwn.Item>Zimbabwe</DrpDwn.Item>
-                    </Link>
-                    <DrpDwn.Item
-                      onClick={() => {
-                        dispatch(filterUserProfile('criteria'));
-                      }}
+                    <DrpDwn
+                      color="inherit"
+                      label={
+                        <div className="topnav__right-user">
+                          <i className="fa fa-filter" />
+                          &nbsp;&nbsp;Filter
+                        </div>
+                      }
                     >
-                      South Africa
-                    </DrpDwn.Item>
-                  </DrpDwn>
+                      <DrpDwn.Item onClick={() => handleFilter('zimbabwe')}>
+                        Zimbabwe
+                      </DrpDwn.Item>
+                      <DrpDwn.Item onClick={() => handleFilter('south')}>
+                        South Africa
+                      </DrpDwn.Item>
+                    </DrpDwn>
+                  </div>
                 </div>
 
                 <div className="topnav__search">
@@ -121,7 +100,7 @@ function Users() {
                 limit="10"
                 headData={userTableHead}
                 renderHead={(item, index) => renderHead(item, index)}
-                bodyData={userList}
+                bodyData={users}
                 renderBody={(item, index) => renderBody(item, index)}
               />
             </div>

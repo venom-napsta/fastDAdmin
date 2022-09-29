@@ -19,6 +19,7 @@ import { useSelector, useDispatch } from 'react-redux';
 // import ThemeAction from '../../redux/actions/ThemeAction';
 import Signin from '../../pages/Signin';
 import NotFound from '../../pages/NotFound';
+import PrivateRoute from '../../PrivateRoute';
 
 const Layout = () => {
   // const themeReducer = useSelector((state) => state.ThemeReducer);
@@ -38,11 +39,11 @@ const Layout = () => {
 
   const { user, isAuthD, loading, error } = useSelector((state) => state.auth);
 
-  useEffect(() => {
-    if (!isAuthD) {
-      <Redirect to="/login" push />;
-    }
-  }, [isAuthD, user, loading, error, history]);
+  // useEffect(() => {
+  //   if (!isAuthD) {
+  //     <Redirect to="/login" push />;
+  //   }
+  // }, [isAuthD, user, loading, error, history]);
 
   return (
     <BrowserRouter>
@@ -56,7 +57,6 @@ const Layout = () => {
             </div>
           )}
         />
-
         <Route
           exact
           render={(props) => (

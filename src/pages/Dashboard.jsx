@@ -1,13 +1,14 @@
 import React, { useEffect } from 'react';
-import { useSelector } from 'react-redux';
-import { Link, Redirect, useHistory } from 'react-router-dom';
-import Chart from 'react-apexcharts';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link, useHistory } from 'react-router-dom';
+// import Chart from 'react-apexcharts';
 
 import StatusCard from '../components/status-card/StatusCard';
 import Table from '../components/table/Table';
 import statusCards from '../assets/JsonData/status-card-data.json';
+// import { getAllDrivers } from '../features/slice/driverSlice';
 
-const chartOptions = {
+/* const chartOptions = {
   series: [
     {
       name: 'Rides',
@@ -53,7 +54,7 @@ const chartOptions = {
       show: false,
     },
   },
-};
+}; */
 
 const topDrivers = {
   head: ['Driver', 'total Rides', 'total earnings', 'Rating'],
@@ -165,17 +166,16 @@ const renderdriverBody = (item, index) => (
 );
 
 const Dashboard = () => {
-  const { user, isAuthD, loading, error } = useSelector((state) => state.auth);
+  const { userInfo, userToken, loading } = useSelector((state) => state.auth); // const { drivers } = useSelector((state) => state.driver);
   const history = useHistory();
+  const dispatch = useDispatch();
 
-  if (!isAuthD) {
-  }
   useEffect(() => {
-    if (!isAuthD) {
+    // // console.log(dispatch(getAllDrivers()));
+    if (!userToken) {
       history.replace('/login');
     }
-  }, [isAuthD, user, loading, error, history]);
-  // const themeReducer = useSelector((state) => state.ThemeReducer.mode);
+  }, [loading, userInfo, userToken, history]);
   return (
     <div>
       <h2 className="page-header">Dashboard</h2>

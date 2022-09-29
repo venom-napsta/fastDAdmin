@@ -1,10 +1,9 @@
-import { Navigate } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { selectUser } from '../features/UserSlice';
 function PrivateRoute({ children }) {
-  const isAuthenticated = useSelector(selectUser);
+  const { isAuthD } = useSelector((state) => state.auth);
 
-  return isAuthenticated ? children : <Navigate to="/login" />;
+  return isAuthD ? children : <Redirect to="/login" />;
 }
 
 export default PrivateRoute;

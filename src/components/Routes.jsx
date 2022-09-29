@@ -10,6 +10,7 @@ import Analytics from '../pages/Analytics';
 import Settings from '../pages/Settings';
 import Reviews from '../pages/Reviews';
 import Drivers from '../pages/Drivers';
+import NotFound from '../pages/NotFound';
 
 const Routes = () => {
   return (
@@ -23,6 +24,7 @@ const Routes = () => {
       <Route path="/drivers" exact component={Drivers} />
       <Route path="/reviews" exact component={Reviews} />
       <Route path="/settings" exact component={Settings} />
+      <Route path="*" component={NotFound} />
     </Switch>
   );
 };

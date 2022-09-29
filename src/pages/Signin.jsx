@@ -14,12 +14,19 @@ import { login, loginStatusChange } from '../features/slice/authSlice';
 // import auth from '../services/authService';
 
 import logo from '../assets/Logo.png';
+import { Spinner } from 'flowbite-react/lib/cjs/components/Spinner';
 
 function Signin() {
   const dispatch = useDispatch();
   const history = useHistory();
 
-  const { user, isAuthD, loading, error } = useSelector((state) => state.auth);
+  const {
+    userInfo,
+    userToken,
+    isAuthD,
+    loading,
+    error: loginErr,
+  } = useSelector((state) => state.auth);
 
   const schema = yup.object().shape({
     email: yup.string().email().required(),
@@ -35,24 +42,23 @@ function Signin() {
   /* Form Sublmision */
   const onSubmitHandler = async (data) => {
     console.log('sign in details', data);
+    dispatch(login(data));
     // auth.login(data.email, data.password);
-    // dispatch(login(data));
-    dispatch(loginStatusChange(true));
-    history.replace('/dashboard');
+    // dispatch(loginStatusChange(true));
+    // history.replace('/dashboard');
     reset();
   };
-  // console.log("form err", errors);
 
   useEffect(() => {
-    if (isAuthD) {
-      console.log('User Logged In', user);
-      // <Redirect to={'/dashboard'} />;
-      history.replace('/dashboard');
-      // window.location.pathname = '/dashboard';
+    if (loginErr) {
+      console.log('login err');
     }
 
-    // if(isAuthD) &&<Redirect to={'/dashboard'} />;
-  }, [isAuthD, user, loading, error, history]);
+    if (userToken) {
+      console.log('User Logged In', userInfo);
+      history.push('/');
+    }
+  }, [isAuthD, loginErr, userInfo, history, userToken]);
 
   return (
     <div className="mx-auto flex min-h-screen w-full items-center justify-center bg-[#f3f3f3]">
@@ -61,7 +67,7 @@ function Signin() {
         <div className="items-center w-90 h-70 sidebar__logo">
           <img src={logo} alt="company logo" />
         </div>
-        {/* sm:w-[50vw] */}
+
         <form onSubmit={handleSubmit(onSubmitHandler)}>
           <div className="text-[#010080] text-center text-4xl font-medium">
             Login
@@ -97,14 +103,22 @@ function Signin() {
             <small className="text-red-600">{errors.password?.message}</small>
           </div>
 
-          {error && <p className="text-red-600 mb-5">{error}</p>}
-          <button
-            type="submit"
-            disabled={loading}
-            className="button w-full transform rounded-md bg-[#010080] py-2 font-bold duration-300 hover:text-[#FF6D1C]"
-          >
-            LOG IN
-          </button>
+          {loginErr && <p className="text-red-600 mb-5">{loginErr}</p>}
+          {loading ? (
+            <button
+              type="submit"
+              className="button w-full transform rounded-md bg-[#010080] py-2 font-bold duration-300 hover:text-[#FF6D1C]"
+            >
+              <Spinner aria-label="Large spinner example" size="md" />
+            </button>
+          ) : (
+            <button
+              type="submit"
+              className="button w-full transform rounded-md bg-[#010080] py-2 font-bold duration-300 hover:text-[#FF6D1C]"
+            >
+              LOG IN
+            </button>
+          )}
         </form>
       </div>
     </div>

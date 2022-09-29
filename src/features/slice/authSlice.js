@@ -11,7 +11,7 @@ export const login = createAsyncThunk(
       },
     };
     try {
-      const { data } = await http.post(
+      const res = await http.post(
         'auth/login',
         {
           email,
@@ -19,8 +19,19 @@ export const login = createAsyncThunk(
         },
         config
       );
+      const { data } = res;
+      if (data) {
+        console.log('Data', data);
+        // localStorage.setItem('userToken', 'userToken');
+        // localStorage.setItem('user', 'napsta')
+        localStorage.setItem('user', JSON.stringify(data.data.user));
+        localStorage.setItem(
+          'userToken',
+          JSON.stringify(data.data.token.token)
+        );
+      }
       console.log('User Res', data);
-      localStorage.setItem('user', JSON.stringify(data));
+      // localStorage.setItem('user', JSON.stringify(data));
       return data;
     } catch (error) {
       console.log('Redux Res', error);
@@ -36,46 +47,41 @@ export const getUserProfile = createAsyncThunk(
   async (arg, { getState, rejectWithValue }) => {
     try {
       // get user data from store
-      const { user } = getState();
-      // config headers
-      const config = {
-        headers: {
-          Authorization: `Bearer ${user.userToken}`,
-        },
-      };
-      const { data } = await http.get(`/profile`, config);
+      // const { userToken } = getState();
+
+      const { data } = await http.get(`/profile`);
       return data;
     } catch (error) {
       console.log('Request Error', error.message);
-      return rejectWithValue(error.response.data);
+      if (error.response && error.response.data.message) {
+        return rejectWithValue(error.response.data.message);
+      } else {
+        return rejectWithValue(error.message);
+      }
     }
   }
 );
 
-// initialize userToken from local storage
-// const userToken = localStorage.getItem('userToken')
-//   ? localStorage.getItem('userToken')
-//   : null
+const userToken = JSON.parse(localStorage.getItem('userToken'));
+const userInfo = JSON.parse(localStorage.getItem('user'));
+
 const authSlice = createSlice({
   name: 'auth',
   initialState: {
-    user: {},
-    isAuthD: false,
+    userInfo: userInfo ? userInfo : {},
+    userToken: userToken ? userToken : null,
     loading: false,
     error: null,
   },
   reducers: {
-    loginStatus: (state) => {
-      state.user = JSON.parse(localStorage.getItem('fastd_auth_token'));
+    reset: (state) => {
+      state.error = null;
+      state.loading = false;
     },
     logout: (state, action) => {
-      state.isAuthD = false;
-      // window.location.pathname = '/login';
-      // localStorage.removeItem('token');
-    },
-    // fake login
-    loginStatusChange: (state, action) => {
-      state.isAuthD = action.payload;
+      localStorage.removeItem('userToken');
+      localStorage.removeItem('user');
+      window.location = '/login';
     },
   },
   extraReducers: {
@@ -84,11 +90,14 @@ const authSlice = createSlice({
     },
     [login.fulfilled]: (state, { payload }) => {
       state.loading = false;
-      state.user = payload;
+      state.userInfo = payload.data.user;
+      state.userToken = payload.data.token.token;
       state.isAuthD = true;
+      window.location = '/';
     },
     [login.rejected]: (state, { payload }) => {
       state.loading = false;
+      state.isAuthD = false;
       state.error = payload;
     },
 

@@ -2,6 +2,10 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import logger from './logService';
 
+// Alter defaults after instance has been created
+const token = JSON.parse(localStorage.getItem('userToken'));
+axios.defaults.headers.common['Authorization'] = token;
+
 // null == success(usu. handled for auditing), error == fail
 axios.interceptors.response.use(null, (error) => {
   const ExpectedError =
@@ -24,15 +28,10 @@ axios.interceptors.response.use(null, (error) => {
   return Promise.reject(error);
 });
 
-function setJwt(jwt) {
-  // Cofiguring default headers
-  axios.defaults.headers.common['x-auth-token'] = jwt;
-}
 let x = {
   get: axios.get,
   post: axios.post,
   put: axios.put,
   delete: axios.delete,
-  setJwt,
 };
 export default x;
