@@ -6240,6 +6240,11 @@
     "chalk" "^4.1.0"
     "is-unicode-supported" "^0.1.0"
 
+"logrocket@^3.0.1":
+  "integrity" "sha512-jOWG+jEzobKVxGytzZ+4KGm2kiMQMRTHab2uDWQyVZcHfEF38BlCH1yjQVY4LCmuQUwZitP9biMzJZnyUQ0dtQ=="
+  "resolved" "https://registry.npmjs.org/logrocket/-/logrocket-3.0.1.tgz"
+  "version" "3.0.1"
+
 "longest@^2.0.1":
   "integrity" "sha512-Ajzxb8CM6WAnFjgiloPsI3bF+WCxcvhdIG3KNA2KN962+tdBsHcuQ4k4qX/EcS/2CRkcc0iAkR956Nib6aXU/Q=="
   "resolved" "https://registry.npmjs.org/longest/-/longest-2.0.1.tgz"

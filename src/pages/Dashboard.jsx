@@ -166,7 +166,8 @@ const renderdriverBody = (item, index) => (
 );
 
 const Dashboard = () => {
-  const { userInfo, userToken, loading } = useSelector((state) => state.auth); // const { drivers } = useSelector((state) => state.driver);
+  const { userInfo, userToken, loading } = useSelector((state) => state.auth);
+  // const { drivers } = useSelector((state) => state.driver);
   const history = useHistory();
   const dispatch = useDispatch();
 

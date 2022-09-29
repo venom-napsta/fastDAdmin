@@ -38,16 +38,20 @@ const renderBody = (item, index) => (
 );
 
 const Drivers = () => {
-  const { user, isAuthD, loading, error } = useSelector((state) => state.auth);
-
   const { drivers } = useSelector((state) => state.driver);
   const history = useHistory();
   const dispatch = useDispatch();
 
+  const { userInfo, userToken, loading, error } = useSelector(
+    (state) => state.auth
+  );
+
   useEffect(() => {
-    console.log('effect');
     console.log(dispatch(getAllDrivers()));
-  }, [isAuthD, dispatch, user, loading, error, history]);
+    if (!userToken) {
+      history.replace('/login');
+    }
+  }, [loading, dispatch, userInfo, userToken, history]);
 
   const [query, setQuery] = useState('');
   if (error) {

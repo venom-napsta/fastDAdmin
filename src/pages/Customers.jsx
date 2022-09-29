@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import Table from '../components/table/Table';
 
 import customerList from '../assets/JsonData/customers-list.json';
+import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 
 const customerTableHead = [
   '',
@@ -29,6 +31,16 @@ const renderBody = (item, index) => (
 );
 
 const Customers = () => {
+  const { userInfo, userToken, loading } = useSelector((state) => state.auth);
+  const history = useHistory();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (!userToken) {
+      history.replace('/login');
+    }
+  }, [loading, userInfo, userToken, history]);
+
   return (
     <div>
       <h2 className="page-header">customers</h2>

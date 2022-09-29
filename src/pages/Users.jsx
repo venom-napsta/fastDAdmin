@@ -1,5 +1,5 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Link, useHistory } from 'react-router-dom';
 import { FaEdit, FaTrashAlt } from 'react-icons/fa';
 
 import Table from '../components/table/Table';
@@ -47,6 +47,17 @@ function Users() {
   function handleFilter(nyika) {
     console.log(users.filter((user) => user.country === nyika));
   }
+
+  const { userInfo, userToken, loading } = useSelector((state) => state.auth);
+  const history = useHistory();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (!userToken) {
+      history.replace('/login');
+    }
+  }, [loading, userInfo, userToken, history]);
+
   return (
     <div>
       <div className="flex">

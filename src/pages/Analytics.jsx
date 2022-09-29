@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Chart from 'react-apexcharts';
 import { useHistory } from 'react-router-dom';
 
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import StatusCard from '../components/status-card/StatusCard';
 import statusCards from '../assets/JsonData/status-card-data.json';
@@ -53,7 +53,17 @@ const chartOptions = {
 
 const Analytics = () => {
   // const themeReducer = useSelector((state) => state.ThemeReducer.mode);
+
+  const { userInfo, userToken, loading } = useSelector((state) => state.auth);
   const history = useHistory();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (!userToken) {
+      history.replace('/login');
+    }
+  }, [loading, userInfo, userToken, history]);
+
   return (
     <div>
       <h2 className="page-header">Analytics</h2>

@@ -37,13 +37,13 @@ const Layout = () => {
   //   dispatch(ThemeAction.setColor(colorClass));
   // }, [dispatch]);
 
-  const { user, isAuthD, loading, error } = useSelector((state) => state.auth);
+  const { userInfo, userToken, loading } = useSelector((state) => state.auth);
 
-  // useEffect(() => {
-  //   if (!isAuthD) {
-  //     <Redirect to="/login" push />;
-  //   }
-  // }, [isAuthD, user, loading, error, history]);
+  useEffect(() => {
+    if (!userToken) {
+      history.push('/login');
+    }
+  }, [loading, userInfo, userToken, history]);
 
   return (
     <BrowserRouter>

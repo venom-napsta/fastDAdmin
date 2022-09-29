@@ -1,9 +1,10 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Link, useHistory } from 'react-router-dom';
 
 // import Badge from '../components/badge/Badge';
 import Table from '../components/table/Table';
 import Dropdown from '../components/dropdown/Dropdown';
+import { useDispatch, useSelector } from 'react-redux';
 
 const renderUserToggle = (user) => (
   <div className="topnav__right-user">
@@ -239,6 +240,17 @@ const Transactions = () => {
       content: 'South Africa',
     },
   ];
+
+  const { userInfo, userToken, loading } = useSelector((state) => state.auth);
+  const history = useHistory();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (!userToken) {
+      history.replace('/login');
+    }
+  }, [loading, userInfo, userToken, history]);
+
   return (
     <div>
       <h2 className="page-header">Transactions</h2>

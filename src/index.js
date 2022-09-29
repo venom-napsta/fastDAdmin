@@ -17,12 +17,14 @@ import { createStore } from 'redux';
 import rootReducer from './redux/reducers';
 
 // logger
+import LogRocket from 'logrocket';
 import { BrowserRouter } from 'react-router-dom';
 import logger from './services/logService';
 logger.init();
 // logger.log();
 
 const store = createStore(rootReducer);
+LogRocket.init('aqhytn/fastd');
 
 ReactDOM.render(
   <React.StrictMode>

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Route, Switch } from 'react-router-dom';
+import { Redirect, Route, Switch } from 'react-router-dom';
 
 import Dashboard from '../pages/Dashboard';
 import Customers from '../pages/Customers';
@@ -24,7 +24,7 @@ const Routes = () => {
       <Route path="/drivers" exact component={Drivers} />
       <Route path="/reviews" exact component={Reviews} />
       <Route path="/settings" exact component={Settings} />
-      <Route path="*" component={NotFound} />
+      <Redirect from="*" to="/login" />
     </Switch>
   );
 };
