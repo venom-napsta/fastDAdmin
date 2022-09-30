@@ -4,13 +4,13 @@ import http from '../../services/httpService';
 // Get Users
 export const getAllUsers = createAsyncThunk(
   'users/getAllUsers',
-  async (arg, { rejectWithValue }) => {
+  async (id = null, { rejectWithValue }) => {
     try {
       const res = await http.get(`/users`);
       return res.data.data;
     } catch (error) {
-      console.log(error);
-      return rejectWithValue(error);
+      console.log('Request Error', error.message);
+      return rejectWithValue(error.response.data);
     }
   }
 );

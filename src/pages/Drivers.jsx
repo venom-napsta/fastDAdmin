@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 
 import Table from '../components/table/Table';
 
@@ -10,7 +10,6 @@ import {
   searchDriver,
   saveDrivers,
 } from '../features/slice/driverSlice';
-import { useState } from 'react';
 import { Badge } from 'flowbite-react/lib/cjs/components/Badge';
 import { Spinner } from 'flowbite-react/lib/cjs/components/Spinner';
 import http from '../services/httpService';
@@ -65,6 +64,7 @@ const Drivers = () => {
   );
 
   const [loadingDrv, setLoading] = useState(true);
+  const [drvErr, setDrvErr] = useState(false);
 
   useEffect(() => {
     http
@@ -76,6 +76,7 @@ const Drivers = () => {
       })
       .catch((err) => {
         console.log('axios err', err);
+        setDrvErr(err.message);
       })
       .finally(() => setLoading(false));
   });
@@ -136,6 +137,23 @@ const Drivers = () => {
                 />
               </div>
             </div>
+
+            {drvErr ? (
+              <>
+                <div className="flex flex-col gap-2">
+                  <div className="text-center">
+                    <div
+                      class="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800"
+                      role="alert"
+                    >
+                      <span class="font-medium">Error, Request Failed!</span>
+                      {' : '}
+                      {drvErr}
+                    </div>
+                  </div>
+                </div>
+              </>
+            ) : null}
           </div>
         </div>
       </div>

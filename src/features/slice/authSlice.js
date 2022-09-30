@@ -4,7 +4,7 @@ import http from '../../services/httpService';
 
 export const login = createAsyncThunk(
   'auth/Login',
-  async ({ email, password }, { rejectWithValue }) => {
+  async ({ contact, password }, { rejectWithValue }) => {
     const config = {
       headers: {
         'Content-Type': 'application/json',
@@ -12,9 +12,9 @@ export const login = createAsyncThunk(
     };
     try {
       const res = await http.post(
-        'auth/login',
+        'login',
         {
-          email,
+          contact,
           password,
         },
         config
@@ -27,16 +27,16 @@ export const login = createAsyncThunk(
         localStorage.setItem('user', JSON.stringify(data.data.user));
         localStorage.setItem(
           'userToken',
-          JSON.stringify(data.data.token.token)
+          JSON.stringify(data.data.token.access_token)
         );
       }
       console.log('User Res', data);
       // localStorage.setItem('user', JSON.stringify(data));
       return data;
     } catch (error) {
-      console.log('Redux Res', error);
-      toast(`Bammer! ${error.response.data.errors.message}`);
-      return rejectWithValue(error.response.data.errors.message);
+      console.log('Redux Res', error.response.data.errors[0].msg);
+      toast(`Bammer! ${error.response.data.errors[0].msg}`);
+      return rejectWithValue(error.response.message);
     }
   }
 );

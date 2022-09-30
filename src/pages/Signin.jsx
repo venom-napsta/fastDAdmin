@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { AiFillLock, AiOutlineMail } from 'react-icons/ai';
+import { AiFillLock, AiOutlinePhone } from 'react-icons/ai';
 
 /* Form Validation and handling */
 import { useForm } from 'react-hook-form';
@@ -28,8 +28,16 @@ function Signin() {
     error: loginErr,
   } = useSelector((state) => state.auth);
 
+  const phoneRegExp =
+    /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
+
   const schema = yup.object().shape({
-    email: yup.string().email().required(),
+    contact: yup
+      .string()
+      .matches(phoneRegExp, 'Phone number is not valid.')
+      .min(9)
+      .max(15)
+      .required(),
     password: yup.string().min(6).max(32).required(),
   });
   const {
@@ -61,31 +69,32 @@ function Signin() {
   }, [isAuthD, loginErr, userInfo, history, userToken]);
 
   return (
-    <div className="mx-auto flex min-h-screen w-full items-center justify-center bg-[#f3f3f3]">
+    <div className="mx-auto flex flex-col min-h-screen w-full items-center justify-center bg-[#f3f3f3]">
       {/* component */}
       <div className="px-5 flex w-[35rem] flex-col space-y-10 ">
-        <div className="items-center w-90 h-70 sidebar__logo">
+        <div className="items-center w-100 h-80 sidebar__logo">
           <img src={logo} alt="company logo" />
         </div>
 
-        <form onSubmit={handleSubmit(onSubmitHandler)}>
+        <form autoComplete="off" onSubmit={handleSubmit(onSubmitHandler)}>
           <div className="text-[#010080] text-center text-4xl font-medium">
             Login
           </div>
           <div className="w-full mb-6 my-4 transform bg-transparent text-lg duration-200 focus-within:rounded-md">
             <input
+              name="contact"
               className={
-                !errors.email
+                !errors.contact
                   ? `w-full h-14 border-1 rounded-md bg-transparent`
                   : `w-full h-14 border-1 border-red-600 rounded-md bg-transparent`
               }
-              placeholder="Email"
-              type="email"
+              placeholder="Contact Number e.g 000000001"
+              type="text"
               required
-              {...register('email')}
+              {...register('contact')}
             />
-            <AiOutlineMail className="absolute right-3 top-5 text-gray-400" />
-            <small className="text-red-600">{errors.email?.message}</small>
+            <AiOutlinePhone className="absolute right-3 top-5 text-gray-400" />
+            <small className="text-red-600">{errors.contact?.message}</small>
           </div>
           <div className="w-full mb-6 transform bg-transparent text-lg duration-200 focus-within:border-[bg-primary]">
             <input

@@ -3,7 +3,9 @@ import { toast } from 'react-toastify';
 import logger from './logService';
 
 // Alter defaults after instance has been created
-const token = JSON.parse(localStorage.getItem('userToken'));
+const token = JSON.parse(localStorage.getItem('userToken'))
+  ? JSON.parse(localStorage.getItem('userToken'))
+  : null;
 axios.defaults.headers.common['Authorization'] = token;
 
 // null == success(usu. handled for auditing), error == fail

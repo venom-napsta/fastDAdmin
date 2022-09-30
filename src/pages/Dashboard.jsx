@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
 // import Chart from 'react-apexcharts';
 
+import { FaArrowUp } from 'react-icons/fa';
+
 import StatusCard from '../components/status-card/StatusCard';
 import Table from '../components/table/Table';
 import statusCards from '../assets/JsonData/status-card-data.json';
@@ -189,6 +191,11 @@ const Dashboard = () => {
                   icon={item.icon}
                   count={item.count}
                   title={item.title}
+                  xtr={
+                    <>
+                      <FaArrowUp size={50} color="green" />
+                    </>
+                  }
                 />
               </div>
             ))}

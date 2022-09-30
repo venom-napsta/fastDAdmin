@@ -47,9 +47,9 @@ const Topnav = () => {
   //   image: user.user_image,
   // };
   return (
-    <div className="topnav">
+    <div className="topnav bg-gray-100">
       <div className="bg-white-200">
-        <h1>Control Panel</h1>
+        <h1 className="text-xl font-bold">Control Panel</h1>
       </div>
       {/* <div className="topnav__search">
                 <input type="text" placeholder='Search here...' />
