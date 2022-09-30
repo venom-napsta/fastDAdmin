@@ -10,8 +10,9 @@ import {
   FaTrash,
 } from 'react-icons/fa';
 import { Button } from 'flowbite-react/lib/esm/components/Button';
-import { AiFillLock, AiOutlineMail } from 'react-icons/ai';
+import { AiFillLock, AiOutlineGlobal } from 'react-icons/ai';
 import { Spinner } from 'flowbite-react/lib/cjs/components/Spinner';
+import { Dropdown } from 'flowbite-react/lib/esm/components/Dropdown';
 
 function Settings() {
   const { userInfo, userToken, loading } = useSelector((state) => state.auth);
@@ -38,12 +39,11 @@ function Settings() {
           <div className="p-2">
             <Button
               pill
-              size="lg"
+              size="xl"
               color="dark"
               onClick={() => setShowModal(true)}
             >
-              <FaEdit color="green" />
-              &nbsp;&nbsp; Edit
+              <FaEdit size={25} color="green" />
             </Button>
           </div>
         </div>
@@ -53,18 +53,15 @@ function Settings() {
             <FaCar size={40} className="ml-2 p-1" />
           </div>
           <div className="text-lg font-medium my-2">Ride Types</div>
-          <div className="p-2 flex flex-row gap-1 sm:flex-col md:flex-col">
-            <Button pill size="lg" color="dark">
+          <div className="p-2 flex flex-row gap-1 ">
+            <Button pill size="xl" color="dark">
               <FaPlus color="white" />
-              &nbsp;&nbsp; Add
             </Button>
-            <Button pill size="lg" color="dark">
+            <Button pill size="xl" color="dark">
               <FaEdit color="green" />
-              &nbsp;&nbsp; Edit
             </Button>
-            <Button pill size="lg" color="dark">
+            <Button pill size="xl" color="dark">
               <FaTrash color="brown" />
-              &nbsp;&nbsp; Remove
             </Button>
             {/* 
             <Button pill size="lg" color="dark">
@@ -83,7 +80,7 @@ function Settings() {
               <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
                 {/*header*/}
                 <div className="flex items-start justify-between p-5 border-b border-solid border-slate-200 rounded-t">
-                  <h3 className="text-3xl font-semibold">Modal Title</h3>
+                  <h3 className="text-3xl font-semibold">Edit Commission</h3>
                   <button
                     className="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
                     onClick={() => setShowModal(false)}
@@ -94,28 +91,33 @@ function Settings() {
                   </button>
                 </div>
                 {/*body*/}
-                <div className="relative p-6 flex-auto">
-                  <form>
-                    <div className="text-[#010080] text-center text-4xl font-medium">
-                      Login
-                    </div>
-                    <div className="w-full mb-6 my-4 transform bg-transparent text-lg duration-200 focus-within:rounded-md">
-                      <input
-                        className={`w-full h-14 border-1 rounded-md bg-transparent`}
-                        placeholder="Email"
-                        type="email"
-                        required
-                      />
-                      <AiOutlineMail className="absolute right-3 top-5 text-gray-400" />
-                    </div>
+                <div className="relative p-6">
+                  <form className="w-auto">
                     <div className="w-full mb-6 transform bg-transparent text-lg duration-200 focus-within:border-[bg-primary]">
+                      <div className=" w-full z-auto mb-6 my-4 transform bg-transparent text-lg duration-200 focus-within:rounded-md">
+                        <div id="select">
+                          <div className="mb-2 block">
+                            <label htmlFor="countries">
+                              Select your country:
+                            </label>
+                          </div>
+                          <select
+                            className="w-full h-14 border-1 rounded-md bg-transparent"
+                            id="countries"
+                            required={true}
+                          >
+                            <option>South Africa</option>
+                            <option>Zimbabwe</option>
+                          </select>
+                        </div>
+                      </div>
+                      <label for="comm">Commission:</label>
                       <input
-                        type="password"
+                        type="number"
                         required
-                        placeholder="Password"
+                        placeholder="Percentage (2d.p) eg 0.08"
                         className={`w-full h-14 border-1 rounded-md bg-transparent`}
                       />
-                      <AiFillLock className="absolute right-3 top-5 text-gray-400" />
                     </div>
 
                     {loading ? (
@@ -130,7 +132,7 @@ function Settings() {
                         type="submit"
                         className="button w-full transform rounded-md bg-[#010080] py-2 font-bold duration-300 hover:text-[#FF6D1C]"
                       >
-                        LOG IN
+                        Submit
                       </button>
                     )}
                   </form>
@@ -143,13 +145,6 @@ function Settings() {
                     onClick={() => setShowModal(false)}
                   >
                     Close
-                  </button>
-                  <button
-                    className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-                    type="button"
-                    onClick={() => setShowModal(false)}
-                  >
-                    Save Changes
                   </button>
                 </div>
               </div>
