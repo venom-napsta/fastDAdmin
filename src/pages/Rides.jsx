@@ -13,11 +13,33 @@ import {
 import { Badge } from 'flowbite-react/lib/cjs/components/Badge';
 import { Spinner } from 'flowbite-react/lib/cjs/components/Spinner';
 import http from '../services/httpService';
+import { saveRides } from '../features/slice/rideSlice';
+
+// const Subheading = [
+
+//   'pick_from',
+//   'pick_from',
+//   'drop_to',
+//   'role',
+//   '-',
+//   'approval status',
+//   'Overal Rating',
+//   'ride status',
+// ];
+// const rideHeader = [
+//   'id',
+//   'customer_id',
+//   'driver_id',
+//   'pick_from',
+//   'drop_to',
+//   'ride_cost',
+//   'ride_status',
+//   'rating'
+// ];
 
 const customerTableHead = [
   'id',
-
-  'name',
+  'customer_id',
   'email',
   'contact',
   'role',
@@ -47,14 +69,12 @@ const renderBody = (item, index) => (
   </tr>
 );
 
-const Drivers = () => {
+const Rides = () => {
   const {
-    driver,
-    drivers,
-    documents,
-    error: driverError,
-    loading: driverLoading,
-  } = useSelector((state) => state.driver);
+    rides,
+    error: getRideError,
+    loading: getRideLoading,
+  } = useSelector((state) => state.rides);
 
   const history = useHistory();
   const dispatch = useDispatch();
@@ -63,22 +83,22 @@ const Drivers = () => {
     (state) => state.auth
   );
 
-  const [loadingDrv, setLoading] = useState(true);
-  const [drvErr, setDrvErr] = useState(false);
+  const [loadingRides, setLoadingRides] = useState(true);
+  const [ridesErr, setRidesErr] = useState(false);
 
   useEffect(() => {
     http
-      .get('/drivers')
+      .get('/rides')
       .then(({ data }) => {
-        console.log('Axios data: drvrs', data.data);
-        dispatch(saveDrivers(data.data));
+        console.log('Axios data: rides', data.data);
+        dispatch(saveRides(data.data));
         // setUserList(data.data);
       })
       .catch((err) => {
         console.log('axios err', err);
-        setDrvErr(err.message);
+        setRidesErr(err.message);
       })
-      .finally(() => setLoading(false));
+      .finally(() => setLoadingRides(false));
   }, []);
 
   useEffect(() => {
@@ -86,11 +106,11 @@ const Drivers = () => {
     if (!userToken) {
       history.replace('/login');
     }
-  }, [loading, drivers, dispatch, userInfo, userToken, history]);
+  }, [loading, dispatch, userInfo, userToken, history]);
 
   const [query, setQuery] = useState('');
 
-  if (loadingDrv) {
+  if (loadingRides) {
     return (
       <div className="flex flex-col gap-2">
         <div className="text-center">
@@ -99,7 +119,7 @@ const Drivers = () => {
       </div>
     );
   }
-  if (error) {
+  if (ridesErr) {
     return (
       <>
         {' '}
@@ -132,13 +152,13 @@ const Drivers = () => {
                   limit="10"
                   headData={customerTableHead}
                   renderHead={(item, index) => renderHead(item, index)}
-                  bodyData={drivers}
+                  bodyData={rides}
                   renderBody={(item, index) => renderBody(item, index)}
                 />
               </div>
             </div>
 
-            {drvErr ? (
+            {ridesErr ? (
               <>
                 <div className="flex flex-col gap-2">
                   <div className="text-center">
@@ -150,7 +170,7 @@ const Drivers = () => {
                         Error, Request Failed!
                       </span>
                       {' : '}
-                      {drvErr}
+                      {ridesErr}
                     </div>
                   </div>
                 </div>
@@ -163,4 +183,4 @@ const Drivers = () => {
   );
 };
 
-export default Drivers;
+export default Rides;

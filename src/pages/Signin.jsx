@@ -10,7 +10,7 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { useHistory } from 'react-router-dom';
 
-import { login, loginStatusChange } from '../features/slice/authSlice';
+import { login } from '../features/slice/authSlice';
 // import auth from '../services/authService';
 
 import logo from '../assets/Logo.png';
@@ -40,6 +40,7 @@ function Signin() {
       .required(),
     password: yup.string().min(6).max(32).required(),
   });
+
   const {
     register,
     handleSubmit,

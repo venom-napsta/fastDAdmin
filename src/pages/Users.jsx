@@ -1,27 +1,28 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { FaEdit, FaTimes, FaTrashAlt } from 'react-icons/fa';
-import { HiInformationCircle } from 'react-icons/hi';
+
+/* Form Validation and handling */
+import { useForm } from 'react-hook-form';
+import * as yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
 
 import Table from '../components/table/Table';
 
 import { Dropdown as DrpDwn } from 'flowbite-react/lib/esm/components/Dropdown';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAllUsers, saveUsers } from '../features/slice/userSlice';
+import { /* getAllUsers */ saveUsers } from '../features/slice/userSlice';
+import { registerUser } from '../features/slice/authSlice';
 import { Spinner } from 'flowbite-react/lib/cjs/components/Spinner';
 import http from '../services/httpService';
 import {
   AiFillLock,
   AiOutlineMail,
+  AiOutlinePhone,
   AiOutlineUser,
   AiOutlineUserAdd,
 } from 'react-icons/ai';
-// import { Table as TableComponent } from 'flowbite-react/lib/esm/components/Table';
-
-/* import {
-  // getAllUsers,
-  // searchUserProfile,
-} from '../features/slice/userSlice'; */
+import RegisteredUser from '../components/common/RegisteredUser';
 
 const renderHead = (item, index) => <th key={index}>{item}</th>;
 
@@ -52,11 +53,44 @@ const renderBody = (item, index) => (
 
 const userTableHead = ['id', 'Name', 'email', 'contact', 'is_verified', 'role'];
 function Users() {
+  const phoneRegExp =
+    /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
+
+  const schema = yup.object().shape({
+    firstname: yup.string().min(3).max(50).required(),
+    lastname: yup.string().min(3).max(50).required(),
+    email: yup.string().email().required(),
+    contact: yup
+      .string()
+      .matches(phoneRegExp, 'Phone number is not valid.')
+      .min(9)
+      .max(15)
+      .required(),
+    password: yup.string().min(6).max(32).required(),
+    password_confirmation: yup.string().min(6).max(32).required(),
+  });
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm({ resolver: yupResolver(schema) });
+
+  /* Form Sublmision */
+  const onSubmitHandler = async (data) => {
+    console.log('sign up details', data);
+    dispatch(registerUser(data));
+    reset();
+  };
+
   function handleFilter(nyika) {
     console.log(users.filter((user) => user.country === nyika));
   }
 
-  const { userInfo, userToken, loading } = useSelector((state) => state.auth);
+  const { userInfo, userToken, loading, registeredUser } = useSelector(
+    (state) => state.auth
+  );
   const {
     users,
     loading: userLoading,
@@ -69,6 +103,7 @@ function Users() {
   const [usrErr, setUsrErr] = useState(null);
   const [showModal, setShowModal] = React.useState(false);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     http
       .get('/users')
@@ -82,14 +117,14 @@ function Users() {
         setUsrErr(err.message);
       })
       .finally(() => setUsrLoading(false));
-  });
+  }, []);
 
   useEffect(() => {
     // dispatch(getAllUsers());
     if (!userToken) {
       history.replace('/login');
     }
-  }, [loading, userInfo, users, userToken, history, dispatch]);
+  }, [loading, userInfo, users, userToken, history, registeredUser, dispatch]);
 
   if (usrLoading) {
     return (
@@ -105,7 +140,8 @@ function Users() {
     <div>
       <div className="flex">
         {' '}
-        <h2 className="page-header">Users</h2>
+        <p></p>
+        {/* <h2 className="font-bold page-header">All Users</h2> */}
         <button onClick={() => setShowModal(true)} className="button">
           Add New User
         </button>
@@ -114,12 +150,16 @@ function Users() {
       <div className="row">
         <div className="col-12">
           <div className="card">
+            {/* Newly registered User */}
+            {registeredUser ? (
+              <RegisteredUser registeredUser={registeredUser} />
+            ) : null}
             <div className="card__body">
               <div className="filter">
-                <div className="topnav__right-item">
+                {/*<div className="topnav__right-item">
                   {/* dropdown here */}
 
-                  {/* <div
+                {/* <div
                     style={{
                       backgroundColor: '#455560',
                       color: 'white',
@@ -144,13 +184,12 @@ function Users() {
                         South Africa
                       </DrpDwn.Item>
                     </DrpDwn>
-                  </div> */}
-                </div>
-
-                <div className="topnav__search">
-                  <input type="text" placeholder="Search here..." />
-                  <i className="bx bx-search"></i>
-                </div>
+                  </div>
+                    </div> */}
+              </div>
+              <div className="topnav__search mb-5">
+                <input type="text" placeholder="Search here..." />
+                <i className="bx bx-search"></i>
               </div>
               <Table
                 limit="10"
@@ -187,53 +226,89 @@ function Users() {
               <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
                 {/*header*/}
                 <div className="flex items-start justify-between p-5 border-b border-solid border-slate-200 rounded-t">
-                  <h3 className="text-3xl font-semibold">Add New User</h3>
+                  <div className="text-[#010080] text-center text-xl font-medium">
+                    User Details
+                  </div>
                   <button
                     className="p-1 ml-auto bg-gray-100 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
                     onClick={() => setShowModal(false)}
                   >
-                    <FaTimes size={30} color="black" />
+                    <FaTimes size={20} color="black" />
                   </button>
                 </div>
                 {/*body*/}
                 <div className="relative p-6 flex-auto">
-                  <form autoComplete="off">
-                    <div className="text-[#010080] text-center text-xl font-medium">
-                      User Details
-                    </div>
+                  <form
+                    onSubmit={handleSubmit(onSubmitHandler)}
+                    autoComplete="off"
+                  >
                     <div className="w-full mb-6 my-4 transform bg-transparent text-lg duration-200 focus-within:rounded-md">
                       <input
-                        className={`w-full h-14 border-1 rounded-md bg-transparent`}
+                        className={
+                          !errors.firstname
+                            ? `w-full h-14 border-1 rounded-md bg-transparent`
+                            : `w-full h-14 border-1 border-red-600 rounded-md bg-transparent`
+                        }
                         placeholder="Firstname"
                         type="text"
                         required
+                        {...register('firstname')}
                       />
                       <AiOutlineUserAdd className="absolute right-3 top-5 text-gray-400" />
                     </div>
                     <div className="w-full mb-6 my-4 transform bg-transparent text-lg duration-200 focus-within:rounded-md">
                       <input
-                        className={`w-full h-14 border-1 rounded-md bg-transparent`}
+                        className={
+                          !errors.lastname
+                            ? `w-full h-14 border-1 rounded-md bg-transparent`
+                            : `w-full h-14 border-1 border-red-600 rounded-md bg-transparent`
+                        }
                         placeholder="Last Name"
                         type="text"
                         required
+                        {...register('lastname')}
                       />
                       <AiOutlineUser className="absolute right-3 top-5 text-gray-400" />
                     </div>
                     <div className="w-full mb-6 my-4 transform bg-transparent text-lg duration-200 focus-within:rounded-md">
                       <input
-                        className={`w-full h-14 border-1 rounded-md bg-transparent`}
+                        className={
+                          !errors.email
+                            ? `w-full h-14 border-1 rounded-md bg-transparent`
+                            : `w-full h-14 border-1 border-red-600 rounded-md bg-transparent`
+                        }
                         placeholder="Email"
                         type="email"
                         required
+                        {...register('email')}
                       />
                       <AiOutlineMail className="absolute right-3 top-5 text-gray-400" />
+                    </div>
+                    <div className="w-full mb-6 my-4 transform bg-transparent text-lg duration-200 focus-within:rounded-md">
+                      <input
+                        className={
+                          !errors.contact
+                            ? `w-full h-14 border-1 rounded-md bg-transparent`
+                            : `w-full h-14 border-1 border-red-600 rounded-md bg-transparent`
+                        }
+                        placeholder="Contact Number"
+                        type="text"
+                        required
+                        {...register('contact')}
+                      />
+                      <AiOutlinePhone className="absolute right-3 top-5 text-gray-400" />
                     </div>
                     <div className="w-full mb-6 transform bg-transparent text-lg duration-200 focus-within:border-[bg-primary]">
                       <input
                         type="password"
                         required
                         placeholder="Password"
-                        className={`w-full h-14 border-1 rounded-md bg-transparent`}
+                        className={
+                          !errors.password
+                            ? `w-full h-14 border-1 rounded-md bg-transparent`
+                            : `w-full h-14 border-1 border-red-600 rounded-md bg-transparent`
+                        }
+                        {...register('password')}
                       />
                       <AiFillLock className="absolute right-3 top-5 text-gray-400" />
                     </div>
@@ -242,7 +317,12 @@ function Users() {
                         type="password"
                         required
                         placeholder="Confirm Password"
-                        className={`w-full h-14 border-1 rounded-md bg-transparent`}
+                        className={
+                          !errors.password_confirmation
+                            ? `w-full h-14 border-1 rounded-md bg-transparent`
+                            : `w-full h-14 border-1 border-red-600 rounded-md bg-transparent`
+                        }
+                        {...register('password_confirmation')}
                       />
                       <AiFillLock className="absolute right-3 top-5 text-gray-400" />
                     </div>
@@ -259,7 +339,7 @@ function Users() {
                         type="submit"
                         className="button w-full transform rounded-md bg-[#010080] py-2 font-bold duration-300 hover:text-[#FF6D1C]"
                       >
-                        LOG IN
+                        Submit
                       </button>
                     )}
                   </form>

@@ -10,6 +10,7 @@ import userSlice from './slice/userSlice';
 import driverSlice from './slice/driverSlice';
 import transactionSlice from './slice/transactionSlice';
 import customerSlice from './slice/customerSlice';
+import rideSlice from './slice/rideSlice';
 import logger from 'redux-logger';
 
 export default configureStore({
@@ -19,6 +20,7 @@ export default configureStore({
     driver: driverSlice,
     trans: transactionSlice,
     customer: customerSlice,
+    rides: rideSlice,
   },
 
   middleware: (getDefaultMiddleware) =>

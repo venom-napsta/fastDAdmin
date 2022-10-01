@@ -10,7 +10,7 @@ import Analytics from '../pages/Analytics';
 import Settings from '../pages/Settings';
 import Reviews from '../pages/Reviews';
 import Drivers from '../pages/Drivers';
-import NotFound from '../pages/NotFound';
+import Rides from '../pages/Rides';
 
 const Routes = () => {
   return (
@@ -20,6 +20,7 @@ const Routes = () => {
       <Route path="/customers" exact component={Customers} />
       <Route path="/transactions" exact component={Transactions} />
       <Route path="/analytics" exact component={Analytics} />
+      <Route path="/rides" exact component={Rides} />
       <Route path="/users" exact component={Users} />
       <Route path="/drivers" exact component={Drivers} />
       <Route path="/reviews" exact component={Reviews} />

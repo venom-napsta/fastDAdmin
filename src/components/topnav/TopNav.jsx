@@ -64,7 +64,7 @@ const Topnav = () => {
             label={
               <div className="topnav__right-user">
                 <div className="topnav__right-user__image">
-                  <Avatar rounded />
+                  <Avatar status="online" bordered rounded />
                   {/* <img src={curr_user.image} alt="usr" /> */}
                 </div>
                 <div className="topnav__right-user__name">

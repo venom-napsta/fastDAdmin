@@ -10,6 +10,11 @@
     "icon": "bx bx-transfer"
   },
   {
+    "display_name": "Rides",
+    "route": "/rides",
+    "icon": "bx bx-map-pin"
+  },
+  {
     "display_name": "Drivers",
     "route": "/drivers",
     "icon": "bx bx-car"
