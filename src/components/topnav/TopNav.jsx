@@ -1,4 +1,6 @@
 import React, { Fragment, useEffect } from 'react';
+import { CgMenuLeftAlt } from 'react-icons/cg';
+import { AiOutlineClose } from 'react-icons/ai';
 
 import './topnav.css';
 
@@ -9,6 +11,7 @@ import Dropdown from '../dropdown/Dropdown';
 // import ThemeMenu from '../thememenu/ThemeMenu';
 
 import notifications from '../../assets/JsonData/notification.json';
+import logo from '../../assets/Logo.png';
 
 import user_image from '../../assets/images/tuat.png';
 
@@ -26,7 +29,7 @@ const renderNotificationItem = (item, index) => (
   </Fragment>
 );
 
-const Topnav = () => {
+const Topnav = ({ show, onShow, onClose }) => {
   const dispatch = useDispatch();
   const history = useHistory();
   const { userInfo, userToken } = useSelector((state) => state.auth);
@@ -46,10 +49,15 @@ const Topnav = () => {
   //   display_name: user.displayName,
   //   image: user.user_image,
   // };
+
   return (
-    <div className="topnav bg-gray-100">
+    <div className="topnav bg-gray-200">
+      {/* <button onClick={onShow}>Menu</button> */}
+      <CgMenuLeftAlt size={45} onClick={onShow} />
       <div className="bg-white-200">
-        <h1 className="text-xl font-bold">Control Panel</h1>
+        <div className="sidebar__logo">
+          <img src={logo} alt="company logo" />
+        </div>
       </div>
       {/* <div className="topnav__search">
                 <input type="text" placeholder='Search here...' />

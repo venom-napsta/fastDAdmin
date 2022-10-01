@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import './layout.css';
 
@@ -13,6 +13,7 @@ import { useSelector } from 'react-redux';
 // import ThemeAction from '../../redux/actions/ThemeAction';
 import Signin from '../../pages/Signin';
 import NotFound from '../../pages/NotFound';
+import TailBar from '../sidebar/TailBar';
 
 const Layout = () => {
   // const themeReducer = useSelector((state) => state.ThemeReducer);
@@ -37,6 +38,8 @@ const Layout = () => {
     }
   }, [loading, userInfo, userToken, history]);
 
+  const [show, setShow] = useState(false);
+
   return (
     <BrowserRouter>
       <Switch>
@@ -53,9 +56,19 @@ const Layout = () => {
           exact
           render={(props) => (
             <div className={`layout theme-mode-light theme-mode-light`}>
-              <Sidebar {...props} />
+              {/* <TailBar /> */}
+              <Sidebar
+                show={show}
+                onShow={() => setShow(true)}
+                onClose={() => setShow(false)}
+                {...props}
+              />
               <div className="layout__content">
-                <TopNav />
+                <TopNav
+                  show={show}
+                  onShow={() => setShow(true)}
+                  onClose={() => setShow(false)}
+                />
                 <div className="layout__content-main">
                   <Routes />
                 </div>

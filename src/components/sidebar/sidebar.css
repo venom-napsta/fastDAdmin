@@ -4,7 +4,8 @@
   position: fixed;
   left: 0;
   top: 0;
-  background-color: var(--main-bg);
+  z-index: 100;
+  background-color: rgb(218, 220, 224);
   box-shadow: var(--box-shadow);
 }
 
