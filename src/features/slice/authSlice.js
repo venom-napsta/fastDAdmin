@@ -12,7 +12,7 @@ export const login = createAsyncThunk(
     };
     try {
       const res = await http.post(
-        'login',
+        'http://75.119.154.13:5000/login',
         {
           contact,
           password,
