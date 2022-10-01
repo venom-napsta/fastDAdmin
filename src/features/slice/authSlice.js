@@ -50,7 +50,7 @@ export const login = createAsyncThunk(
     };
     try {
       const res = await http.post(
-        'login',
+        '/login',
         {
           contact,
           password,
