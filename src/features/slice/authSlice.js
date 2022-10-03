@@ -2,18 +2,19 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { toast } from 'react-toastify';
 import http from '../../services/httpService';
 
+const config = {
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  withCredentials: true,
+};
+
 export const registerUser = createAsyncThunk(
   'auth/register',
   async (
     { firstname, lastname, email, contact, password, password_confirmation },
     { rejectWithValue }
   ) => {
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      withCredentials: true,
-    };
     try {
       const res = await http.post(
         'sign-up/admin',
@@ -45,11 +46,6 @@ export const registerUser = createAsyncThunk(
 export const login = createAsyncThunk(
   'auth/Login',
   async ({ contact, password }, { rejectWithValue }) => {
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    };
     try {
       const res = await http.post(
         '/login',
