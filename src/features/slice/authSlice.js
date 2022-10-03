@@ -2,15 +2,16 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { toast } from 'react-toastify';
 import http from '../../services/httpService';
 
+const token = JSON.parse(localStorage.getItem('userToken'))
+  ? JSON.parse(localStorage.getItem('userToken'))
+  : null;
+
 export const registerUser = createAsyncThunk(
   'auth/register',
   async (
     { firstname, lastname, email, contact, password, password_confirmation },
     { rejectWithValue }
   ) => {
-    const token = JSON.parse(localStorage.getItem('userToken'))
-      ? JSON.parse(localStorage.getItem('userToken'))
-      : null;
     const config = {
       headers: {
         'Content-Type': 'application/json',
@@ -51,6 +52,7 @@ export const login = createAsyncThunk(
     const config = {
       headers: {
         'Content-Type': 'application/json',
+        Authorization: `${token}`,
       },
     };
     try {
