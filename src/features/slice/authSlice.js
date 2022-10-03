@@ -8,9 +8,13 @@ export const registerUser = createAsyncThunk(
     { firstname, lastname, email, contact, password, password_confirmation },
     { rejectWithValue }
   ) => {
+    const token = JSON.parse(localStorage.getItem('userToken'))
+      ? JSON.parse(localStorage.getItem('userToken'))
+      : null;
     const config = {
       headers: {
         'Content-Type': 'application/json',
+        Authorization: `${token}`,
       },
     };
     try {

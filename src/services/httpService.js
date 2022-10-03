@@ -2,11 +2,11 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import logger from './logService';
 
-// Alter defaults after instance has been created
-const token = JSON.parse(localStorage.getItem('userToken'))
-  ? JSON.parse(localStorage.getItem('userToken'))
-  : null;
-axios.defaults.headers.common['Authorization'] = token;
+// // Alter defaults after instance has been created
+// const token = JSON.parse(localStorage.getItem('userToken'))
+//   ? JSON.parse(localStorage.getItem('userToken'))
+//   : null;
+// axios.defaults.headers.common['Authorization'] = token;
 
 // null == success(usu. handled for auditing), error == fail
 axios.interceptors.response.use(null, (error) => {
@@ -26,6 +26,7 @@ axios.interceptors.response.use(null, (error) => {
     // toast.error("An expected Error Occured");
     // toast == all colors, .err == red, .success == green
   }
+  toast.error('An unexpected Error Occured');
 
   return Promise.reject(error);
 });
