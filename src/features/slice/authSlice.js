@@ -11,8 +11,8 @@ export const registerUser = createAsyncThunk(
     const config = {
       headers: {
         'Content-Type': 'application/json',
-        withCredentials: true,
       },
+      withCredentials: true,
     };
     try {
       const res = await http.post(
