@@ -22,10 +22,10 @@ axios.interceptors.response.use(null, (error) => {
     // console.log('Logging the error', error);
     // alert('An expected Error Occured');
 
-    toast(`Bammer !!!: ${error}`);
-    // toast.error("An expected Error Occured");
+    toast.error('An expected Error Occured');
     // toast == all colors, .err == red, .success == green
-  } else toast.error('An unexpected Error Occured');
+  }
+  toast(`Bammer !!!: ${error}`);
 
   return Promise.reject(error);
 });
