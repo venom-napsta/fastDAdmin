@@ -40,6 +40,7 @@ export const registerUser = createAsyncThunk(
   }
 );
 
+// Add User /login Post
 export const login = createAsyncThunk(
   'auth/Login',
   async ({ contact, password }, { rejectWithValue }) => {
@@ -60,8 +61,6 @@ export const login = createAsyncThunk(
       const { data } = res;
       if (data) {
         console.log('Data', data);
-        // localStorage.setItem('userToken', 'userToken');
-        // localStorage.setItem('user', 'napsta')
         localStorage.setItem('user', JSON.stringify(data.data.user));
         localStorage.setItem(
           'userToken',
@@ -69,7 +68,6 @@ export const login = createAsyncThunk(
         );
       }
       console.log('User Res', data);
-      // localStorage.setItem('user', JSON.stringify(data));
       return data;
     } catch (error) {
       console.log('Redux Res', error.response.data.errors[0].msg);

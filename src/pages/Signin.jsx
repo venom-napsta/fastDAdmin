@@ -70,12 +70,15 @@ function Signin() {
   }, [isAuthD, loginErr, userInfo, history, userToken]);
 
   return (
-    <div className="mx-auto flex flex-col min-h-screen w-full items-center justify-center bg-[#f3f3f3]">
+    <div className="mx-auto py-10 flex items-center justify-center ">
       {/* component */}
-      <div className="px-5 flex w-[35rem] flex-col space-y-10 ">
-        <div className="items-center w-100 h-80 sidebar__logo">
-          <img src={logo} alt="company logo" />
-        </div>
+      <div className="px-5 w-[35rem] items-center mt-8 justify-center flex-col space-y-10 ">
+        <img
+          src={logo}
+          className="px-5 items-center justify-center "
+          alt="company logo"
+        />
+        {/* <div className="items-center w-100 h-80 sidebar__logo"></div> */}
 
         <form autoComplete="off" onSubmit={handleSubmit(onSubmitHandler)}>
           <div className="text-[#010080] text-center text-4xl font-medium">

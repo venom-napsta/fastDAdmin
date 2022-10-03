@@ -1,5 +1,5 @@
 .topnav {
-  padding: 30px;
+  padding: 0 1.4rem 0 1.4rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -40,13 +40,13 @@
 }
 
 .topnav__right-item ~ .topnav__right-item {
-  margin-left: 30px;
+  margin-left: 1.8rem;
 }
 
 .notification-item {
   display: flex;
   align-items: center;
-  padding: 20px;
+  padding: 1.4rem;
   color: aliceblue;
   background: var(--txt-color);
 }

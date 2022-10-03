@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { FaEdit, FaTimes, FaTrashAlt } from 'react-icons/fa';
 
@@ -126,6 +126,12 @@ function Users() {
     }
   }, [loading, userInfo, users, userToken, history, registeredUser, dispatch]);
 
+  const [filter, setFilter] = useState('');
+  // const filteredUsers = useMemo(
+  //   () => users.filter((user) => user.firstname.startsWith(filter)),
+  //   [filter, users]
+  // );
+
   if (usrLoading) {
     return (
       <div className="flex flex-col gap-2">
@@ -188,16 +194,23 @@ function Users() {
                     </div> */}
               </div>
               <div className="topnav__search mb-5">
-                <input type="text" placeholder="Search here..." />
+                <input
+                  onChange={(e) => setFilter(e.target.value)}
+                  type="text"
+                  placeholder="Search here..."
+                />
                 <i className="bx bx-search"></i>
               </div>
-              <Table
-                limit="10"
-                headData={userTableHead}
-                renderHead={(item, index) => renderHead(item, index)}
-                bodyData={users}
-                renderBody={(item, index) => renderBody(item, index)}
-              />
+
+              <>
+                <Table
+                  limit="10"
+                  headData={userTableHead}
+                  renderHead={(item, index) => renderHead(item, index)}
+                  bodyData={users}
+                  renderBody={(item, index) => renderBody(item, index)}
+                />
+              </>
             </div>
             {usrErr ? (
               <>

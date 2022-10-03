@@ -55,7 +55,7 @@ const Layout = () => {
         <Route
           exact
           render={(props) => (
-            <div className={`layout theme-mode-light theme-mode-light`}>
+            <div className={`w-full layout bg-gray-500 theme-mode-light`}>
               {/* <TailBar /> */}
               <Sidebar
                 show={show}

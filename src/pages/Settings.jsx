@@ -111,7 +111,7 @@ function Settings() {
                           </select>
                         </div>
                       </div>
-                      <label for="comm">Commission:</label>
+                      <label htmlFor="comm">Commission:</label>
                       <input
                         type="number"
                         required

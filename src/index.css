@@ -1,3 +1,72 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 576px) {
+  .sidebar__logo > img {
+    display: none;
+  }
+  .status-card {
+    padding: 30px;
+    width: 100%;
+  }
+  .card {
+    padding: 10px;
+  }
+  .dispFull > .col-4 {
+    width: 100%;
+  }
+  .dispFull > .col-8 {
+    width: 100%;
+  }
+  .topnav__right-user > p > i {
+    display: none;
+  }
+}
+
+/* Small devices (portrait tablets and large phones, 576 and up) */
+@media only screen and (min-width: 576px) {
+  /* style */
+  .status-card {
+    padding: 25px;
+    display: flex;
+    flex-direction: row;
+    flex: 1;
+  }
+  .row {
+    display: flex;
+  }
+  .card {
+    padding: 20px;
+  }
+  .dispFull {
+    width: 98vw;
+  }
+  .dispFull > .col-4 {
+    width: 100%;
+  }
+  .dispFull > .col-8 {
+    width: 100%;
+  }
+  .topnav__right-user > p > i {
+    display: none;
+  }
+}
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 92px) {
+  /* style */
+  .row > .col-12 {
+  }
+  .status-card {
+    padding: 30px;
+    display: flex;
+    flex: 1 1;
+  }
+}
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1200px) {
+  /* style */
+}

@@ -186,14 +186,14 @@ const Dashboard = () => {
         <div className="col-12">
           <div className="row">
             {statusCards.map((item, index) => (
-              <div className="col-4" key={index}>
+              <div className="col-4 flex w-full text-sm" key={index}>
                 <StatusCard
                   icon={item.icon}
                   count={item.count}
                   title={item.title}
                   xtr={
                     <>
-                      <FaArrowUp size={50} color="green" />
+                      <FaArrowUp size={45} color="green" />
                     </>
                   }
                 />
@@ -224,39 +224,41 @@ const Dashboard = () => {
             /> */}
           </div>
         </div>
-        <div className="col-4">
-          <div className="card">
-            <div className="card__header">
-              <h3>top Drivers</h3>
-            </div>
-            <div className="card__body">
-              <Table
-                headData={topDrivers.head}
-                renderHead={(item, index) => renderCusomerHead(item, index)}
-                bodyData={topDrivers.body}
-                renderBody={(item, index) => renderCusomerBody(item, index)}
-              />
-            </div>
-            <div className="card__footer">
-              <Link to="/drivers">view all</Link>
+        <div className="dispFull">
+          <div className="col-4">
+            <div className="card">
+              <div className="card__header">
+                <h3>top Drivers</h3>
+              </div>
+              <div className="card__body">
+                <Table
+                  headData={topDrivers.head}
+                  renderHead={(item, index) => renderCusomerHead(item, index)}
+                  bodyData={topDrivers.body}
+                  renderBody={(item, index) => renderCusomerBody(item, index)}
+                />
+              </div>
+              <div className="card__footer">
+                <Link to="/drivers">view all</Link>
+              </div>
             </div>
           </div>
-        </div>
-        <div className="col-8">
-          <div className="card">
-            <div className="card__header">
-              <h3>Latest Transactions</h3>
-            </div>
-            <div className="card__body">
-              <Table
-                headData={latestTransactions.header}
-                renderHead={(item, index) => renderdriverHead(item, index)}
-                bodyData={latestTransactions.body}
-                renderBody={(item, index) => renderdriverBody(item, index)}
-              />
-            </div>
-            <div className="card__footer">
-              <Link to="/transactions">view all</Link>
+          <div className="col-8 ">
+            <div className="card">
+              <div className="card__header">
+                <h3>Latest Transactions</h3>
+              </div>
+              <div className="card__body">
+                <Table
+                  headData={latestTransactions.header}
+                  renderHead={(item, index) => renderdriverHead(item, index)}
+                  bodyData={latestTransactions.body}
+                  renderBody={(item, index) => renderdriverBody(item, index)}
+                />
+              </div>
+              <div className="card__footer">
+                <Link to="/transactions">view all</Link>
+              </div>
             </div>
           </div>
         </div>

@@ -35,6 +35,7 @@ const userSlice = createSlice({
     users: [],
     loading: false,
     error: null,
+    searchResults: null,
   },
   reducers: {
     saveUsers(state, { payload }) {

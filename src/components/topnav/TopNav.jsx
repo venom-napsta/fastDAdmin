@@ -54,7 +54,7 @@ const Topnav = ({ show, onShow, onClose }) => {
     <div className="topnav bg-gray-200">
       {/* <button onClick={onShow}>Menu</button> */}
       <CgMenuLeftAlt size={45} onClick={onShow} />
-      <div className="bg-white-200">
+      <div className="sm:hidden md:hidden">
         <div className="sidebar__logo">
           <img src={logo} alt="company logo" />
         </div>
