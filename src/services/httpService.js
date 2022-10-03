@@ -25,8 +25,7 @@ axios.interceptors.response.use(null, (error) => {
     toast(`Bammer !!!: ${error}`);
     // toast.error("An expected Error Occured");
     // toast == all colors, .err == red, .success == green
-  }
-  toast.error('An unexpected Error Occured');
+  } else toast.error('An unexpected Error Occured');
 
   return Promise.reject(error);
 });
