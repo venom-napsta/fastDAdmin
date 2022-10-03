@@ -6,6 +6,7 @@ const config = {
   headers: {
     'Content-Type': 'application/json',
   },
+  crossdomain: true,
   withCredentials: true,
 };
 

@@ -1,7 +1,6 @@
 {
   "name": "react-lap",
   "version": "0.1.0",
-  "proxy": "http://75.119.154.13:5000",
   "private": true,
   "dependencies": {
     "@hookform/resolvers": "^2.9.8",
