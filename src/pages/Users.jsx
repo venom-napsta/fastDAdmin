@@ -160,12 +160,13 @@ function Users() {
             {registeredUser ? (
               <RegisteredUser registeredUser={registeredUser} />
             ) : null}
-            <div className="card__body">
-              <div className="filter">
-                {/*<div className="topnav__right-item">
+            {users.length > 0 ? (
+              <div className="card__body">
+                <div className="filter">
+                  {/*<div className="topnav__right-item">
                   {/* dropdown here */}
 
-                {/* <div
+                  {/* <div
                     style={{
                       backgroundColor: '#455560',
                       color: 'white',
@@ -192,27 +193,27 @@ function Users() {
                     </DrpDwn>
                   </div>
                     </div> */}
-              </div>
-              <div className="topnav__search mb-5">
-                <input
-                  onChange={(e) => setFilter(e.target.value)}
-                  type="text"
-                  placeholder="Search here..."
-                />
-                <i className="bx bx-search"></i>
-              </div>
+                </div>
+                <div className="topnav__search mb-5">
+                  <input
+                    onChange={(e) => setFilter(e.target.value)}
+                    type="text"
+                    placeholder="Search here..."
+                  />
+                  <i className="bx bx-search"></i>
+                </div>
 
-              <>
-                <Table
-                  limit="10"
-                  headData={userTableHead}
-                  renderHead={(item, index) => renderHead(item, index)}
-                  bodyData={users}
-                  renderBody={(item, index) => renderBody(item, index)}
-                />
-              </>
-            </div>
-            {usrErr ? (
+                <>
+                  <Table
+                    limit="10"
+                    headData={userTableHead}
+                    renderHead={(item, index) => renderHead(item, index)}
+                    bodyData={users}
+                    renderBody={(item, index) => renderBody(item, index)}
+                  />
+                </>
+              </div>
+            ) : (
               <>
                 <div className="flex flex-col gap-2">
                   <div className="text-center">
@@ -227,7 +228,7 @@ function Users() {
                   </div>
                 </div>
               </>
-            ) : null}
+            )}
           </div>
         </div>
       </div>

@@ -99,16 +99,6 @@ const Drivers = () => {
       </div>
     );
   }
-  if (error) {
-    return (
-      <>
-        {' '}
-        <Badge color="failure" size="sm">
-          {error}
-        </Badge>
-      </>
-    );
-  }
 
   return (
     <Fragment>
@@ -116,46 +106,49 @@ const Drivers = () => {
         <div className="row">
           <div className="col-12">
             <div className="card">
-              <div className="topnav__search">
-                <input
-                  onChange={(e) => setQuery(e.target.value)}
-                  type="text"
-                  placeholder="Search here..."
-                />
-                <i
-                  onClick={() => dispatch(searchDriver(query))}
-                  className="bx bx-search"
-                ></i>
-              </div>
-              <div className="card__body">
-                <Table
-                  limit="10"
-                  headData={customerTableHead}
-                  renderHead={(item, index) => renderHead(item, index)}
-                  bodyData={drivers}
-                  renderBody={(item, index) => renderBody(item, index)}
-                />
-              </div>
-            </div>
-
-            {drvErr ? (
-              <>
-                <div className="flex flex-col gap-2">
-                  <div className="text-center">
-                    <div
-                      className="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800"
-                      role="alert"
-                    >
-                      <span className="font-medium">
-                        Error, Request Failed!
-                      </span>
-                      {' : '}
-                      {drvErr}
+              {drivers.length > 0 ? (
+                <>
+                  {' '}
+                  <div className="topnav__search">
+                    <input
+                      onChange={(e) => setQuery(e.target.value)}
+                      type="text"
+                      placeholder="Search here..."
+                    />
+                    <i
+                      onClick={() => dispatch(searchDriver(query))}
+                      className="bx bx-search"
+                    ></i>
+                  </div>
+                  <div className="card__body">
+                    <Table
+                      limit="10"
+                      headData={customerTableHead}
+                      renderHead={(item, index) => renderHead(item, index)}
+                      bodyData={drivers}
+                      renderBody={(item, index) => renderBody(item, index)}
+                    />
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="flex flex-col gap-2">
+                    <div className="text-center">
+                      <div
+                        className="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800"
+                        role="alert"
+                      >
+                        <span className="font-medium">
+                          Error, Request Failed!
+                        </span>
+                        {' : '}
+                        {drvErr}
+                      </div>
                     </div>
                   </div>
-                </div>
-              </>
-            ) : null}
+                </>
+              )}
+            </div>
           </div>
         </div>
       </div>
