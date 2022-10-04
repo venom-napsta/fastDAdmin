@@ -23,7 +23,7 @@ function Signin() {
   const {
     userInfo,
     userToken,
-    isAuthD,
+
     loading,
     error: loginErr,
   } = useSelector((state) => state.auth);
@@ -67,7 +67,7 @@ function Signin() {
       console.log('User Logged In', userInfo);
       history.push('/');
     }
-  }, [isAuthD, loginErr, userInfo, history, userToken]);
+  }, [loginErr, userInfo, history, userToken]);
 
   return (
     <div className="mx-auto py-10 flex items-center justify-center ">

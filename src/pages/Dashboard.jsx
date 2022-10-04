@@ -173,12 +173,13 @@ const Dashboard = () => {
   const history = useHistory();
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    // // console.log(dispatch(getAllDrivers()));
-    if (!userToken) {
-      history.replace('/login');
-    }
-  }, [loading, userInfo, userToken, history]);
+  // useEffect(() => {
+  //   // // console.log(dispatch(getAllDrivers()));
+  //   if (!userToken) {
+  //     history.replace('/login');
+  //   }
+  // }, [loading, userInfo, userToken, history]);
+
   return (
     <div>
       <h2 className="page-header">Dashboard</h2>

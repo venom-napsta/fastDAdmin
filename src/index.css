@@ -7,18 +7,21 @@
   .sidebar__logo > img {
     display: none;
   }
+  .row {
+    width: 100vw;
+  }
   .status-card {
-    padding: 30px;
-    width: 100%;
+    padding: 15px;
+    width: 95%;
   }
   .card {
     padding: 10px;
   }
   .dispFull > .col-4 {
-    width: 100%;
+    width: 100vw;
   }
   .dispFull > .col-8 {
-    width: 100%;
+    width: 100vw;
   }
   .topnav__right-user > p > i {
     display: none;
@@ -41,7 +44,7 @@
     padding: 20px;
   }
   .dispFull {
-    width: 98vw;
+    width: 100vw;
   }
   .dispFull > .col-4 {
     width: 100%;
@@ -55,14 +58,38 @@
 }
 
 /* Large devices (laptops/desktops, 992px and up) */
-@media only screen and (min-width: 92px) {
+@media only screen and (min-width: 920px) {
   /* style */
-  .row > .col-12 {
+  w-full {
+    width: unset;
   }
+  .row > .w-full {
+    width: 33%;
+  }
+  /* .status-card {
+    display: flex;
+  }  */
   .status-card {
     padding: 30px;
     display: flex;
-    flex: 1 1;
+  }
+  .row {
+    display: flex;
+  }
+  .card {
+    padding: 30px;
+  }
+  .dispFull {
+    width: 100vw;
+  }
+  .dispFull > .col-4 {
+    width: 100%;
+  }
+  .dispFull > .col-8 {
+    width: 100%;
+  }
+  .topnav__right-user > p > i {
+    display: none;
   }
 }
 

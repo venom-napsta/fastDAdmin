@@ -18,11 +18,11 @@ function Settings() {
   const { userInfo, userToken, loading } = useSelector((state) => state.auth);
   const history = useHistory();
 
-  useEffect(() => {
-    if (!userToken) {
-      history.replace('/login');
-    }
-  }, [loading, userInfo, userToken, history]);
+  // useEffect(() => {
+  //   if (!userToken) {
+  //     history.replace('/login');
+  //   }
+  // }, [loading, userInfo, userToken, history]);
 
   const [showModal, setShowModal] = useState(false);
 

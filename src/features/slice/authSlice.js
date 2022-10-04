@@ -37,7 +37,7 @@ export const registerUser = createAsyncThunk(
       return data;
     } catch (error) {
       console.log('Redux Res', error.response.data.errors[0].msg);
-      toast(`Bammer! ${error.response.data.errors[0].msg}`);
+      toast(`Error! ${error.response.message}`);
       return rejectWithValue(error.response.message);
     }
   }
@@ -46,12 +46,12 @@ export const registerUser = createAsyncThunk(
 // Add User /login Post
 export const login = createAsyncThunk(
   'auth/Login',
-  async ({ contact, password }, { rejectWithValue }) => {
+  async ({ contact: phone_number, password }, { rejectWithValue }) => {
     try {
       const res = await http.post(
-        '/login',
+        '/auth/admin/login',
         {
-          contact,
+          phone_number,
           password,
         },
         config
@@ -69,7 +69,7 @@ export const login = createAsyncThunk(
       return data;
     } catch (error) {
       console.log('Redux Res', error.response.data.errors[0].msg);
-      toast(`Bammer! ${error.response.data.errors[0].msg}`);
+      toast(`Error! ${error.response.message}`);
       return rejectWithValue(error.response.message);
     }
   }
@@ -109,11 +109,6 @@ const authSlice = createSlice({
     registeredUser: null,
   },
   reducers: {
-    /* 
-    reset: (state) => {
-      state.error = null;
-      state.loading = false;
-    }, */
     logout: (state, action) => {
       localStorage.removeItem('userToken');
       localStorage.removeItem('user');
@@ -128,12 +123,10 @@ const authSlice = createSlice({
       state.loading = false;
       state.userInfo = payload.data.user;
       state.userToken = payload.data.token.token;
-      state.isAuthD = true;
       window.location = '/';
     },
     [login.rejected]: (state, { payload }) => {
       state.loading = false;
-      state.isAuthD = false;
       state.error = payload;
     },
 

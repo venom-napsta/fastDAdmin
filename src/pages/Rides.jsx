@@ -5,11 +5,6 @@ import Table from '../components/table/Table';
 // import customerList from '../assets/JsonData/customers-list.json';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import {
-  getAllDrivers,
-  searchDriver,
-  saveDrivers,
-} from '../features/slice/driverSlice';
 import { Badge } from 'flowbite-react/lib/cjs/components/Badge';
 import { Spinner } from 'flowbite-react/lib/cjs/components/Spinner';
 import http from '../services/httpService';
@@ -26,27 +21,15 @@ import { saveRides } from '../features/slice/rideSlice';
 //   'Overal Rating',
 //   'ride status',
 // ];
-// const rideHeader = [
-//   'id',
-//   'customer_id',
-//   'driver_id',
-//   'pick_from',
-//   'drop_to',
-//   'ride_cost',
-//   'ride_status',
-//   'rating'
-// ];
-
-const customerTableHead = [
+const rideHeader = [
   'id',
   'customer_id',
-  'email',
-  'contact',
-  'role',
-  '-',
-  'approval status',
-  'Overal Rating',
-  'ride status',
+  'driver_id',
+  'pick_from',
+  'drop_to',
+  'ride_cost',
+  'ride_status',
+  'rating',
 ];
 
 // const driversHeadHeader = ['Driving Info', 'Profile'];
@@ -101,12 +84,12 @@ const Rides = () => {
       .finally(() => setLoadingRides(false));
   }, []);
 
-  useEffect(() => {
-    // dispatch(getAllDrivers());
-    if (!userToken) {
-      history.replace('/login');
-    }
-  }, [loading, dispatch, userInfo, userToken, history]);
+  // useEffect(() => {
+  //   // dispatch(getAllDrivers());
+  //   if (!userToken) {
+  //     history.replace('/login');
+  //   }
+  // }, [loading, dispatch, userInfo, userToken, history]);
 
   const [query, setQuery] = useState('');
 
@@ -119,16 +102,16 @@ const Rides = () => {
       </div>
     );
   }
-  if (ridesErr) {
-    return (
-      <>
-        {' '}
-        <Badge color="failure" size="sm">
-          {error}
-        </Badge>
-      </>
-    );
-  }
+  // if (ridesErr) {
+  //   return (
+  //     <>
+  //       {' '}
+  //       <Badge color="failure" size="sm">
+  //         {ridesErr}
+  //       </Badge>
+  //     </>
+  //   );
+  // }
 
   return (
     <Fragment>
@@ -142,15 +125,12 @@ const Rides = () => {
                   type="text"
                   placeholder="Search here..."
                 />
-                <i
-                  onClick={() => dispatch(searchDriver(query))}
-                  className="bx bx-search"
-                ></i>
+                <i className="bx bx-search"></i>
               </div>
               <div className="card__body">
                 <Table
                   limit="10"
-                  headData={customerTableHead}
+                  headData={rideHeader}
                   renderHead={(item, index) => renderHead(item, index)}
                   bodyData={rides}
                   renderBody={(item, index) => renderBody(item, index)}

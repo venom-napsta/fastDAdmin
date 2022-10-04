@@ -81,12 +81,12 @@ const Drivers = () => {
       .finally(() => setLoading(false));
   }, []);
 
-  useEffect(() => {
-    // dispatch(getAllDrivers());
-    if (!userToken) {
-      history.replace('/login');
-    }
-  }, [loading, drivers, dispatch, userInfo, userToken, history]);
+  // useEffect(() => {
+  //   // dispatch(getAllDrivers());
+  //   if (!userToken) {
+  //     history.replace('/login');
+  //   }
+  // }, [loading, drivers, dispatch, userInfo, userToken, history]);
 
   const [query, setQuery] = useState('');
 

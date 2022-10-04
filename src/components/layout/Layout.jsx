@@ -32,11 +32,11 @@ const Layout = () => {
 
   const { userInfo, userToken, loading } = useSelector((state) => state.auth);
 
-  useEffect(() => {
-    if (!userToken) {
-      history.push('/login');
-    }
-  }, [loading, userInfo, userToken, history]);
+  // useEffect(() => {
+  //   if (!userToken) {
+  //     history.push('/login');
+  //   }
+  // }, [loading, userInfo, userToken, history]);
 
   const [show, setShow] = useState(false);
 

@@ -119,12 +119,12 @@ function Users() {
       .finally(() => setUsrLoading(false));
   }, []);
 
-  useEffect(() => {
-    // dispatch(getAllUsers());
-    if (!userToken) {
-      history.replace('/login');
-    }
-  }, [loading, userInfo, users, userToken, history, registeredUser, dispatch]);
+  // useEffect(() => {
+  //   // dispatch(getAllUsers());
+  //   if (!userToken) {
+  //     history.replace('/login');
+  //   }
+  // }, [loading, userInfo, users, userToken, history, registeredUser, dispatch]);
 
   const [filter, setFilter] = useState('');
   // const filteredUsers = useMemo(
