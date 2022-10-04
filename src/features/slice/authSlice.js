@@ -18,7 +18,7 @@ export const registerUser = createAsyncThunk(
   ) => {
     try {
       const res = await http.post(
-        'sign-up/admin',
+        '/auth/admin/sign-up',
         {
           firstname,
           lastname,

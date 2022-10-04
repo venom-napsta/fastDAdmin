@@ -67,7 +67,7 @@ const Sidebar = (props) => {
           ))}
           <div
             onClick={props.onClose}
-            className="flex bg-[#0000a0] text-gray-50 content-center relative bottom-0 right-0 left-0 p-4 mb-1  hover:bg-red-900"
+            className="flex bg-[#0000a0] text-gray-50 content-center absolute bottom-0 right-0 left-0 p-4 mb-1  hover:bg-red-900"
           >
             Close <AiOutlineClose color="orange" size={30} />
           </div>
