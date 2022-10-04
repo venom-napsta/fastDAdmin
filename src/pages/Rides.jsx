@@ -118,7 +118,7 @@ const Rides = () => {
         <div className="row">
           <div className="col-12">
             <div className="card">
-              {rides.length > 0 ? (
+              {rides ? (
                 <>
                   <div className="topnav__search">
                     <input

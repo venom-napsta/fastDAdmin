@@ -35,7 +35,7 @@ const rideSlice = createSlice({
     },
     [getAllRides.fulfilled]: (state, action) => {
       state.loading = false;
-      state.drivers = action.payload;
+      state.rides = action.payload;
     },
     [getAllRides.rejected]: (state, action) => {
       state.loading = false;

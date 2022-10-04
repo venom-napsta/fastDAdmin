@@ -106,7 +106,7 @@ const Drivers = () => {
         <div className="row">
           <div className="col-12">
             <div className="card">
-              {drivers.length > 0 ? (
+              {drivers ? (
                 <>
                   {' '}
                   <div className="topnav__search">

@@ -160,7 +160,7 @@ function Users() {
             {registeredUser ? (
               <RegisteredUser registeredUser={registeredUser} />
             ) : null}
-            {users.length > 0 ? (
+            {users ? (
               <div className="card__body">
                 <div className="filter">
                   {/*<div className="topnav__right-item">
