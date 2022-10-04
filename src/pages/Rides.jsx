@@ -5,7 +5,6 @@ import Table from '../components/table/Table';
 // import customerList from '../assets/JsonData/customers-list.json';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { Badge } from 'flowbite-react/lib/cjs/components/Badge';
 import { Spinner } from 'flowbite-react/lib/cjs/components/Spinner';
 import http from '../services/httpService';
 import { saveRides } from '../features/slice/rideSlice';
@@ -128,13 +127,15 @@ const Rides = () => {
                 <i className="bx bx-search"></i>
               </div>
               <div className="card__body">
-                <Table
-                  limit="10"
-                  headData={rideHeader}
-                  renderHead={(item, index) => renderHead(item, index)}
-                  bodyData={rides}
-                  renderBody={(item, index) => renderBody(item, index)}
-                />
+                {rides ? (
+                  <Table
+                    limit="10"
+                    headData={rideHeader}
+                    renderHead={(item, index) => renderHead(item, index)}
+                    bodyData={rides}
+                    renderBody={(item, index) => renderBody(item, index)}
+                  />
+                ) : null}
               </div>
             </div>
 
