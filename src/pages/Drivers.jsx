@@ -1,104 +1,85 @@
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { Fragment } from 'react';
 
 import Table from '../components/table/Table';
 
-// import customerList from '../assets/JsonData/customers-list.json';
-import { useDispatch, useSelector } from 'react-redux';
-import { useHistory } from 'react-router-dom';
-import {
-  getAllDrivers,
-  searchDriver,
-  saveDrivers,
-} from '../features/slice/driverSlice';
-import { Badge } from 'flowbite-react/lib/cjs/components/Badge';
-import { Spinner } from 'flowbite-react/lib/cjs/components/Spinner';
-import http from '../services/httpService';
-
-const customerTableHead = [
-  'id',
-
-  'name',
-  'email',
-  'contact',
-  'role',
-  '-',
-  'approval status',
-  'Overal Rating',
-  'ride status',
-];
-
-// const driversHeadHeader = ['Driving Info', 'Profile'];
-
-const renderHead = (item, index) => <th key={index}>{item}</th>;
-
-const renderBody = (item, index) => (
-  <tr key={index}>
-    <td>{item.id}</td>
-    <td>
-      {item.profile.firstname}&nbsp;{item.profile.lastname}
-    </td>
-    <td>{item.profile.email}</td>
-    <td>{item.profile.contact}</td>
-    <td>{item.profile.role}</td>
-    <td>-</td>
-    <td>{item.driving_info.approval_status}</td>
-    <td>{item.driving_info.overall_rating}</td>
-    <td>{item.driving_info.ride_status}</td>
-  </tr>
-);
+import { FaEdit, FaFilter, FaSortAlphaUpAlt, FaTrashAlt } from 'react-icons/fa';
+import Modal from '../components/common/Modal';
+import { useSelector } from 'react-redux';
+import EditModal from '../components/common/EditModal';
 
 const Drivers = () => {
-  const {
-    driver,
-    drivers,
-    documents,
-    error: driverError,
-    loading: driverLoading,
-  } = useSelector((state) => state.driver);
+  const { drivers, loading, error } = useSelector((state) => state.driver);
 
-  const history = useHistory();
-  const dispatch = useDispatch();
+  const customerTableHead = [
+    'ID',
+    'name',
+    'email',
+    'contact',
+    'location',
+    'ride_Status',
+    'approval_Status',
+    'overal_rating',
+    'Action',
+  ];
 
-  const { userInfo, userToken, loading, error } = useSelector(
-    (state) => state.auth
+  const renderHead = (item, index) => <th key={index}>{item}</th>;
+
+  const renderBody = (item, index) => (
+    <tr
+      onClick={() => {
+        console.log('Item Selected', item);
+        setDriver(item);
+        setShowModal(true);
+      }}
+      className="hover:cursor-pointer"
+      key={index}
+    >
+      <td>{item.id}</td>
+      <td>
+        {item.firstname} {item.lastname}
+      </td>
+      <td>{item.email}</td>
+      <td>{item.contact}</td>
+      <td>{item.location === 'za' ? 'South Africa' : 'Zimbabwe'}</td>
+      <td>{item.ride_status}</td>
+      <td>{item.approval_status}</td>
+      <td>{item.overal_rating}</td>
+      {
+        <Fragment>
+          <td>
+            <FaEdit
+              className="rounded-r hover:border sm:rounded sm:border-r-1 border-r border-b  hover:border-green-400 py-1 px-2"
+              color="green"
+              size={40}
+              onClick={(e) => {
+                e.stopPropagation();
+                setDriver(item);
+                setShowEditModal(true);
+              }}
+            />
+          </td>
+          <td>
+            <FaTrashAlt
+              className="rounded-r hover:border sm:rounded sm:border-r-1 border-r border-b  hover:border-red-400 py-1 px-2"
+              color="brown"
+              size={40}
+              onClick={(e) => {
+                e.stopPropagation();
+                if (
+                  window.confirm('Are you sure you wish to delete this item?')
+                )
+                  console.log('Del', item);
+              }}
+            />
+          </td>
+        </Fragment>
+      }
+    </tr>
   );
 
-  const [loadingDrv, setLoading] = useState(true);
-  const [drvErr, setDrvErr] = useState(false);
-
-  useEffect(() => {
-    http
-      .get('/drivers')
-      .then(({ data }) => {
-        console.log('Axios data: drvrs', data.data);
-        dispatch(saveDrivers(data.data));
-        // setUserList(data.data);
-      })
-      .catch((err) => {
-        console.log('axios err', err);
-        setDrvErr(err.message);
-      })
-      .finally(() => setLoading(false));
-  }, []);
-
-  // useEffect(() => {
-  //   // dispatch(getAllDrivers());
-  //   if (!userToken) {
-  //     history.replace('/login');
-  //   }
-  // }, [loading, drivers, dispatch, userInfo, userToken, history]);
-
-  const [query, setQuery] = useState('');
-
-  if (loadingDrv) {
-    return (
-      <div className="flex flex-col gap-2">
-        <div className="text-center">
-          <Spinner size="xl" aria-label="Center-aligned spinner example" />
-        </div>
-      </div>
-    );
-  }
+  const [driver, setDriver] = React.useState({});
+  const [showModal, setShowModal] = React.useState(false);
+  const [showEditModal, setShowEditModal] = React.useState(false);
 
   return (
     <Fragment>
@@ -106,51 +87,85 @@ const Drivers = () => {
         <div className="row">
           <div className="col-12">
             <div className="card">
-              {drivers ? (
-                <>
-                  {' '}
+              <div className="my-2 flex sm:flex-row flex-col">
+                <div className="flex flex-row mb-1 sm:mb-0 topnav__search mx-2">
+                  <div className="mx-3 border border-r-0 p-3 border-gray-400-200">
+                    <FaSortAlphaUpAlt />
+                  </div>
+                  <div className="relative flex items-center">
+                    <select className="ml-2 h-full border-l-0 rounded-r border sm:rounded sm:border-l-0 border-r border-b block appearance-none w-full bg-white border-gray-400 text-gray-700 py-2 px-4 pr-8 leading-tight focus:outline-none focus:border-l focus:border-r focus:bg-white focus:border-gray-500">
+                      <option>Sort by:</option>
+                      <option>Date</option>
+                      <option>Name</option>
+                      <option>Trips</option>
+                      <option>Amount</option>
+                    </select>
+                  </div>
+                  <div className="mx-3 border border-r-0 p-3 border-gray-400-200">
+                    <FaFilter />
+                  </div>
+                  <div className="relative flex items-center ">
+                    <label htmlFor="date">Time </label>
+                    <select
+                      name="date"
+                      id="date"
+                      className="ml-2 h-full rounded-l border block appearance-none w-full bg-white border-gray-400 text-gray-700 py-2 px-4 pr-8 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                    >
+                      <option>All</option>
+                      <option>0-24hrs</option>
+                      <option>24-48hrs</option>
+                      <option>20</option>
+                    </select>
+                  </div>
+                  <div className="relative flex items-center ">
+                    <label htmlFor="coutry">Country </label>
+                    <select className="ml-2 h-full rounded-r border sm:rounded sm:border-r-1 border-r border-b block appearance-none w-full bg-white border-gray-400 text-gray-700 py-2 px-4 pr-8 leading-tight focus:outline-none focus:border-l focus:border-r focus:bg-white focus:border-gray-500">
+                      <option value="zw">Zimbabwe</option>
+                      <option value="za">South Africa</option>
+                    </select>
+                  </div>
+                </div>
+                <div className="block relative">
+                  <span className="h-full absolute inset-y-0 left-0 flex items-center pl-2">
+                    <svg
+                      viewBox="0 0 24 24"
+                      className="h-4 w-4 fill-current text-gray-500"
+                    >
+                      <path d="M10 4a6 6 0 100 12 6 6 0 000-12zm-8 6a8 8 0 1114.32 4.906l5.387 5.387a1 1 0 01-1.414 1.414l-5.387-5.387A8 8 0 012 10z"></path>
+                    </svg>
+                  </span>
                   <div className="topnav__search">
-                    <input
-                      onChange={(e) => setQuery(e.target.value)}
-                      type="text"
-                      placeholder="Search here..."
-                    />
-                    <i
-                      onClick={() => dispatch(searchDriver(query))}
-                      className="bx bx-search"
-                    ></i>
+                    <input type="text" placeholder="Search here..." />
+                    <i className="bx bx-search"></i>
                   </div>
-                  <div className="card__body">
-                    <Table
-                      limit="10"
-                      headData={customerTableHead}
-                      renderHead={(item, index) => renderHead(item, index)}
-                      bodyData={drivers}
-                      renderBody={(item, index) => renderBody(item, index)}
-                    />
-                  </div>
-                </>
-              ) : (
-                <>
-                  <div className="flex flex-col gap-2">
-                    <div className="text-center">
-                      <div
-                        className="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800"
-                        role="alert"
-                      >
-                        <span className="font-medium">
-                          Error, Request Failed!
-                        </span>
-                        {' : '}
-                        {drvErr}
-                      </div>
-                    </div>
-                  </div>
-                </>
-              )}
+                </div>
+              </div>
+              <div className="card__body">
+                <Table
+                  limit="10"
+                  headData={customerTableHead}
+                  renderHead={(item, index) => renderHead(item, index)}
+                  bodyData={drivers}
+                  renderBody={(item, index) => renderBody(item, index)}
+                />
+              </div>
             </div>
           </div>
         </div>
+        {showModal && (
+          <Modal
+            driver={driver}
+            showModal
+            onClose={() => setShowModal(false)}
+          />
+        )}
+        {showEditModal && (
+          <EditModal
+            driver={driver}
+            showEditModal
+            onClose={() => setShowEditModal(false)}
+          />
+        )}
       </div>
     </Fragment>
   );

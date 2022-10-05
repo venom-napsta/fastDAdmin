@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import http from '../../services/httpService';
 // import customerList from '../ ../assets/JsonData/customers-list.json';
-import driverList from '../../assets/JsonData/customers-list.json';
+import driverList from '../../assets/JsonData/drivers_list.json';
 // const baseURL = 'http://194.163.132.169:5000';
 
 // Get All Drivers /drivers  GET
@@ -81,7 +81,8 @@ const driverSlice = createSlice({
   name: 'drivers',
   initialState: {
     driver: {},
-    drivers: [],
+    // drivers: [],
+    drivers: driverList,
     documents: [],
     loading: false,
     error: null,

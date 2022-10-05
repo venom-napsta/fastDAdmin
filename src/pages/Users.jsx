@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { FaEdit, FaTimes, FaTrashAlt } from 'react-icons/fa';
 
@@ -9,7 +9,6 @@ import { yupResolver } from '@hookform/resolvers/yup';
 
 import Table from '../components/table/Table';
 
-import { Dropdown as DrpDwn } from 'flowbite-react/lib/esm/components/Dropdown';
 import { useDispatch, useSelector } from 'react-redux';
 import { /* getAllUsers */ saveUsers } from '../features/slice/userSlice';
 import { registerUser } from '../features/slice/authSlice';
