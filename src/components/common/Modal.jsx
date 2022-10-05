@@ -25,7 +25,7 @@ function Modal({ onClose, driver: user }) {
               {/*header*/}
               <div className="flex items-start justify-between p-5 border-b border-solid border-slate-200 rounded-t">
                 <div className="text-[#010080] text-center text-xl font-medium">
-                  User Details
+                  Driver Details
                 </div>
                 <button
                   className="p-1 ml-auto bg-gray-100 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
@@ -36,7 +36,7 @@ function Modal({ onClose, driver: user }) {
               </div>
               {/*body*/}
               <div className="relative p-6 flex-auto">
-                <form autoComplete="off">
+                <form className="overflow-auto " autoComplete="off">
                   <div className="w-full mb-6 my-4 transform bg-transparent text-lg duration-200 focus-within:rounded-md">
                     Name: {user.firstname + ' ' + user.lastname}
                     <AiOutlineUserAdd className="absolute right-3 top-5 text-gray-400" />

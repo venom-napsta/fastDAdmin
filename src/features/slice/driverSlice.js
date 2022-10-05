@@ -91,10 +91,14 @@ const driverSlice = createSlice({
     saveDrivers(state, { payload }) {
       state.drivers = payload;
     },
+    // Delete Driver
+    deleteDriver(state, { payload }) {
+      state.drivers = state.drivers.filter((item) => item.id !== payload);
+    },
     // search driver
     searchDriver(state, { payload }) {
-      const updatedDrivers = state.drivers.map((driver) =>
-        driver._id === payload._id ? payload : state.drivers
+      const updatedDrivers = state.drivers.map((drvr) =>
+        drvr._id === payload._id ? payload : state.drivers
       );
       state.drivers = updatedDrivers;
     },

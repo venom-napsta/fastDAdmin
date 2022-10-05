@@ -48,7 +48,9 @@ const Table = (props) => {
             <tbody>
               {dataShow.map((item, index) => props.renderBody(item, index))}
             </tbody>
-          ) : null}
+          ) : (
+            <div>No data found.</div>
+          )}
         </table>
       </div>
       {pages > 1 ? (

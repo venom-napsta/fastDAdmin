@@ -1,13 +1,55 @@
 import React, { Fragment } from 'react';
+import { useSelector } from 'react-redux';
 
 import Table from '../components/table/Table';
 
 import { FaEdit, FaFilter, FaSortAlphaUpAlt, FaTrashAlt } from 'react-icons/fa';
 import Modal from '../components/common/Modal';
-import { useSelector } from 'react-redux';
 import EditModal from '../components/common/EditModal';
 
 const Drivers = () => {
+  const deleteDriver = (id) => {
+    console.log('Del Component', id);
+  };
+
+  const sortOptions = [
+    'date',
+    'name',
+    'trips',
+    'amount',
+    // { value: 'date', label: 'Date' },
+    // { value: 'name', label: 'Name' },
+    // { value: 'trips', label: 'Trips' },
+    // { value: 'amount', label: 'Amount' },
+  ];
+  const sortItemsBy = (param) => {
+    console.log('Sortby', param);
+  };
+
+  const handleSearch = async (e) => {
+    e.preventDefault();
+  };
+
+  const handleReset = async () => {
+    setSearchValue('');
+  };
+
+  const [sortOption, setSortOption] = React.useState('');
+  const [searchValue, setSearchValue] = React.useState('');
+  const [filterValue, setFilterValue] = React.useState('');
+
+  const handleSort = (e) => {
+    let value = e.target.value;
+    setSortOption(value);
+    console.log('Sort Value', sortOption);
+  };
+
+  const handleFilter = (e) => {
+    let value = e.target.value;
+    setFilterValue(value);
+    console.log('Sort Value', sortOption);
+  };
+
   const { drivers, loading, error } = useSelector((state) => state.driver);
 
   const customerTableHead = [
@@ -45,7 +87,7 @@ const Drivers = () => {
       <td>{item.approval_status}</td>
       <td>{item.overal_rating}</td>
       {
-        <Fragment>
+        <>
           <td>
             <FaEdit
               className="rounded-r hover:border sm:rounded sm:border-r-1 border-r border-b  hover:border-green-400 py-1 px-2"
@@ -65,14 +107,13 @@ const Drivers = () => {
               size={40}
               onClick={(e) => {
                 e.stopPropagation();
-                if (
-                  window.confirm('Are you sure you wish to delete this item?')
-                )
-                  console.log('Del', item);
+                window.confirm(
+                  'Are you sure you wish to delete this driver?'
+                ) && deleteDriver(item.id);
               }}
             />
           </td>
-        </Fragment>
+        </>
       }
     </tr>
   );
@@ -80,6 +121,11 @@ const Drivers = () => {
   const [driver, setDriver] = React.useState({});
   const [showModal, setShowModal] = React.useState(false);
   const [showEditModal, setShowEditModal] = React.useState(false);
+
+  React.useEffect(() => {
+    console.log('Search Value', searchValue);
+    console.log('Sort Value', sortOption);
+  }, [searchValue, sortOption, drivers]);
 
   return (
     <Fragment>
@@ -92,15 +138,20 @@ const Drivers = () => {
                   <div className="mx-3 border border-r-0 p-3 border-gray-400-200">
                     <FaSortAlphaUpAlt />
                   </div>
-                  <div className="relative flex items-center">
-                    <select className="ml-2 h-full border-l-0 rounded-r border sm:rounded sm:border-l-0 border-r border-b block appearance-none w-full bg-white border-gray-400 text-gray-700 py-2 px-4 pr-8 leading-tight focus:outline-none focus:border-l focus:border-r focus:bg-white focus:border-gray-500">
-                      <option>Sort by:</option>
-                      <option>Date</option>
-                      <option>Name</option>
-                      <option>Trips</option>
-                      <option>Amount</option>
+                  <form className="relative flex items-center">
+                    <select
+                      name="sort"
+                      onChange={handleSort}
+                      value={sortOption}
+                      className="ml-2 h-full border-l-0 rounded-r border sm:border-l-0 border-r border-b block appearance-none bg-white border-gray-400 text-gray-700 py-2 px-4 pr-8 leading-tight focus:outline-none focus:border-l focus:border-r focus:bg-white focus:border-gray-500"
+                    >
+                      {sortOptions.map((item, idx) => (
+                        <option value={item} key={idx}>
+                          {item + ' '}
+                        </option>
+                      ))}
                     </select>
-                  </div>
+                  </form>
                   <div className="mx-3 border border-r-0 p-3 border-gray-400-200">
                     <FaFilter />
                   </div>
@@ -121,33 +172,54 @@ const Drivers = () => {
                   </div>
                   <div className="relative flex items-center ">
                     <label htmlFor="coutry">Country </label>
-                    <select className="ml-2 h-full rounded-r border sm:rounded sm:border-r-1 border-r border-b block appearance-none w-full bg-white border-gray-400 text-gray-700 py-2 px-4 pr-8 leading-tight focus:outline-none focus:border-l focus:border-r focus:bg-white focus:border-gray-500">
+                    <select
+                      name="country"
+                      onChange={handleFilter}
+                      value={filterValue}
+                      className="ml-2 h-full rounded-r border sm:rounded sm:border-r-1 border-r border-b block appearance-none w-full bg-white border-gray-400 text-gray-700 py-2 px-4 pr-8 leading-tight focus:outline-none focus:border-l focus:border-r focus:bg-white focus:border-gray-500"
+                    >
                       <option value="zw">Zimbabwe</option>
                       <option value="za">South Africa</option>
                     </select>
                   </div>
                 </div>
-                <div className="block relative">
-                  <span className="h-full absolute inset-y-0 left-0 flex items-center pl-2">
-                    <svg
-                      viewBox="0 0 24 24"
-                      className="h-4 w-4 fill-current text-gray-500"
-                    >
-                      <path d="M10 4a6 6 0 100 12 6 6 0 000-12zm-8 6a8 8 0 1114.32 4.906l5.387 5.387a1 1 0 01-1.414 1.414l-5.387-5.387A8 8 0 012 10z"></path>
-                    </svg>
-                  </span>
-                  <div className="topnav__search">
-                    <input type="text" placeholder="Search here..." />
-                    <i className="bx bx-search"></i>
+                <div className="relative">
+                  <div className="topnav__search ">
+                    <form className="flex items-center" onSubmit={handleSearch}>
+                      <input
+                        className="border rounded-md"
+                        value={searchValue}
+                        onChange={(e) => {
+                          e.preventDefault();
+                          setSearchValue(e.target.value);
+                          console.log('Search Value', searchValue);
+                        }}
+                        type="text"
+                        placeholder="Search here..."
+                      />
+                      <i className="ml-1 bx bx-search"></i>
+                    </form>
                   </div>
                 </div>
               </div>
+              {/* 
+              <button onClick={handleReset} className=" text-gray-400">
+                Reset
+              </button> */}
               <div className="card__body">
                 <Table
                   limit="10"
                   headData={customerTableHead}
                   renderHead={(item, index) => renderHead(item, index)}
-                  bodyData={drivers}
+                  bodyData={
+                    searchValue.length > 0
+                      ? drivers.filter((drv) =>
+                          drv.firstname
+                            .toLowerCase()
+                            .includes(searchValue.toLowerCase())
+                        )
+                      : drivers
+                  }
                   renderBody={(item, index) => renderBody(item, index)}
                 />
               </div>
