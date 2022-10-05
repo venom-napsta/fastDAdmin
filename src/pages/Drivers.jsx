@@ -112,9 +112,11 @@ const Drivers = () => {
                       className="ml-2 h-full rounded-l border block appearance-none w-full bg-white border-gray-400 text-gray-700 py-2 px-4 pr-8 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                     >
                       <option>All</option>
-                      <option>0-24hrs</option>
-                      <option>24-48hrs</option>
-                      <option>20</option>
+                      <option>0-24 hrs</option>
+                      <option>24-48 hrs</option>
+                      <option>2-7 days</option>
+                      <option>Last 2 weeks</option>
+                      <option>Last 1 month</option>
                     </select>
                   </div>
                   <div className="relative flex items-center ">

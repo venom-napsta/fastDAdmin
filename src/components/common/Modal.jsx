@@ -1,6 +1,12 @@
 import React, { Fragment } from 'react';
 import {
-  AiFillLock,
+  AiFillCar,
+  AiFillCheckCircle,
+  AiFillCompass,
+  AiFillFile,
+  AiFillFileUnknown,
+  AiFillQuestionCircle,
+  AiFillTrophy,
   AiOutlineMail,
   AiOutlinePhone,
   AiOutlineUser,
@@ -49,15 +55,63 @@ function Modal({ onClose, driver: user }) {
                   </div>
                   <div className="w-full mb-6 transform bg-transparent text-lg duration-200 focus-within:border-[bg-primary]">
                     Ride Status: {user.ride_status}
-                    <AiFillLock className="absolute right-3 top-5 text-gray-400" />
+                    <AiFillQuestionCircle className="absolute right-3 top-5 text-gray-400" />
                   </div>
+
+                  <div className="w-full mb-6 transform bg-transparent text-lg duration-200 focus-within:border-[bg-primary]">
+                    Documents :
+                    <AiFillFile className="absolute right-3 top-5 text-gray-400" />
+                    <div>
+                      <ul style={{ listStyle: 'inside' }}>
+                        <li>Document 1</li>
+                        <li>Document 2</li>
+                        <li>Document 3</li>
+                      </ul>
+                    </div>
+                  </div>
+
+                  {user.approval_status === 'approved' && (
+                    <>
+                      <div className="w-full mb-6 transform bg-transparent text-lg duration-200 focus-within:border-[bg-primary]">
+                        Vehicles :
+                        <AiFillCar className="absolute right-3 top-5 text-gray-400" />
+                        <div>
+                          <ul style={{ listStyle: 'inside' }}>
+                            <li>Vehicle 1</li>
+                            <li>Vehicle 2</li>
+                            <li>Vehicle 3</li>
+                          </ul>
+                        </div>
+                      </div>
+
+                      <div className="w-full mb-6 transform bg-transparent text-lg duration-200 focus-within:border-[bg-primary]">
+                        Trips :
+                        <AiFillCompass className="absolute right-3 top-5 text-gray-400" />
+                        <div>
+                          <ul style={{ listStyle: 'inside' }}>
+                            <li>Trips 1</li>
+                            <li>Trips 2</li>
+                            <li>Trips 3</li>
+                          </ul>
+                        </div>
+                      </div>
+                    </>
+                  )}
+
                   <div className="w-full mb-6 transform bg-transparent text-lg duration-200 focus-within:border-[bg-primary]">
                     Approval Status: {user.approval_status}
-                    <AiFillLock className="absolute right-3 top-5 text-gray-400" />
+                    {user.approval_status === 'pending' ? (
+                      <AiFillFileUnknown className="absolute right-3 top-5 text-gray-400" />
+                    ) : (
+                      <AiFillCheckCircle
+                        color="green"
+                        className="absolute right-3 top-5 text-gray-400"
+                      />
+                    )}
                   </div>
                   <div className="w-full mb-6 transform bg-transparent text-lg duration-200 focus-within:border-[bg-primary]">
-                    AOverall Rating: {user.overal_rating}
-                    <AiFillLock className="absolute right-3 top-5 text-gray-400" />
+                    Overall Rating: {user.overal_rating}
+                    <AiFillTrophy className="absolute right-3 top-5 text-gray-400" />
                   </div>
                 </form>
               </div>
