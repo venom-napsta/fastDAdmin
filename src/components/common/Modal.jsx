@@ -19,12 +19,12 @@ function Modal({ onClose, driver: user }) {
     <Fragment>
       <>
         <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
-          <div className="relative w-7/12 my-6 mx-auto max-w-3xl">
+          <div className="relative w-8/12 my13 mx-auto overflow-y-auto  max-w-3xl">
             {/*content*/}
-            <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+            <div className="overflow-y-auto  border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
               {/*header*/}
-              <div className="flex items-start justify-between p-5 border-b border-solid border-slate-200 rounded-t">
-                <div className="text-[#010080] text-center text-xl font-medium">
+              <div className="flex items-start justify-between p-10 border-b border-solid border-slate-200 rounded-t">
+                <div className="text-[#010080] text-center text-lg font-medium">
                   Driver Details
                 </div>
                 <button
@@ -65,7 +65,6 @@ function Modal({ onClose, driver: user }) {
                       <ul style={{ listStyle: 'inside' }}>
                         <li>Document 1</li>
                         <li>Document 2</li>
-                        <li>Document 3</li>
                       </ul>
                     </div>
                   </div>
@@ -79,7 +78,6 @@ function Modal({ onClose, driver: user }) {
                           <ul style={{ listStyle: 'inside' }}>
                             <li>Vehicle 1</li>
                             <li>Vehicle 2</li>
-                            <li>Vehicle 3</li>
                           </ul>
                         </div>
                       </div>
@@ -91,7 +89,6 @@ function Modal({ onClose, driver: user }) {
                           <ul style={{ listStyle: 'inside' }}>
                             <li>Trips 1</li>
                             <li>Trips 2</li>
-                            <li>Trips 3</li>
                           </ul>
                         </div>
                       </div>
