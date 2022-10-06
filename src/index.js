@@ -24,7 +24,7 @@ logger.init();
 // logger.log();
 
 const store = createStore(rootReducer);
-LogRocket.init('aqhytn/fastd');
+// LogRocket.init('aqhytn/fastd');
 
 ReactDOM.render(
   <React.StrictMode>

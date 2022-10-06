@@ -14,7 +14,6 @@ thead {
 }
 
 tr:nth-child(even) {
-  text-align: left;
   background-color: rgb(241, 241, 241);
 }
 
@@ -22,8 +21,10 @@ th {
   background-color: lightgray;
   text-transform: capitalize;
   padding: 15px 10px;
+  text-align: left;
 }
 td {
+  text-align: left;
   text-transform: capitalize;
   padding: 13px 8px;
 }

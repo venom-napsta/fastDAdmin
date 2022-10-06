@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 
 import Table from '../components/table/Table';
@@ -26,17 +26,8 @@ const Drivers = () => {
     console.log('Sortby', param);
   };
 
-  const handleSearch = async (e) => {
-    e.preventDefault();
-  };
-
-  const handleReset = async () => {
-    setSearchValue('');
-  };
-
-  const [sortOption, setSortOption] = React.useState('');
-  const [searchValue, setSearchValue] = React.useState('');
-  const [filterValue, setFilterValue] = React.useState('');
+  const [sortOption, setSortOption] = useState('');
+  const [filterValue, setFilterValue] = useState('');
 
   const handleSort = (e) => {
     let value = e.target.value;
@@ -118,14 +109,9 @@ const Drivers = () => {
     </tr>
   );
 
-  const [driver, setDriver] = React.useState({});
-  const [showModal, setShowModal] = React.useState(false);
-  const [showEditModal, setShowEditModal] = React.useState(false);
-
-  React.useEffect(() => {
-    console.log('Search Value', searchValue);
-    console.log('Sort Value', sortOption);
-  }, [searchValue, sortOption, drivers]);
+  const [driver, setDriver] = useState({});
+  const [showModal, setShowModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
 
   return (
     <Fragment>
@@ -183,7 +169,7 @@ const Drivers = () => {
                     </select>
                   </div>
                 </div>
-                <div className="relative">
+                {/* <div className="relative">
                   <div className="topnav__search ">
                     <form className="flex items-center" onSubmit={handleSearch}>
                       <input
@@ -197,10 +183,13 @@ const Drivers = () => {
                         type="text"
                         placeholder="Search here..."
                       />
-                      <i className="ml-1 bx bx-search"></i>
-                    </form>
+                      <i
+                        onClick={handleSearch}
+                        className="ml-1 bx bx-search"
+                      ></i>
+                    </form> 
                   </div>
-                </div>
+                      </div>*/}
               </div>
               {/* 
               <button onClick={handleReset} className=" text-gray-400">
@@ -211,15 +200,7 @@ const Drivers = () => {
                   limit="10"
                   headData={customerTableHead}
                   renderHead={(item, index) => renderHead(item, index)}
-                  bodyData={
-                    searchValue.length > 0
-                      ? drivers.filter((drv) =>
-                          drv.firstname
-                            .toLowerCase()
-                            .includes(searchValue.toLowerCase())
-                        )
-                      : drivers
-                  }
+                  bodyData={drivers}
                   renderBody={(item, index) => renderBody(item, index)}
                 />
               </div>
