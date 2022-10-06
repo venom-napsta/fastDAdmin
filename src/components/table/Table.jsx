@@ -42,7 +42,7 @@ const Table = (props) => {
           String(o[k]).toLowerCase().includes(searchString.toLowerCase())
         )
       );
-      setDataShow([...searchTable]);
+      setTableFilter([...searchTable]);
     } else if (searchString === '') {
       setSearchValue(searchString);
       setDataShow([...dataShow]);
@@ -58,13 +58,16 @@ const Table = (props) => {
           <div className="flex justify-between">
             <form className="flex items-center" onSubmit={handleSearch}>
               <input
-                className="border w-full rounded-md"
+                className="border w-full rounded-md pl-10"
                 value={searchValue}
                 onChange={handleSearch}
                 type="text"
                 placeholder="Search here..."
               />
-              <i onClick={handleSearch} className="ml-1 bx bx-search"></i>
+              <i
+                onClick={handleSearch}
+                className="absolute left-3 bx bx-search"
+              ></i>
             </form>
           </div>
           <button
@@ -72,7 +75,7 @@ const Table = (props) => {
               setSearchValue('');
               setDataShow(initDataShow);
             }}
-            className="bg-slate-400 p-3 px-5 rounded-md"
+            className="border-solid border hover:bg-slate-400 p-2 px-5 rounded-md"
           >
             Reset
           </button>
@@ -89,9 +92,21 @@ const Table = (props) => {
               </thead>
             ) : null}
             {props.bodyData && props.renderBody ? (
-              <tbody>
-                {dataShow.map((item, index) => props.renderBody(item, index))}
-              </tbody>
+              <>
+                {searchValue.length > 0 ? (
+                  <tbody>
+                    {tableFilter.map((item, index) =>
+                      props.renderBody(item, index)
+                    )}
+                  </tbody>
+                ) : (
+                  <tbody>
+                    {dataShow.map((item, index) =>
+                      props.renderBody(item, index)
+                    )}
+                  </tbody>
+                )}
+              </>
             ) : (
               <div>No data found.</div>
             )}
