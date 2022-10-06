@@ -12,35 +12,6 @@ const Drivers = () => {
     console.log('Del Component', id);
   };
 
-  const sortOptions = [
-    'date',
-    'name',
-    'trips',
-    'amount',
-    // { value: 'date', label: 'Date' },
-    // { value: 'name', label: 'Name' },
-    // { value: 'trips', label: 'Trips' },
-    // { value: 'amount', label: 'Amount' },
-  ];
-  const sortItemsBy = (param) => {
-    console.log('Sortby', param);
-  };
-
-  const [sortOption, setSortOption] = useState('');
-  const [filterValue, setFilterValue] = useState('');
-
-  const handleSort = (e) => {
-    let value = e.target.value;
-    setSortOption(value);
-    console.log('Sort Value', sortOption);
-  };
-
-  const handleFilter = (e) => {
-    let value = e.target.value;
-    setFilterValue(value);
-    console.log('Sort Value', sortOption);
-  };
-
   const { drivers, loading, error } = useSelector((state) => state.driver);
 
   const customerTableHead = [
@@ -120,55 +91,7 @@ const Drivers = () => {
           <div className="col-12">
             <div className="card">
               <div className="my-2 flex sm:flex-row flex-col">
-                <div className="flex flex-row mb-1 sm:mb-0 topnav__search mx-2">
-                  <div className="mx-3 border border-r-0 p-3 border-gray-400-200">
-                    <FaSortAlphaUpAlt />
-                  </div>
-                  <form className="relative flex items-center">
-                    <select
-                      name="sort"
-                      onChange={handleSort}
-                      value={sortOption}
-                      className="ml-2 h-full border-l-0 rounded-r border sm:border-l-0 border-r border-b block appearance-none bg-white border-gray-400 text-gray-700 py-2 px-4 pr-8 leading-tight focus:outline-none focus:border-l focus:border-r focus:bg-white focus:border-gray-500"
-                    >
-                      {sortOptions.map((item, idx) => (
-                        <option value={item} key={idx}>
-                          {item + ' '}
-                        </option>
-                      ))}
-                    </select>
-                  </form>
-                  <div className="mx-3 border border-r-0 p-3 border-gray-400-200">
-                    <FaFilter />
-                  </div>
-                  <div className="relative flex items-center ">
-                    <label htmlFor="date">Time </label>
-                    <select
-                      name="date"
-                      id="date"
-                      className="ml-2 h-full rounded-l border block appearance-none w-full bg-white border-gray-400 text-gray-700 py-2 px-4 pr-8 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                    >
-                      <option>All</option>
-                      <option>0-24 hrs</option>
-                      <option>24-48 hrs</option>
-                      <option>2-7 days</option>
-                      <option>Last 2 weeks</option>
-                      <option>Last 1 month</option>
-                    </select>
-                  </div>
-                  <div className="relative flex items-center ">
-                    <label htmlFor="coutry">Country </label>
-                    <select
-                      name="country"
-                      onChange={handleFilter}
-                      value={filterValue}
-                      className="ml-2 h-full rounded-r border sm:rounded sm:border-r-1 border-r border-b block appearance-none w-full bg-white border-gray-400 text-gray-700 py-2 px-4 pr-8 leading-tight focus:outline-none focus:border-l focus:border-r focus:bg-white focus:border-gray-500"
-                    >
-                      <option value="zw">Zimbabwe</option>
-                      <option value="za">South Africa</option>
-                    </select>
-                  </div>
-                </div>
+                {/* relative bar */}
                 {/* <div className="relative">
                   <div className="topnav__search ">
                     <form className="flex items-center" onSubmit={handleSearch}>
