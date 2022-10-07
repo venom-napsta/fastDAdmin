@@ -47,30 +47,29 @@ export const registerUser = createAsyncThunk(
 export const login = createAsyncThunk(
   'auth/Login',
   async ({ contact: phone_number, password }, { rejectWithValue }) => {
-    try {
-      const res = await http.post(
-        '/auth/admin/login',
-        {
-          phone_number,
-          password,
-        },
-        config
-      );
-      const { data } = res;
-      if (data) {
-        console.log('Data', data);
-        localStorage.setItem('user', JSON.stringify(data.data.user));
-        localStorage.setItem(
-          'userToken',
-          JSON.stringify(data.data.token.access_token)
-        );
-      }
-      console.log('User Res', data);
+    const options = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ phone_number, password }),
+    };
+
+    const res = await fetch(
+      'http://75.119.154.13:5000/auth/admin/login',
+      options
+    );
+
+    const data = await res.json();
+    console.log('Data', data.success);
+    if (data.success === true) {
+      console.log('Data', data);
       return data;
-    } catch (error) {
-      console.log('Redux Res', error.response.data.errors[0].msg);
-      toast(`Error! ${error.response.message}`);
-      return rejectWithValue(error.response.message);
+    } else if (data.success === false) {
+      toast(`Error: ${data.errors.message}`);
+      return rejectWithValue(data.errors.message);
+    } else if (!res.ok) {
+      console.error(data);
+      toast('Unexpected Error Occurred, Please try again');
+      return rejectWithValue(data);
     }
   }
 );
@@ -111,7 +110,6 @@ const authSlice = createSlice({
   reducers: {
     logout: (state, action) => {
       localStorage.removeItem('userToken');
-      localStorage.removeItem('user');
       window.location = '/login';
     },
   },
@@ -121,8 +119,12 @@ const authSlice = createSlice({
     },
     [login.fulfilled]: (state, { payload }) => {
       state.loading = false;
+      localStorage.setItem('user', JSON.stringify(payload.data.user));
+      localStorage.setItem(
+        'userToken',
+        JSON.stringify(payload.data.token.access_token)
+      );
       state.userInfo = payload.data.user;
-      state.userToken = payload.data.token.token;
       window.location = '/';
     },
     [login.rejected]: (state, { payload }) => {
@@ -160,3 +162,23 @@ const authSlice = createSlice({
 
 export const { logout, loginStatus, loginStatusChange } = authSlice.actions;
 export default authSlice.reducer;
+
+// const res = await http.post(
+//   '/auth/admin/login',
+//   {
+//     phone_number,
+//     password,
+//   },
+//   config
+// );
+// const { data } = res;
+// if (data) {
+//   console.log('Data', data);
+//   localStorage.setItem('user', JSON.stringify(data.data.user));
+//   localStorage.setItem(
+//     'userToken',
+//     JSON.stringify(data.data.token.access_token)
+//   );
+// }
+// console.log('User Res', data);
+// return data;

@@ -31,6 +31,7 @@ const latestTransactions = {
     {
       id: '#OD1711',
       user: 'john doe',
+      country: 'za',
       date: '17 Jun 2021 - 17:30',
       price: '$900',
       method: 'cash',
@@ -39,6 +40,7 @@ const latestTransactions = {
     {
       id: '#OD1712',
       user: 'frank iva',
+      country: 'zw',
       date: '1 Jun 2021 - 02:33',
       price: '$400',
       method: 'transfer',
@@ -47,6 +49,7 @@ const latestTransactions = {
     {
       id: '#OD1713',
       user: 'anthony baker',
+      country: 'zw',
       date: '27 Jun 2021 - 11:20',
       price: '$200',
       method: 'transfer',
@@ -55,6 +58,7 @@ const latestTransactions = {
     {
       id: '#OD1712',
       user: 'frank iva',
+      country: 'za',
       date: '1 Jun 2021 - 15:10',
       price: '$400',
       method: 'cash',
@@ -63,6 +67,7 @@ const latestTransactions = {
     {
       id: '#OD1713',
       user: 'anthony baker',
+      country: 'za',
       date: '27 Jun 2021 - 00:28',
       price: '$200',
       method: 'transfer',
@@ -71,6 +76,7 @@ const latestTransactions = {
     {
       id: '#OD1713',
       user: 'anthony baker',
+      country: 'zw',
       date: '27 Jun 2021 - 11:20',
       price: '$200',
       method: 'transfer',
@@ -79,6 +85,7 @@ const latestTransactions = {
     {
       id: '#OD1712',
       user: 'frank iva',
+      country: 'zw',
       date: '1 Jun 2021 - 15:10',
       price: '$400',
       method: 'cash',
@@ -87,6 +94,7 @@ const latestTransactions = {
     {
       id: '#OD1713',
       user: 'anthony baker',
+      country: 'zw',
       date: '27 Jun 2021 - 00:28',
       price: '$200',
       method: 'transfer',
@@ -95,6 +103,7 @@ const latestTransactions = {
     {
       id: '#OD1713',
       user: 'anthony baker',
+      country: 'za',
       date: '27 Jun 2021 - 11:20',
       price: '$200',
       method: 'transfer',
@@ -103,6 +112,7 @@ const latestTransactions = {
     {
       id: '#OD1712',
       user: 'frank iva',
+      country: 'za',
       date: '1 Jun 2021 - 15:10',
       price: '$400',
       method: 'cash',
@@ -111,6 +121,7 @@ const latestTransactions = {
     {
       id: '#OD1713',
       user: 'anthony baker',
+      country: 'za',
       date: '27 Jun 2021 - 00:28',
       price: '$200',
       method: 'transfer',
@@ -119,6 +130,7 @@ const latestTransactions = {
     {
       id: '#OD1713',
       user: 'anthony baker',
+      country: 'za',
       date: '27 Jun 2021 - 11:20',
       price: '$200',
       method: 'transfer',
@@ -127,6 +139,7 @@ const latestTransactions = {
     {
       id: '#OD1712',
       user: 'frank iva',
+      country: 'za',
       date: '1 Jun 2021 - 15:10',
       price: '$400',
       method: 'cash',
@@ -135,6 +148,7 @@ const latestTransactions = {
     {
       id: '#OD1713',
       user: 'anthony baker',
+      country: 'zw',
       date: '27 Jun 2021 - 00:28',
       price: '$200',
       method: 'transfer',
@@ -143,6 +157,7 @@ const latestTransactions = {
     {
       id: '#OD1713',
       user: 'anthony baker',
+      country: 'za',
       date: '27 Jun 2021 - 11:20',
       price: '$200',
       method: 'transfer',
@@ -151,6 +166,7 @@ const latestTransactions = {
     {
       id: '#OD1712',
       user: 'frank iva',
+      country: 'za',
       date: '1 Jun 2021 - 15:10',
       price: '$400',
       method: 'cash',
@@ -159,6 +175,7 @@ const latestTransactions = {
     {
       id: '#OD1713',
       user: 'anthony baker',
+      country: 'za',
       date: '27 Jun 2021 - 00:28',
       price: '$200',
       method: 'transfer',
@@ -167,6 +184,7 @@ const latestTransactions = {
     {
       id: '#OD1713',
       user: 'anthony baker',
+      country: 'za',
       date: '27 Jun 2021 - 11:20',
       price: '$200',
       method: 'transfer',
@@ -175,6 +193,7 @@ const latestTransactions = {
     {
       id: '#OD1712',
       user: 'frank iva',
+      country: 'zw',
       date: '1 Jun 2021 - 15:10',
       price: '$400',
       method: 'cash',
@@ -183,6 +202,7 @@ const latestTransactions = {
     {
       id: '#OD1713',
       user: 'anthony baker',
+      country: 'zw',
       date: '27 Jun 2021 - 00:28',
       price: '$200',
       method: 'transfer',
@@ -191,6 +211,7 @@ const latestTransactions = {
     {
       id: '#OD1713',
       user: 'anthony baker',
+      country: 'za',
       date: '27 Jun 2021 - 11:20',
       price: '$200',
       method: 'transfer',
@@ -199,6 +220,7 @@ const latestTransactions = {
     {
       id: '#OD1712',
       user: 'frank iva',
+      country: 'za',
       date: '1 Jun 2021 - 15:10',
       price: '$400',
       method: 'cash',
@@ -207,6 +229,7 @@ const latestTransactions = {
     {
       id: '#OD1713',
       user: 'anthony baker',
+      country: 'za',
       date: '27 Jun 2021 - 00:28',
       price: '$200',
       method: 'transfer',

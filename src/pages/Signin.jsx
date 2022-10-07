@@ -15,6 +15,7 @@ import { login } from '../features/slice/authSlice';
 
 import logo from '../assets/Logo.png';
 import { Spinner } from 'flowbite-react/lib/cjs/components/Spinner';
+import { toast } from 'react-toastify';
 
 function Signin() {
   const dispatch = useDispatch();
@@ -50,8 +51,10 @@ function Signin() {
 
   /* Form Sublmision */
   const onSubmitHandler = async (data) => {
+    // const { contact: phone_number, password } = data;
     console.log('sign in details', data);
     dispatch(login(data));
+
     // auth.login(data.email, data.password);
     // dispatch(loginStatusChange(true));
     // history.replace('/dashboard');

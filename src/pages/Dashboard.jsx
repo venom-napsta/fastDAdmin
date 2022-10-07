@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
-// import Chart from 'react-apexcharts';
+import Chart from 'react-apexcharts';
 
 import { FaArrowUp } from 'react-icons/fa';
 
@@ -10,23 +10,23 @@ import Table from '../components/table/Table';
 import statusCards from '../assets/JsonData/status-card-data.json';
 // import { getAllDrivers } from '../features/slice/driverSlice';
 
-/* const chartOptions = {
+const chartOptions = {
   series: [
     {
       name: 'Rides',
-      data: [40, 70, 20, 90, 36, 80, 30, 91, 60, 89],
+      data: [40, 70, 20, 60, 36, 80, 30, 50, 60, 89],
     },
     {
       name: 'Packages',
-      data: [40, 30, 70, 80, 40, 16, 40, 20, 51, 10],
+      data: [40, 30, 70, 60, 40, 16, 40, 20, 51, 80],
     },
     {
-      name: 'Food',
-      data: [20, 52, 68, 89, 23, 95, 62, 20, 29, 30],
+      name: 'Drivers',
+      data: [20, 52, 48, 62, 23, 75, 62, 38, 56, 93],
     },
   ],
   options: {
-    color: ['#6ab04c', '#2980b9'],
+    color: ['#6ab04c', '#2980b9', '#111'],
     chart: {
       background: 'transparent',
     },
@@ -47,6 +47,7 @@ import statusCards from '../assets/JsonData/status-card-data.json';
         'Jul',
         'Aug',
         'Sep',
+        'Oct',
       ],
     },
     legend: {
@@ -56,7 +57,7 @@ import statusCards from '../assets/JsonData/status-card-data.json';
       show: false,
     },
   },
-}; */
+};
 
 const topDrivers = {
   head: ['Driver', 'total Rides', 'total earnings', 'Rating'],
@@ -173,12 +174,12 @@ const Dashboard = () => {
   const history = useHistory();
   const dispatch = useDispatch();
 
-  // useEffect(() => {
-  //   // // console.log(dispatch(getAllDrivers()));
-  //   if (!userToken) {
-  //     history.replace('/login');
-  //   }
-  // }, [loading, userInfo, userToken, history]);
+  useEffect(() => {
+    // // console.log(dispatch(getAllDrivers()));
+    if (!userToken) {
+      history.replace('/login');
+    }
+  }, [loading, userInfo, userToken, history]);
 
   return (
     <div>
@@ -194,7 +195,7 @@ const Dashboard = () => {
                   title={item.title}
                   xtr={
                     <>
-                      <FaArrowUp size={45} color="green" />
+                      <FaArrowUp size={40} color="green" />
                     </>
                   }
                 />
@@ -205,24 +206,12 @@ const Dashboard = () => {
         <div onClick={() => history.push('/analytics')} className="col-12">
           <div className="card full-height">
             {/* chart */}
-            {/* <Chart
-              options={
-                
-                mode:'light'
-                // themeReducer === 'theme-mode-dark'
-                //   ? {
-                //       ...chartOptions.options,
-                //       theme: { mode: 'dark' },
-                //     }
-                //   : {
-                //       ...chartOptions.options,
-                //       theme: { mode: 'light' },
-                //     }
-              }
+            <Chart
+              options={chartOptions.options}
               series={chartOptions.series}
               type="line"
-              height="100%"
-            /> */}
+              height="200%"
+            />
           </div>
         </div>
         <div className="dispFull">

@@ -11,6 +11,7 @@ table {
 
 thead {
   background-color: var(--second-bg);
+  font-size: 1rem;
 }
 
 tr:nth-child(even) {
@@ -27,6 +28,7 @@ td {
   text-align: left;
   text-transform: capitalize;
   padding: 13px 8px;
+  font-size: 0.9rem;
 }
 
 tbody > tr:hover {

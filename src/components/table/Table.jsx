@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { FaFilter, FaSortAlphaUpAlt } from 'react-icons/fa';
+// import { FaFilter, FaSortAlphaUpAlt } from 'react-icons/fa';
 
 import './table.css';
 
@@ -89,7 +89,7 @@ const Table = (props) => {
   if (props.bodyData.length <= 0) return <div>No data found.</div>;
   return (
     <div>
-      <div className="flex flex-row mb-1 sm:mb-0 topnav__search mx-2">
+      {/* <div className="flex flex-row mb-1 sm:mb-0 topnav__search mx-2">
         <div className="mx-3 border border-r-0 p-3 border-gray-400-200">
           <FaSortAlphaUpAlt />
         </div>
@@ -165,55 +165,52 @@ const Table = (props) => {
           >
             Reset
           </button>
-        </div>
-        <div className="table-wrapper">
-          <table>
-            {props.headData && props.renderHead ? (
-              <thead>
-                <tr>
-                  {props.headData.map((item, index) =>
-                    props.renderHead(item, index)
-                  )}
-                </tr>
-              </thead>
-            ) : null}
-            {props.bodyData && props.renderBody ? (
-              <>
-                {searchValue.length > 0 ? (
-                  <tbody>
-                    {tableFilter.map((item, index) =>
-                      props.renderBody(item, index)
-                    )}
-                  </tbody>
-                ) : (
-                  <tbody>
-                    {dataShow.map((item, index) =>
-                      props.renderBody(item, index)
-                    )}
-                  </tbody>
+        </div> */}
+      <div className="table-wrapper">
+        <table>
+          {props.headData && props.renderHead ? (
+            <thead>
+              <tr>
+                {props.headData.map((item, index) =>
+                  props.renderHead(item, index)
                 )}
-              </>
-            ) : (
-              <div>No data found.</div>
-            )}
-          </table>
-        </div>
-        {pages > 1 ? (
-          <div className="table__pagination">
-            {range.map((item, index) => (
-              <div
-                key={index}
-                className={`table__pagination-item ${
-                  currPage === index ? 'active' : ''
-                }`}
-                onClick={() => selectPage(index)}
-              >
-                {item + 1}
-              </div>
-            ))}
-          </div>
-        ) : null}
+              </tr>
+            </thead>
+          ) : null}
+          {props.bodyData && props.renderBody ? (
+            <>
+              {searchValue.length > 0 ? (
+                <tbody>
+                  {tableFilter.map((item, index) =>
+                    props.renderBody(item, index)
+                  )}
+                </tbody>
+              ) : (
+                <tbody>
+                  {dataShow.map((item, index) => props.renderBody(item, index))}
+                </tbody>
+              )}
+            </>
+          ) : (
+            <div>No data found.</div>
+          )}
+        </table>
       </div>
+      {pages > 1 ? (
+        <div className="table__pagination">
+          {range.map((item, index) => (
+            <div
+              key={index}
+              className={`table__pagination-item ${
+                currPage === index ? 'active' : ''
+              }`}
+              onClick={() => selectPage(index)}
+            >
+              {item + 1}
+            </div>
+          ))}
+        </div>
+      ) : null}
     </div>
   );
 };
