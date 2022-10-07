@@ -1,96 +1,28 @@
 import React, { Fragment, useState, useEffect, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 
-import Table from '../components/table/Table';
+// import Table from '../components/table/Table';
 
-import { FaEdit, FaFilter, FaSortAlphaUpAlt, FaTrashAlt } from 'react-icons/fa';
+import { FaEdit, FaFilter, FaTrashAlt } from 'react-icons/fa';
 import Modal from '../components/common/Modal';
 import EditModal from '../components/common/EditModal';
 import DataTable from 'react-data-table-component';
 
 const Drivers = () => {
-  const deleteDriver = (id) => {
-    console.log('Del Component', id);
+  const deleteDriver = (drvr) => {
+    console.log('Del Component', drvr);
   };
 
   const { drivers, loading, error } = useSelector((state) => state.driver);
-
-  const customerTableHead = [
-    'ID',
-    'name',
-    'email',
-    'contact',
-    'location',
-    'ride_Status',
-    'approval_Status',
-    'overal_rating',
-    'Action',
-  ];
-
-  const renderHead = (item, index) => <th key={index}>{item}</th>;
-
-  const renderBody = (item, index) => (
-    <tr
-      onClick={() => {
-        console.log('Item Selected', item);
-        setDriver(item);
-        setShowModal(true);
-      }}
-      className="hover:cursor-pointer"
-      key={index}
-    >
-      <td>{item.id}</td>
-      <td>
-        {item.firstname} {item.lastname}
-      </td>
-      <td>{item.email}</td>
-      <td>{item.contact}</td>
-      <td>{item.location === 'za' ? 'South Africa' : 'Zimbabwe'}</td>
-      <td>{item.ride_status}</td>
-      <td>{item.approval_status}</td>
-      <td>{item.overal_rating}</td>
-      {
-        <>
-          <td>
-            <FaEdit
-              className="rounded-r hover:border sm:rounded sm:border-r-1 border-r border-b  hover:border-green-400 py-1 px-2"
-              color="green"
-              size={40}
-              onClick={(e) => {
-                e.stopPropagation();
-                setDriver(item);
-                setShowEditModal(true);
-              }}
-            />
-          </td>
-          <td>
-            <FaTrashAlt
-              className="rounded-r hover:border sm:rounded sm:border-r-1 border-r border-b  hover:border-red-400 py-1 px-2"
-              color="brown"
-              size={40}
-              onClick={(e) => {
-                e.stopPropagation();
-                window.confirm(
-                  'Are you sure you wish to delete this driver?'
-                ) && deleteDriver(item.id);
-              }}
-            />
-          </td>
-        </>
-      }
-    </tr>
-  );
 
   const [driver, setDriver] = useState({});
   const [showModal, setShowModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
 
-  const [sortOption, setSortOption] = useState('');
-  const [filterValue, setFilterValue] = useState('');
-  const [tableFilter, setTableFilter] = useState([]);
-  // const [dataShow, setDataShow] = useState(initDataShow);
+  const [dataShow, setDataShow] = useState(drivers);
   const [searchValue, setSearchValue] = useState('');
-  const [currPage, setCurrPage] = useState(0);
+  const [timeFilter, setTimeFilter] = useState('');
+  const [resetPaginationToggle, setResetPaginationToggle] = useState(false);
 
   // react-data-table
   const columns = useMemo(
@@ -126,7 +58,7 @@ const Drivers = () => {
         selector: (row) => row.contact,
       },
       {
-        name: 'Location',
+        name: 'Country',
         selector: (row) => row.location,
         filterable: true,
         sortable: true,
@@ -189,44 +121,40 @@ const Drivers = () => {
         ],
       },
       {
-        cell: () => (
-          <button onClick={(row) => console.log('Action Btn', row)}>
-            Action
-          </button>
+        name: 'Action',
+        right: true,
+        selector: (row) => (
+          <p className="flex">
+            <FaEdit
+              className="rounded-r hover:border sm:rounded sm:border-r-1 border-r border-b  hover:border-green-400 p-2"
+              color="green"
+              size={40}
+              onClick={(e) => {
+                e.stopPropagation();
+                console.log('Edit', row);
+
+                setDriver(row);
+                setShowEditModal(true);
+              }}
+            />
+            &nbsp; &nbsp;
+            <FaTrashAlt
+              className="rounded-r hover:border sm:rounded sm:border-r-1 border-r border-b  hover:border-red-400 p-2"
+              color="brown"
+              size={40}
+              onClick={(e) => {
+                e.stopPropagation();
+                window.confirm(
+                  'Are you sure you wish to delete this driver?'
+                ) && deleteDriver(row);
+              }}
+            />
+          </p>
         ),
-        ignoreRowClick: true,
-        allowOverflow: true,
-        button: true,
       },
-      /* {
-      name: 'Action',
-      selector: (row) => (
-        <p>
-          <button
-            onClick={() => console.log('Del', row)}
-            className="bg-gray-300 text-red-700"
-          >
-            Delete
-          </button>
-        </p>
-      ),
-      filterable: true,
-      sortable: true,
-    }, */
     ],
     []
   );
-
-  const sortOptions = [
-    'date',
-    'name',
-    'trips',
-    'amount',
-    // { value: 'date', label: 'Date' },
-    // { value: 'name', label: 'Name' },
-    // { value: 'trips', label: 'Trips' },
-    // { value: 'amount', label: 'Amount' },
-  ];
 
   // conditional Row Styles
   const conditionalRowStyles = [
@@ -240,6 +168,7 @@ const Drivers = () => {
       when: (row) => row.approval_status === 'blocked',
       style: {
         color: 'gray',
+        backgroundColor: '#ffcccb',
       },
     },
   ];
@@ -281,8 +210,12 @@ const Drivers = () => {
   };
 
   const handleChange = ({ selectedRows }) => {
+    let ids = [];
+    ids = selectedRows.map((row) => row.id);
     // You can set state or dispatch with something like Redux so we can use the retrieved data
     console.log('Selected Rows: ', selectedRows);
+    console.log('Selected Rows Count: ', selectedRows.length);
+    console.log('Selected Rows IDs: ', ids);
   };
 
   const paginationOptions = {
@@ -295,23 +228,12 @@ const Drivers = () => {
   const rowDisabledCriteria = (row) => row.approval_status === 'blocked';
   // console.log('disab', row.approval_status === 'pending');
 
-  const FilterComponent = ({ filterText, onFilter, onClear }) => (
-    <>
-      <input
-        id="search"
-        type="text"
-        placeholder="Filter By Name"
-        aria-label="Search Input"
-        value={filterText}
-        onChange={onFilter}
-      />
-      <button type="button" onClick={onClear}>
-        X
-      </button>
-    </>
-  );
-
   const handleSearch = (e) => {
+    e.preventDefault();
+    // const filteredItems = drivers.filter(
+    //   drv => drv.firstname && drv.firstname.toLowerCase().includes(searchValue.toLowerCase()),
+    // );
+
     let searchString = e.target.value;
     e.preventDefault();
     if (searchString !== '') {
@@ -321,12 +243,54 @@ const Drivers = () => {
           String(o[k]).toLowerCase().includes(searchString.toLowerCase())
         )
       );
-      setTableFilter([...searchTable]);
+      setDataShow([...searchTable]);
+      setResetPaginationToggle(!resetPaginationToggle);
     } else if (searchString === '') {
-      setSearchValue(searchString);
-      // setDataShow([...dataShow]);
+      handleClear();
     }
   };
+
+  const handleTimeFilter = (e) => {
+    e.preventDefault();
+
+    let option = e.target.value;
+    console.log('HandleFilter', timeFilter);
+    e.preventDefault();
+    if (option !== '') {
+      const searchTable = drivers.filter((o) =>
+        Object.keys(o).some((k) =>
+          String(o[k]).toLowerCase().includes(option.toLowerCase())
+        )
+      );
+      setDataShow([...searchTable]);
+      setResetPaginationToggle(!resetPaginationToggle);
+    } else if (option === '') {
+      handleTimeClear();
+    }
+  };
+
+  const handleTimeClear = () => {
+    if (timeFilter === '') {
+      setTimeFilter('');
+      setDataShow(drivers);
+      setResetPaginationToggle(!resetPaginationToggle);
+    }
+  };
+
+  const handleClear = () => {
+    if (searchValue) {
+      setSearchValue('');
+      setDataShow(drivers);
+      setResetPaginationToggle(!resetPaginationToggle);
+    }
+  };
+
+  const handleRowClick = (row) => {
+    setDriver(row);
+    setShowModal(true);
+  };
+
+  useEffect(() => {}, [drivers, searchValue, resetPaginationToggle, dataShow]);
 
   return (
     <Fragment>
@@ -353,20 +317,28 @@ const Drivers = () => {
                     <select
                       name="date"
                       id="date"
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      value={timeFilter}
+                      onChange={handleTimeFilter}
+                      className="bg-gray-50 border w-52 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     >
-                      <option defaultValue="">Time Filter</option>
-                      <option>0-24 hrs</option>
-                      <option>24-48 hrs</option>
-                      <option>2-7 days</option>
-                      <option>Last 2 weeks</option>
-                      <option>Last 1 month</option>
+                      <option defaultValue="">Filter By Daye/Time</option>
+                      <option value="last24hrs">0-24 hrs</option>
+                      <option value="last24_48hrs">24-48 hrs</option>
+                      <option value="last2_7days">2-7 days</option>
+                      <option value="last2_weeks">Last 2 weeks</option>
+                      <option value="lastCustom">Last 1 month</option>
                     </select>
+                    <button
+                      onClick={handleTimeClear}
+                      className="ml-2 border-solid border hover:bg-gray-200 p-2 px-5 rounded-md"
+                    >
+                      Reset
+                    </button>
                   </div>
-                  <div className="">
+                  {/* <div className="">
                     <select
                       name="country"
-                      value={filterValue}
+                      // value={filterValue}
                       // onChange={handleFilter}
                       id="countries"
                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -375,21 +347,22 @@ const Drivers = () => {
                       <option value="zw">Zimbabwe</option>
                       <option value="za">South Africa</option>
                     </select>
-                  </div>
+                  </div> */}
                 </div>
                 <div className="relative">
-                  <div className="topnav__search ">
+                  <div className="topnav__search">
                     <form className="flex items-center" onSubmit={handleSearch}>
                       <input
-                        className="border rounded-md"
+                        className="border rounded-md w-full"
                         value={searchValue}
-                        onChange={(e) => {
-                          e.preventDefault();
-                          setSearchValue(e.target.value);
-                          console.log('Search Value', searchValue);
-                        }}
                         type="text"
+                        id="search"
+                        aria-label="Search Input"
                         placeholder="Search here..."
+                        onChange={(e) => {
+                          setSearchValue(e.target.value);
+                          handleSearch(e);
+                        }}
                       />
                       <i
                         onClick={handleSearch}
@@ -397,10 +370,8 @@ const Drivers = () => {
                       ></i>
                     </form>
                     <button
-                      onClick={() => {
-                        setSearchValue('');
-                      }}
-                      className="border-solid border hover:bg-slate-400 p-2 px-5 rounded-md"
+                      onClick={handleClear}
+                      className="border-solid border hover:bg-gray-200 p-2 px-5 rounded-md"
                     >
                       Reset
                     </button>
@@ -411,15 +382,17 @@ const Drivers = () => {
                 <div className="table-wrapper">
                   <>
                     <DataTable
+                      title=""
                       columns={columns}
-                      data={drivers}
+                      data={dataShow}
                       selectableRows
                       onSelectedRowsChange={handleChange}
                       selectableRowDisabled={rowDisabledCriteria}
-                      onRowClicked={(row) => console.log('row', row)}
+                      onRowClicked={(row) => handleRowClick(row)}
                       className="text-2xl"
                       responsive
                       pagination
+                      paginationResetDefaultPage={resetPaginationToggle}
                       paginationComponentOptions={paginationOptions}
                       customStyles={customStyles}
                       conditionalRowStyles={conditionalRowStyles}
@@ -454,3 +427,71 @@ const Drivers = () => {
 };
 
 export default Drivers;
+
+/* 
+const customerTableHead = [
+  'ID',
+  'name',
+  'email',
+  'contact',
+  'location',
+  'ride_Status',
+  'approval_Status',
+  'overal_rating',
+  'Action',
+];
+
+const renderHead = (item, index) => <th key={index}>{item}</th>;
+
+const renderBody = (item, index) => (
+  <tr
+    onClick={() => {
+      console.log('Item Selected', item);
+      setDriver(item);
+      setShowModal(true);
+    }}
+    className="hover:cursor-pointer"
+    key={index}
+  >
+    <td>{item.id}</td>
+    <td>
+      {item.firstname} {item.lastname}
+    </td>
+    <td>{item.email}</td>
+    <td>{item.contact}</td>
+    <td>{item.location === 'za' ? 'South Africa' : 'Zimbabwe'}</td>
+    <td>{item.ride_status}</td>
+    <td>{item.approval_status}</td>
+    <td>{item.overal_rating}</td>
+    {
+      <>
+        <td>
+          <FaEdit
+            className="rounded-r hover:border sm:rounded sm:border-r-1 border-r border-b  hover:border-green-400 py-1 px-2"
+            color="green"
+            size={40}
+            onClick={(e) => {
+              e.stopPropagation();
+              setDriver(item);
+              setShowEditModal(true);
+            }}
+          />
+        </td>
+        <td>
+          <FaTrashAlt
+            className="rounded-r hover:border sm:rounded sm:border-r-1 border-r border-b  hover:border-red-400 py-1 px-2"
+            color="brown"
+            size={40}
+            onClick={(e) => {
+              e.stopPropagation();
+              window.confirm(
+                'Are you sure you wish to delete this driver?'
+              ) && deleteDriver(item.id);
+            }}
+          />
+        </td>
+      </>
+    }
+  </tr>
+);
+ */

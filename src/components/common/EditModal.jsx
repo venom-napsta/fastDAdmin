@@ -50,7 +50,7 @@ function EditModal({ onClose, driver: user, onSubmit }) {
           {/*content*/}
           <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
             {/*header*/}
-            <div className="flex items-start justify-between p-5 border-b border-solid border-slate-200 rounded-t">
+            <div className="flex items-start justify-between p-4 border-b border-solid border-slate-200 rounded-t">
               <div className="text-[#010080] text-center text-xl font-medium">
                 Driver Details
               </div>
@@ -68,8 +68,8 @@ function EditModal({ onClose, driver: user, onSubmit }) {
                   <input
                     className={
                       !errors.firstname
-                        ? `w-full h-14 border-1 rounded-md bg-transparent`
-                        : `w-full h-14 border-1 border-red-600 rounded-md bg-transparent`
+                        ? `w-full h-10 border-1 rounded-md bg-transparent`
+                        : `w-full h-10 border-1 border-red-600 rounded-md bg-transparent`
                     }
                     placeholder="Firstname"
                     type="text"
@@ -77,14 +77,14 @@ function EditModal({ onClose, driver: user, onSubmit }) {
                     required
                     {...register('firstname')}
                   />
-                  <AiOutlineUserAdd className="absolute right-3 top-5 text-gray-400" />
+                  <AiOutlineUserAdd className="absolute right-4 top-3 text-gray-400" />
                 </div>
                 <div className="w-full mb-6 my-4 transform bg-transparent text-lg duration-200 focus-within:rounded-md">
                   <input
                     className={
                       !errors.lastname
-                        ? `w-full h-14 border-1 rounded-md bg-transparent`
-                        : `w-full h-14 border-1 border-red-600 rounded-md bg-transparent`
+                        ? `w-full h-10 border-1 rounded-md bg-transparent`
+                        : `w-full h-10 border-1 border-red-600 rounded-md bg-transparent`
                     }
                     placeholder="Last Name"
                     type="text"
@@ -92,14 +92,14 @@ function EditModal({ onClose, driver: user, onSubmit }) {
                     required
                     {...register('lastname')}
                   />
-                  <AiOutlineUser className="absolute right-3 top-5 text-gray-400" />
+                  <AiOutlineUser className="absolute right-4 top-3 text-gray-400" />
                 </div>
                 <div className="w-full mb-6 my-4 transform bg-transparent text-lg duration-200 focus-within:rounded-md">
                   <input
                     className={
                       !errors.email
-                        ? `w-full h-14 border-1 rounded-md bg-transparent`
-                        : `w-full h-14 border-1 border-red-600 rounded-md bg-transparent`
+                        ? `w-full h-10 border-1 rounded-md bg-transparent`
+                        : `w-full h-10 border-1 border-red-600 rounded-md bg-transparent`
                     }
                     placeholder="Email"
                     type="email"
@@ -107,14 +107,14 @@ function EditModal({ onClose, driver: user, onSubmit }) {
                     required
                     {...register('email')}
                   />
-                  <AiOutlineMail className="absolute right-3 top-5 text-gray-400" />
+                  <AiOutlineMail className="absolute right-4 top-3 text-gray-400" />
                 </div>
                 <div className="w-full mb-6 my-4 transform bg-transparent text-lg duration-200 focus-within:rounded-md">
                   <input
                     className={
                       !errors.contact
-                        ? `w-full h-14 border-1 rounded-md bg-transparent`
-                        : `w-full h-14 border-1 border-red-600 rounded-md bg-transparent`
+                        ? `w-full h-10 border-1 rounded-md bg-transparent`
+                        : `w-full h-10 border-1 border-red-600 rounded-md bg-transparent`
                     }
                     placeholder="Contact Number"
                     type="text"
@@ -122,7 +122,7 @@ function EditModal({ onClose, driver: user, onSubmit }) {
                     required
                     {...register('contact')}
                   />
-                  <AiOutlinePhone className="absolute right-3 top-5 text-gray-400" />
+                  <AiOutlinePhone className="absolute right-4 top-3 text-gray-400" />
                 </div>
                 <div className="w-full mb-6 transform bg-transparent text-lg duration-200 focus-within:border-[bg-primary]">
                   <label htmlFor="approval_status">Approval Status:</label>
@@ -136,7 +136,7 @@ function EditModal({ onClose, driver: user, onSubmit }) {
 
                 <button
                   type="submit"
-                  className="button w-full transform rounded-md bg-[#010080] py-2 font-bold duration-300 hover:text-[#FF6D1C]"
+                  className="button w-full transform rounded-md bg-[#010080] py-2 font-normal duration-300 hover:text-[#FF6D1C]"
                 >
                   Submit
                 </button>
@@ -159,7 +159,7 @@ function EditModal({ onClose, driver: user, onSubmit }) {
               </form>
             </div>
             {/*footer*/}
-            <div className="flex items-center justify-end p-6 border-t border-solid border-slate-200 rounded-b">
+            <div className="flex items-center justify-end p-3 border-t border-solid border-slate-200 rounded-b">
               <button
                 className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                 type="button"
