@@ -18,7 +18,7 @@
     "location": "za",
     "contact": "+46 993 722 3008",
     "ride_status": "no_ride",
-    "approval_status": "pending",
+    "approval_status": "blocked",
     "overal_rating": 0
   },
   {
@@ -73,7 +73,7 @@
     "location": "zw",
     "contact": "+86 805 547 3640",
     "ride_status": "no_ride",
-    "approval_status": "pending",
+    "approval_status": "blocked",
     "overal_rating": 0
   },
   {
