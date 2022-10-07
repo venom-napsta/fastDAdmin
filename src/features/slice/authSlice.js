@@ -54,10 +54,7 @@ export const login = createAsyncThunk(
       body: JSON.stringify({ phone_number, password }),
     };
 
-    const res = await fetch(
-      'http://75.119.154.13:5000/auth/admin/login',
-      options
-    );
+    const res = await fetch('/auth/admin/login', options);
 
     const data = await res.json();
     console.log('Data', data.success);
