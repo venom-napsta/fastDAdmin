@@ -66,7 +66,17 @@ const Drivers = () => {
           {
             when: (row) => row.location === 'za',
             style: {
-              backgroundColor: 'rgba(30, 10, 260, 0.9)',
+              backgroundColor: '#010080',
+              color: 'white',
+              '&:hover': {
+                cursor: 'not-allowed',
+              },
+            },
+          },
+          {
+            when: (row) => row.location === 'zw',
+            style: {
+              backgroundColor: '#ff6d1c',
               color: 'white',
               '&:hover': {
                 cursor: 'not-allowed',

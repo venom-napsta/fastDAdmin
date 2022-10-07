@@ -173,3 +173,9 @@ input:focus {
   justify-content: space-between;
   padding-right: 1em;
 }
+
+/* Table Style Overides */
+/* .rdt_Pagination {
+  margin-top: 20px;
+  background-color: red;
+} */
