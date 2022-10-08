@@ -17,7 +17,10 @@ export const getAllDrivers = createAsyncThunk(
   'driver/getAllDrivers',
   async (id = null, { rejectWithValue }) => {
     try {
-      const res = await http.get(`/admin/drivers`, config);
+      const res = await http.get(
+        `http://75.119.154.13:5000/admin/drivers`,
+        config
+      );
       console.log('res drvr', res);
       return res.data;
     } catch (error) {
