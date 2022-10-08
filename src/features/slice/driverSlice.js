@@ -22,7 +22,7 @@ export const getAllDrivers = createAsyncThunk(
         headers: {
           'Content-Type': 'application/json',
           Authorization:
-            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInJvbGUiOiJhZG1pbiIsImlhdCI6MTY2NTIzOTcyNiwiZXhwIjoxNjY1MjQzMzI2fQ.8T5VWi_HkoPeqF1Cx_A0fwS9ejLjGqLFbzD_PTfYqX4',
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInJvbGUiOiJhZG1pbiIsImlhdCI6MTY2NTI0NTkxNSwiZXhwIjoxNjY1MjQ5NTE1fQ.xNIO2QSyxlXaY5dWoFRrFLRBCpgnydebsoaybAkm5lQ',
         },
       };
 
