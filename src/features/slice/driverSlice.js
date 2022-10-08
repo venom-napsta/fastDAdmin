@@ -17,9 +17,28 @@ export const getAllDrivers = createAsyncThunk(
   'driver/getAllDrivers',
   async (id = null, { rejectWithValue }) => {
     try {
-      const res = await http.get(`/admin/drivers`, config);
-      console.log('res drvr', res);
-      return res.data;
+      const options = {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization:
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInJvbGUiOiJhZG1pbiIsImlhdCI6MTY2NTIzOTcyNiwiZXhwIjoxNjY1MjQzMzI2fQ.8T5VWi_HkoPeqF1Cx_A0fwS9ejLjGqLFbzD_PTfYqX4',
+        },
+      };
+
+      fetch(
+        'https://fastdapi.malingreatssmartsystems.co.zw/admin/drivers',
+        options
+      )
+        .then((response) => response.json())
+        .then((response) => {
+          console.log(response);
+          return response;
+        })
+        .catch((err) => {
+          console.error(err);
+          return rejectWithValue(err);
+        });
     } catch (error) {
       console.log(error);
       return rejectWithValue(error.response.data.errors.message);
@@ -118,7 +137,8 @@ const driverSlice = createSlice({
     },
     [getAllDrivers.fulfilled]: (state, action) => {
       state.loading = false;
-      state.drivers = action.payload.data;
+      console.log('Data Res', action.payload);
+      // state.drivers = action.payload.data;
     },
     [getAllDrivers.rejected]: (state, action) => {
       state.loading = false;
