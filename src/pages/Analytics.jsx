@@ -11,11 +11,11 @@ const chartOptions = {
   series: [
     {
       name: 'Online Customers',
-      data: [40, 70, 20, 90, 36, 80, 30, 91, 60],
+      data: [40, 70, 20, 90, 36, 80, 30, 51, 73],
     },
     {
       name: 'Store Customers',
-      data: [40, 30, 70, 80, 40, 16, 40, 20, 51, 10],
+      data: [40, 30, 70, 80, 40, 16, 40, 20, 81],
     },
   ],
   options: {
@@ -84,22 +84,12 @@ const Analytics = () => {
         <div onClick={() => history.push('/analytics')} className="col-12">
           <div className="card full-height">
             {/* chart */}
-            {/* <Chart
-              options={
-                themeReducer === 'theme-mode-dark'
-                  ? {
-                      ...chartOptions.options,
-                      theme: { mode: 'dark' },
-                    }
-                  : {
-                      ...chartOptions.options,
-                      theme: { mode: 'light' },
-                    }
-              }
+            <Chart
+              options={chartOptions.options}
               series={chartOptions.series}
               type="line"
               height="100%"
-            /> */}
+            />
           </div>
         </div>
       </div>

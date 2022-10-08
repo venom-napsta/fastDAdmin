@@ -1,380 +1,365 @@
-import React, { useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
-import { FaEdit, FaTimes, FaTrashAlt } from 'react-icons/fa';
+import React, { Fragment, useState, useEffect, useMemo } from 'react';
+import { useSelector } from 'react-redux';
 
-/* Form Validation and handling */
-import { useForm } from 'react-hook-form';
-import * as yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup';
+// import Table from '../components/table/Table';
 
-import Table from '../components/table/Table';
+import { FaEdit, FaFilter, FaTrashAlt } from 'react-icons/fa';
+import Modal from '../components/common/Modal';
+import EditModal from '../components/common/EditModal';
+import DataTable from 'react-data-table-component';
 
-import { useDispatch, useSelector } from 'react-redux';
-import { /* getAllUsers */ saveUsers } from '../features/slice/userSlice';
-import { registerUser } from '../features/slice/authSlice';
-import { Spinner } from 'flowbite-react/lib/cjs/components/Spinner';
-import http from '../services/httpService';
-import {
-  AiFillLock,
-  AiOutlineMail,
-  AiOutlinePhone,
-  AiOutlineUser,
-  AiOutlineUserAdd,
-} from 'react-icons/ai';
-import RegisteredUser from '../components/common/RegisteredUser';
-
-const renderHead = (item, index) => <th key={index}>{item}</th>;
-
-const renderBody = (item, index) => (
-  <tr key={index}>
-    <td>{item.id}</td>
-    <td>
-      {item.firstname}&nbsp;{item.lastname}
-    </td>
-    <td>{item.email}</td>
-    <td>{item.contact}</td>
-    <td>{item.is_verified}</td>
-    <td>{item.role}</td>
-    <>
-      {
-        <>
-          <td>
-            <FaEdit color="green" size={20} />
-          </td>
-          <td>
-            <FaTrashAlt color="brown" size={20} />
-          </td>
-        </>
-      }
-    </>
-  </tr>
-);
-
-const userTableHead = ['id', 'Name', 'email', 'contact', 'is_verified', 'role'];
-function Users() {
-  const phoneRegExp =
-    /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
-
-  const schema = yup.object().shape({
-    firstname: yup.string().min(3).max(50).required(),
-    lastname: yup.string().min(3).max(50).required(),
-    email: yup.string().email().required(),
-    contact: yup
-      .string()
-      .matches(phoneRegExp, 'Phone number is not valid.')
-      .min(9)
-      .max(15)
-      .required(),
-    password: yup.string().min(6).max(32).required(),
-    password_confirmation: yup.string().min(6).max(32).required(),
-  });
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    reset,
-  } = useForm({ resolver: yupResolver(schema) });
-
-  /* Form Sublmision */
-  const onSubmitHandler = async (data) => {
-    console.log('sign up details', data);
-    dispatch(registerUser(data));
-    reset();
+const Users = () => {
+  const deleteDriver = (drvr) => {
+    console.log('Del Component', drvr);
   };
 
-  function handleFilter(nyika) {
-    console.log(users.filter((user) => user.country === nyika));
-  }
+  const { users, loading, error } = useSelector((state) => state.users);
+  const [driver, setDriver] = useState({});
+  const [showModal, setShowModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
 
-  const { userInfo, userToken, loading, registeredUser } = useSelector(
-    (state) => state.auth
+  const [dataShow, setDataShow] = useState(users);
+  const [searchValue, setSearchValue] = useState('');
+  const [timeFilter, setTimeFilter] = useState('');
+  const [resetPaginationToggle, setResetPaginationToggle] = useState(false);
+
+  // react-data-table
+  const columns = useMemo(
+    () => [
+      {
+        name: 'ID',
+        selector: (row) => row.id,
+        filterable: false,
+        sortable: true,
+        width: '80px',
+      },
+
+      {
+        name: 'Name',
+        selector: (row) => row.name,
+        filterable: true,
+        sortable: true,
+      },
+      {
+        name: 'Email',
+        selector: (row) => row.email,
+        filterable: true,
+        sortable: true,
+      },
+      {
+        name: 'Contact',
+        selector: (row) => row.phone,
+      },
+      {
+        name: 'User Type',
+        selector: (row) => row.userType,
+        filterable: true,
+        sortable: true,
+      },
+      {
+        name: 'Action',
+        right: true,
+        selector: (row) => (
+          <p className="flex">
+            <FaEdit
+              className="rounded-r hover:border sm:rounded sm:border-r-1 border-r border-b  hover:border-green-400 p-2"
+              color="green"
+              size={40}
+              onClick={(e) => {
+                e.stopPropagation();
+                console.log('Edit', row);
+
+                setDriver(row);
+                setShowEditModal(true);
+              }}
+            />
+            &nbsp; &nbsp;
+            <FaTrashAlt
+              className="rounded-r hover:border sm:rounded sm:border-r-1 border-r border-b  hover:border-red-400 p-2"
+              color="brown"
+              size={40}
+              onClick={(e) => {
+                e.stopPropagation();
+                window.confirm(
+                  'Are you sure you wish to delete this driver?'
+                ) && deleteDriver(row);
+              }}
+            />
+          </p>
+        ),
+      },
+    ],
+    []
   );
-  const {
-    users,
-    loading: userLoading,
-    error: userError,
-  } = useSelector((state) => state.users);
-  const history = useHistory();
-  const dispatch = useDispatch();
 
-  const [usrLoading, setUsrLoading] = useState(true);
-  const [usrErr, setUsrErr] = useState(null);
-  const [showModal, setShowModal] = React.useState(false);
+  // conditional Row Styles
+  const conditionalRowStyles = [
+    {
+      when: (row) => row.id % 2 === 0,
+      style: {
+        backgroundColor: 'lightgray',
+      },
+    },
+    {
+      when: (row) => row.approval_status === 'blocked',
+      style: {
+        color: 'gray',
+        backgroundColor: '#ffcccb',
+      },
+    },
+  ];
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => {
-    http
-      .get('/users')
-      .then(({ data }) => {
-        console.log('Axios data', data.data);
-        dispatch(saveUsers(data.data));
-        // setUserList(data.data);
-      })
-      .catch((err) => {
-        console.log('axios err', err);
-        setUsrErr(err.message);
-      })
-      .finally(() => setUsrLoading(false));
-  }, []);
+  const customStyles = {
+    header: {
+      style: {
+        fontSize: '50px',
+      },
+    },
+    headRow: {
+      style: {
+        fontSize: '14px',
+        backgroundColor: 'gray',
+        borderTopStyle: 'solid',
+        borderTopWidth: '1px',
+      },
 
-  // useEffect(() => {
-  //   // dispatch(getAllUsers());
-  //   if (!userToken) {
-  //     history.replace('/login');
-  //   }
-  // }, [loading, userInfo, users, userToken, history, registeredUser, dispatch]);
+      headCells: {
+        style: {
+          color: '#202124',
+          fontSize: '14px',
+        },
+      },
+      rows: {
+        highlightOnHoverStyle: {
+          backgroundColor: 'gray',
+          borderBottomColor: 'red',
+          borderRadius: '25px',
+          outline: '1px solid #FFFFFF',
+        },
+      },
+      pagination: {
+        style: {
+          border: 'red 1px solid',
+        },
+      },
+    },
+  };
 
-  const [filter, setFilter] = useState('');
-  // const filteredUsers = useMemo(
-  //   () => users.filter((user) => user.firstname.startsWith(filter)),
-  //   [filter, users]
-  // );
+  const handleChange = ({ selectedRows }) => {
+    let ids = [];
+    ids = selectedRows.map((row) => row.id);
+    // You can set state or dispatch with something like Redux so we can use the retrieved data
+    console.log('Selected Rows: ', selectedRows);
+    console.log('Selected Rows Count: ', selectedRows.length);
+    console.log('Selected Rows IDs: ', ids);
+  };
 
-  if (usrLoading) {
-    return (
-      <div className="flex flex-col gap-2">
-        <div className="text-center">
-          <Spinner size="xl" aria-label="Center-aligned spinner example" />
-        </div>
-      </div>
-    );
-  }
+  const paginationOptions = {
+    rowsPerPageText: 'users Per Page',
+    rangeSeparatorText: 'of',
+    selectAllRowsItem: true,
+    selectAllRowsItemText: 'All users',
+  };
+
+  const rowDisabledCriteria = (row) => row.approval_status === 'blocked';
+  // console.log('disab', row.approval_status === 'pending');
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    // const filteredItems = users.filter(
+    //   drv => drv.firstname && drv.firstname.toLowerCase().includes(searchValue.toLowerCase()),
+    // );
+
+    let searchString = e.target.value;
+    e.preventDefault();
+    if (searchString !== '') {
+      setSearchValue(searchString);
+      const searchTable = users.filter((o) =>
+        Object.keys(o).some((k) =>
+          String(o[k]).toLowerCase().includes(searchString.toLowerCase())
+        )
+      );
+      setDataShow([...searchTable]);
+      setResetPaginationToggle(!resetPaginationToggle);
+    } else if (searchString === '') {
+      handleClear();
+    }
+  };
+
+  const handleTimeFilter = (e) => {
+    e.preventDefault();
+
+    let option = e.target.value;
+    console.log('HandleFilter', timeFilter);
+    e.preventDefault();
+    if (option !== '') {
+      const searchTable = users.filter((o) =>
+        Object.keys(o).some((k) =>
+          String(o[k]).toLowerCase().includes(option.toLowerCase())
+        )
+      );
+      setDataShow([...searchTable]);
+      setResetPaginationToggle(!resetPaginationToggle);
+    } else if (option === '') {
+      handleTimeClear();
+    }
+  };
+
+  const handleTimeClear = () => {
+    if (timeFilter === '') {
+      setTimeFilter('');
+      setDataShow(users);
+      setResetPaginationToggle(!resetPaginationToggle);
+    }
+  };
+
+  const handleClear = () => {
+    if (searchValue) {
+      setSearchValue('');
+      setDataShow(users);
+      setResetPaginationToggle(!resetPaginationToggle);
+    }
+  };
+
+  const handleRowClick = (row) => {
+    setDriver(row);
+    setShowModal(true);
+  };
+
+  useEffect(() => {}, [users, searchValue, resetPaginationToggle, dataShow]);
 
   return (
-    <div>
-      <div className="flex">
-        {' '}
-        <p></p>
-        {/* <h2 className="font-bold page-header">All Users</h2> */}
-        <button onClick={() => setShowModal(true)} className="button">
-          Add New User
-        </button>
-      </div>
-
+    <Fragment>
       <div className="row">
         <div className="col-12">
           <div className="card">
-            {/* Newly registered User */}
-            {registeredUser ? (
-              <RegisteredUser registeredUser={registeredUser} />
-            ) : null}
-            {users ? (
-              <div className="card__body">
-                <div className="filter">
-                  {/*<div className="topnav__right-item">
-                  {/* dropdown here */}
-
-                  {/* <div
-                    style={{
-                      backgroundColor: '#455560',
-                      color: 'white',
-                      padding: '8px',
-                      borderRadius: '50px',
-                    }}
-                    className="dropdown dropdown__toggle "
-                  >
-                    <DrpDwn
-                      color="inherit"
-                      label={
-                        <div className="topnav__right-user">
-                          <i className="fa fa-filter" />
-                          &nbsp;&nbsp;Filter
-                        </div>
-                      }
+            <div className="flex sm:flex-row flex-col">
+              <h1 className="ml-2 font-bold text-2xl">users</h1>
+            </div>
+            <div className="card__body sm:flex-row flex-col">
+              {/* <Table
+                  limit="10"
+                  headData={customerTableHead}
+                  renderHead={(item, index) => renderHead(item, index)}
+                  bodyData={users}
+                  renderBody={(item, index) => renderBody(item, index)}
+                /> */}
+              <div className="flex flex-row justify-self-auto mb-4 sm:mb-3 topnav__search mx-2">
+                <div className="flex xs:flex-col sm:flex-row">
+                  <div className="relative flex items-center mr-3">
+                    <div className="mx-3 border border-r-0 p-3 border-gray-400-200">
+                      <FaFilter />
+                    </div>
+                    <select
+                      name="date"
+                      id="date"
+                      value={timeFilter}
+                      onChange={handleTimeFilter}
+                      className="bg-gray-50 border w-52 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     >
-                      <DrpDwn.Item onClick={() => handleFilter('zimbabwe')}>
-                        Zimbabwe
-                      </DrpDwn.Item>
-                      <DrpDwn.Item onClick={() => handleFilter('south')}>
-                        South Africa
-                      </DrpDwn.Item>
-                    </DrpDwn>
+                      <option defaultValue="">Filter By Daye/Time</option>
+                      <option value="last24hrs">0-24 hrs</option>
+                      <option value="last24_48hrs">24-48 hrs</option>
+                      <option value="last2_7days">2-7 days</option>
+                      <option value="last2_weeks">Last 2 weeks</option>
+                      <option value="lastCustom">Last 1 month</option>
+                    </select>
+                    <button
+                      onClick={handleTimeClear}
+                      className="ml-2 border-solid border hover:bg-gray-200 p-2 px-5 rounded-md"
+                    >
+                      Reset
+                    </button>
                   </div>
-                    </div> */}
+                  {/* <div className="">
+                    <select
+                      name="country"
+                      // value={filterValue}
+                      // onChange={handleFilter}
+                      id="countries"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    >
+                      <option defaultValue="">Country</option>
+                      <option value="zw">Zimbabwe</option>
+                      <option value="za">South Africa</option>
+                    </select>
+                  </div> */}
                 </div>
-                <div className="topnav__search mb-5">
-                  <input
-                    onChange={(e) => setFilter(e.target.value)}
-                    type="text"
-                    placeholder="Search here..."
-                  />
-                  <i className="bx bx-search"></i>
+                <div className="relative">
+                  <div className="topnav__search">
+                    <form className="flex items-center" onSubmit={handleSearch}>
+                      <input
+                        className="border rounded-md w-full"
+                        value={searchValue}
+                        type="text"
+                        id="search"
+                        aria-label="Search Input"
+                        placeholder="Search here..."
+                        onChange={(e) => {
+                          setSearchValue(e.target.value);
+                          handleSearch(e);
+                        }}
+                      />
+                      <i
+                        onClick={handleSearch}
+                        className="ml-1 bx bx-search"
+                      ></i>
+                    </form>
+                    <button
+                      onClick={handleClear}
+                      className="border-solid border hover:bg-gray-200 p-2 px-5 rounded-md"
+                    >
+                      Reset
+                    </button>
+                  </div>
                 </div>
-
-                <>
-                  <Table
-                    limit="10"
-                    headData={userTableHead}
-                    renderHead={(item, index) => renderHead(item, index)}
-                    bodyData={users}
-                    renderBody={(item, index) => renderBody(item, index)}
-                  />
-                </>
               </div>
-            ) : (
-              <>
-                <div className="flex flex-col gap-2">
-                  <div className="text-center">
-                    <div
-                      class="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800"
-                      role="alert"
-                    >
-                      <span class="font-medium">Error, Request Failed!</span>{' '}
-                      {' : '}
-                      {usrErr}
-                    </div>
-                  </div>
-                </div>
-              </>
-            )}
-          </div>
-        </div>
-      </div>
-      {showModal ? (
-        <>
-          <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
-            <div className="relative w-7/12 my-6 mx-auto max-w-3xl">
-              {/*content*/}
-              <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
-                {/*header*/}
-                <div className="flex items-start justify-between p-5 border-b border-solid border-slate-200 rounded-t">
-                  <div className="text-[#010080] text-center text-xl font-medium">
-                    User Details
-                  </div>
-                  <button
-                    className="p-1 ml-auto bg-gray-100 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
-                    onClick={() => setShowModal(false)}
-                  >
-                    <FaTimes size={20} color="black" />
-                  </button>
-                </div>
-                {/*body*/}
-                <div className="relative p-6 flex-auto">
-                  <form
-                    onSubmit={handleSubmit(onSubmitHandler)}
-                    autoComplete="off"
-                  >
-                    <div className="w-full mb-6 my-4 transform bg-transparent text-lg duration-200 focus-within:rounded-md">
-                      <input
-                        className={
-                          !errors.firstname
-                            ? `w-full h-14 border-1 rounded-md bg-transparent`
-                            : `w-full h-14 border-1 border-red-600 rounded-md bg-transparent`
-                        }
-                        placeholder="Firstname"
-                        type="text"
-                        required
-                        {...register('firstname')}
-                      />
-                      <AiOutlineUserAdd className="absolute right-3 top-5 text-gray-400" />
-                    </div>
-                    <div className="w-full mb-6 my-4 transform bg-transparent text-lg duration-200 focus-within:rounded-md">
-                      <input
-                        className={
-                          !errors.lastname
-                            ? `w-full h-14 border-1 rounded-md bg-transparent`
-                            : `w-full h-14 border-1 border-red-600 rounded-md bg-transparent`
-                        }
-                        placeholder="Last Name"
-                        type="text"
-                        required
-                        {...register('lastname')}
-                      />
-                      <AiOutlineUser className="absolute right-3 top-5 text-gray-400" />
-                    </div>
-                    <div className="w-full mb-6 my-4 transform bg-transparent text-lg duration-200 focus-within:rounded-md">
-                      <input
-                        className={
-                          !errors.email
-                            ? `w-full h-14 border-1 rounded-md bg-transparent`
-                            : `w-full h-14 border-1 border-red-600 rounded-md bg-transparent`
-                        }
-                        placeholder="Email"
-                        type="email"
-                        required
-                        {...register('email')}
-                      />
-                      <AiOutlineMail className="absolute right-3 top-5 text-gray-400" />
-                    </div>
-                    <div className="w-full mb-6 my-4 transform bg-transparent text-lg duration-200 focus-within:rounded-md">
-                      <input
-                        className={
-                          !errors.contact
-                            ? `w-full h-14 border-1 rounded-md bg-transparent`
-                            : `w-full h-14 border-1 border-red-600 rounded-md bg-transparent`
-                        }
-                        placeholder="Contact Number"
-                        type="text"
-                        required
-                        {...register('contact')}
-                      />
-                      <AiOutlinePhone className="absolute right-3 top-5 text-gray-400" />
-                    </div>
-                    <div className="w-full mb-6 transform bg-transparent text-lg duration-200 focus-within:border-[bg-primary]">
-                      <input
-                        type="password"
-                        required
-                        placeholder="Password"
-                        className={
-                          !errors.password
-                            ? `w-full h-14 border-1 rounded-md bg-transparent`
-                            : `w-full h-14 border-1 border-red-600 rounded-md bg-transparent`
-                        }
-                        {...register('password')}
-                      />
-                      <AiFillLock className="absolute right-3 top-5 text-gray-400" />
-                    </div>
-                    <div className="w-full mb-6 transform bg-transparent text-lg duration-200 focus-within:border-[bg-primary]">
-                      <input
-                        type="password"
-                        required
-                        placeholder="Confirm Password"
-                        className={
-                          !errors.password_confirmation
-                            ? `w-full h-14 border-1 rounded-md bg-transparent`
-                            : `w-full h-14 border-1 border-red-600 rounded-md bg-transparent`
-                        }
-                        {...register('password_confirmation')}
-                      />
-                      <AiFillLock className="absolute right-3 top-5 text-gray-400" />
-                    </div>
-
-                    {loading ? (
-                      <button
-                        type="submit"
-                        className="button w-full transform rounded-md bg-[#010080] py-2 font-bold duration-300 hover:text-[#FF6D1C]"
-                      >
-                        <Spinner aria-label="Large spinner example" size="md" />
-                      </button>
-                    ) : (
-                      <button
-                        type="submit"
-                        className="button w-full transform rounded-md bg-[#010080] py-2 font-bold duration-300 hover:text-[#FF6D1C]"
-                      >
-                        Submit
-                      </button>
-                    )}
-                  </form>
-                </div>
-                {/*footer*/}
-                <div className="flex items-center justify-end p-6 border-t border-solid border-slate-200 rounded-b">
-                  <button
-                    className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-                    type="button"
-                    onClick={() => setShowModal(false)}
-                  >
-                    Close
-                  </button>
+              <div className="relative">
+                <div className="table-wrapper">
+                  <>
+                    <DataTable
+                      title=""
+                      columns={columns}
+                      data={dataShow}
+                      selectableRows
+                      onSelectedRowsChange={handleChange}
+                      selectableRowDisabled={rowDisabledCriteria}
+                      onRowClicked={(row) => handleRowClick(row)}
+                      className="text-2xl"
+                      responsive
+                      pagination
+                      paginationResetDefaultPage={resetPaginationToggle}
+                      paginationComponentOptions={paginationOptions}
+                      customStyles={customStyles}
+                      conditionalRowStyles={conditionalRowStyles}
+                      fixedHeader
+                      highlightOnHover
+                      paginationRowsPerPageOptions={[10, 50, 100]}
+                      pointerOnHover
+                    />
+                  </>
                 </div>
               </div>
             </div>
           </div>
-          <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
-        </>
-      ) : null}
-    </div>
+        </div>
+        {showModal && (
+          <Modal
+            driver={driver}
+            showModal
+            onClose={() => setShowModal(false)}
+          />
+        )}
+        {showEditModal && (
+          <EditModal
+            driver={driver}
+            showEditModal
+            onClose={() => setShowEditModal(false)}
+          />
+        )}
+      </div>
+    </Fragment>
   );
-}
+};
 
 export default Users;

@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import http from '../../services/httpService';
+import customerList from '../../assets/JsonData/customers-list.json';
 
 // Get Users
 export const getAllCustomers = createAsyncThunk(
@@ -18,7 +19,7 @@ export const getAllCustomers = createAsyncThunk(
 const userSlice = createSlice({
   name: 'customers',
   initialState: {
-    customers: [],
+    customers: [customerList],
     loading: false,
     error: null,
   },

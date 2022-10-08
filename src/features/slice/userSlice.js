@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import http from '../../services/httpService';
+import users from '../../assets/JsonData/users.json';
 
 // Get Users
 export const getAllUsers = createAsyncThunk(
@@ -32,7 +33,7 @@ export const getAllUsers = createAsyncThunk(
 const userSlice = createSlice({
   name: 'users',
   initialState: {
-    users: [],
+    users: users,
     loading: false,
     error: null,
     searchResults: null,
