@@ -8,7 +8,7 @@ const config = {
   headers: {
     'Content-Type': 'application/json',
     Authorization:
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInJvbGUiOiJhZG1pbiIsImlhdCI6MTY2NTIyMjA4MSwiZXhwIjoxNjY1MjI1NjgxfQ.KvapkY-tVwTvWbCidJzpSZyErWoU5D6cFdhGsB6qI1k',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInJvbGUiOiJhZG1pbiIsImlhdCI6MTY2NTIzOTcyNiwiZXhwIjoxNjY1MjQzMzI2fQ.8T5VWi_HkoPeqF1Cx_A0fwS9ejLjGqLFbzD_PTfYqX4',
   },
 };
 
@@ -17,10 +17,7 @@ export const getAllDrivers = createAsyncThunk(
   'driver/getAllDrivers',
   async (id = null, { rejectWithValue }) => {
     try {
-      const res = await http.get(
-        `http://75.119.154.13:5000/admin/drivers`,
-        config
-      );
+      const res = await http.get(`/admin/drivers`, config);
       console.log('res drvr', res);
       return res.data;
     } catch (error) {
