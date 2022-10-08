@@ -50,7 +50,7 @@ export const login = createAsyncThunk(
     const options = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      referrerPolicy: 'unsafe_url',
+      // referrerPolicy: 'unsafe_url',
       body: JSON.stringify({ phone_number, password }),
     };
 

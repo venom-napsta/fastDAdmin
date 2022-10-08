@@ -1,5 +1,5 @@
 import React, { Fragment, useState, useEffect, useMemo } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 // import Table from '../components/table/Table';
 
@@ -7,6 +7,8 @@ import { FaEdit, FaFilter, FaTrashAlt } from 'react-icons/fa';
 import Modal from '../components/common/Modal';
 import EditModal from '../components/common/EditModal';
 import DataTable from 'react-data-table-component';
+
+import { getAllDrivers } from '../features/slice/driverSlice';
 
 const Drivers = () => {
   const deleteDriver = (drvr) => {
@@ -300,6 +302,11 @@ const Drivers = () => {
     setShowModal(true);
   };
 
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getAllDrivers());
+  }, [dispatch]);
+
   useEffect(() => {}, [drivers, searchValue, resetPaginationToggle, dataShow]);
 
   return (
@@ -394,7 +401,7 @@ const Drivers = () => {
                     <DataTable
                       title=""
                       columns={columns}
-                      data={dataShow}
+                      data={drivers}
                       selectableRows
                       onSelectedRowsChange={handleChange}
                       selectableRowDisabled={rowDisabledCriteria}

@@ -4,12 +4,20 @@ import http from '../../services/httpService';
 import driverList from '../../assets/JsonData/drivers_list.json';
 // const baseURL = 'http://194.163.132.169:5000';
 
+const config = {
+  headers: {
+    'Content-Type': 'application/json',
+    Authorization:
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInJvbGUiOiJhZG1pbiIsImlhdCI6MTY2NTIyMjA4MSwiZXhwIjoxNjY1MjI1NjgxfQ.KvapkY-tVwTvWbCidJzpSZyErWoU5D6cFdhGsB6qI1k',
+  },
+};
+
 // Get All Drivers /drivers  GET
 export const getAllDrivers = createAsyncThunk(
   'driver/getAllDrivers',
   async (id = null, { rejectWithValue }) => {
     try {
-      const res = await http.get(`/drivers`);
+      const res = await http.get(`/admin/drivers`, config);
       console.log('res drvr', res.data);
       return res.data;
     } catch (error) {
@@ -110,7 +118,7 @@ const driverSlice = createSlice({
     },
     [getAllDrivers.fulfilled]: (state, action) => {
       state.loading = false;
-      state.drivers = action.payload;
+      state.drivers = action.payload.data;
     },
     [getAllDrivers.rejected]: (state, action) => {
       state.loading = false;
