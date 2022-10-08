@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "proxy": "http://75.119.154.13:5000",
+  "homepage": ".",
   "dependencies": {
     "@hookform/resolvers": "^2.9.8",
     "@reduxjs/toolkit": "^1.8.5",
