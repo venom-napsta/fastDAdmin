@@ -170,16 +170,16 @@ const renderdriverBody = (item, index) => (
 
 const Dashboard = () => {
   const { userInfo, userToken, loading } = useSelector((state) => state.auth);
-  // const { drivers } = useSelector((state) => state.driver);
+  const { drivers } = useSelector((state) => state.driver);
   const history = useHistory();
   const dispatch = useDispatch();
 
-  // useEffect(() => {
-  //   // // console.log(dispatch(getAllDrivers()));
-  //   if (!userToken) {
-  //     history.replace('/login');
-  //   }
-  // }, [loading, userInfo, userToken, history]);
+  useEffect(() => {
+    // console.log(dispatch(getAllDrivers()));
+    if (!userToken) {
+      history.replace('/login');
+    }
+  }, [loading, userInfo, userToken, history]);
 
   return (
     <div>

@@ -2,14 +2,6 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { toast } from 'react-toastify';
 import http from '../../services/httpService';
 
-const config = {
-  headers: {
-    'Content-Type': 'application/json',
-  },
-  crossdomain: true,
-  withCredentials: true,
-};
-
 export const registerUser = createAsyncThunk(
   'auth/register',
   async (
@@ -17,18 +9,14 @@ export const registerUser = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      const res = await http.post(
-        '/auth/admin/sign-up',
-        {
-          firstname,
-          lastname,
-          email,
-          contact,
-          password,
-          password_confirmation,
-        },
-        config
-      );
+      const res = await http.post('/auth/admin/sign-up', {
+        firstname,
+        lastname,
+        email,
+        contact,
+        password,
+        password_confirmation,
+      });
       const { data } = res;
       if (data) {
         console.log('Res Data', data);
@@ -43,31 +31,25 @@ export const registerUser = createAsyncThunk(
   }
 );
 
-// Add User /login Post
+// User /login Post
 export const login = createAsyncThunk(
   'auth/Login',
   async ({ contact: phone_number, password }, { rejectWithValue }) => {
-    const options = {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      // referrerPolicy: 'unsafe_url',
-      body: JSON.stringify({ phone_number, password }),
-    };
-
-    const res = await fetch('/auth/admin/login', options);
-
-    const data = await res.json();
-    console.log('Data', data.success);
-    if (data.success === true) {
-      console.log('Data', data);
+    try {
+      const res = await http.post('/auth/admin/login', {
+        phone_number,
+        password,
+      });
+      const { data } = res;
+      if (data) {
+        console.log('Data Inside', data);
+      }
+      console.log('User Res', data);
       return data;
-    } else if (data.success === false) {
-      toast(`Error: ${data.errors.message}`);
-      return rejectWithValue(data.errors.message);
-    } else if (!res.ok) {
-      console.error(data);
+    } catch (error) {
+      console.error('err', error);
       toast('Unexpected Error Occurred, Please try again');
-      return rejectWithValue(data);
+      return rejectWithValue(error);
     }
   }
 );
@@ -108,6 +90,7 @@ const authSlice = createSlice({
   reducers: {
     logout: (state, action) => {
       localStorage.removeItem('userToken');
+      localStorage.removeItem('user');
       window.location = '/login';
     },
   },
@@ -161,22 +144,25 @@ const authSlice = createSlice({
 export const { logout, loginStatus, loginStatusChange } = authSlice.actions;
 export default authSlice.reducer;
 
-// const res = await http.post(
-//   '/auth/admin/login',
-//   {
-//     phone_number,
-//     password,
-//   },
-//   config
-// );
-// const { data } = res;
-// if (data) {
+// const options = {
+//   method: 'POST',
+//   headers: { 'Content-Type': 'application/json' },
+//   // referrerPolicy: 'unsafe_url',
+//   body: JSON.stringify({ phone_number, password }),
+// };
+
+// const res = await fetch('/auth/admin/login', options);
+
+// const data = await res.json();
+// console.log('Data', data.success);
+// if (data.success === true) {
 //   console.log('Data', data);
-//   localStorage.setItem('user', JSON.stringify(data.data.user));
-//   localStorage.setItem(
-//     'userToken',
-//     JSON.stringify(data.data.token.access_token)
-//   );
+//   return data;
+// } else if (data.success === false) {
+//   toast(`Error: ${data.errors.message}`);
+//   return rejectWithValue(data.errors.message);
+// } else if (!res.ok) {
+//   console.error(data);
+//   toast('Unexpected Error Occurred, Please try again');
+//   return rejectWithValue(data);
 // }
-// console.log('User Res', data);
-// return data;

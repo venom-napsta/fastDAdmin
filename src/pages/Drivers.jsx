@@ -9,8 +9,22 @@ import EditModal from '../components/common/EditModal';
 import DataTable from 'react-data-table-component';
 
 import { getAllDrivers } from '../features/slice/driverSlice';
+import { useHistory } from 'react-router-dom';
 
 const Drivers = () => {
+  const {
+    userInfo,
+    userToken,
+    loading: userLoading,
+  } = useSelector((state) => state.auth);
+  const history = useHistory();
+
+  useEffect(() => {
+    if (!userToken) {
+      history.replace('/login');
+    }
+  }, [userLoading, userInfo, userToken, history]);
+
   const deleteDriver = (drvr) => {
     console.log('Del Component', drvr);
   };
@@ -57,7 +71,7 @@ const Drivers = () => {
       },
       {
         name: 'Contact',
-        selector: (row) => row.contact,
+        selector: (row) => row.phone_number,
       },
       {
         name: 'Country',
@@ -88,10 +102,9 @@ const Drivers = () => {
         ],
       },
       {
-        name: 'Approval Status',
-        selector: (row) => row.approval_status,
+        name: 'National ID',
+        selector: (row) => row.national_id,
         filterable: true,
-        sortable: true,
         // right: true,
         // conditional Styling
         conditionalCellStyles: [
@@ -114,8 +127,8 @@ const Drivers = () => {
         sortable: true,
       },
       {
-        name: 'Overal Rating',
-        selector: (row) => row.overal_rating,
+        name: 'Role',
+        selector: (row) => row.role,
         filterable: true,
         sortable: true,
         conditionalCellStyles: [
@@ -402,9 +415,9 @@ const Drivers = () => {
                       title=""
                       columns={columns}
                       data={drivers}
-                      selectableRows
+                      // selectableRows
                       onSelectedRowsChange={handleChange}
-                      selectableRowDisabled={rowDisabledCriteria}
+                      // selectableRowDisabled={rowDisabledCriteria}
                       onRowClicked={(row) => handleRowClick(row)}
                       className="text-2xl"
                       responsive

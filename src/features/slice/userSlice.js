@@ -7,7 +7,7 @@ export const getAllUsers = createAsyncThunk(
   'users/getAllUsers',
   async (id = null, { rejectWithValue }) => {
     try {
-      const res = await http.get(`/users`);
+      const res = await http.get(`/admin/users`);
       return res.data.data;
     } catch (error) {
       console.log('Request Error', error.message);

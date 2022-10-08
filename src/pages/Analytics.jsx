@@ -5,21 +5,22 @@ import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
 import StatusCard from '../components/status-card/StatusCard';
-import statusCards from '../assets/JsonData/status-card-data.json';
+import statusCardsZA from '../assets/JsonData/status-card-dataZA.json';
+import statusCardsZW from '../assets/JsonData/status-card-dataZW.json';
 
 const chartOptionsZW = {
   series: [
     {
       name: 'Rides',
-      data: [40, 70, 20, 60, 36, 80, 30, 50, 60, 89],
+      data: [20, 50, 20, 50, 36, 80, 30, 60, 70, 83],
     },
     {
       name: 'Packages',
-      data: [40, 30, 70, 60, 40, 16, 40, 20, 51, 80],
+      data: [60, 40, 70, 63, 30, 16, 40, 20, 51, 70],
     },
     {
       name: 'Drivers',
-      data: [20, 52, 48, 62, 23, 75, 62, 38, 56, 93],
+      data: [28, 52, 58, 62, 33, 75, 62, 38, 56, 93],
     },
   ],
   options: {
@@ -106,19 +107,20 @@ const chartOptionsZA = {
 };
 
 const Analytics = () => {
-  // const themeReducer = useSelector((state) => state.ThemeReducer.mode);
-
   const { userInfo, userToken, loading } = useSelector((state) => state.auth);
   const history = useHistory();
   const dispatch = useDispatch();
 
-  const [country, setCountry] = useState('Zimbabwe');
+  const [country, setCountry] = useState('zw');
+  const [bg, setBg] = useState(false);
 
-  // useEffect(() => {
-  //   if (!userToken) {
-  //     history.replace('/login');
-  //   }
-  // }, [loading, userInfo, userToken, history]);
+  useEffect(() => {
+    if (!userToken) {
+      history.replace('/login');
+    }
+  }, [loading, userInfo, userToken, history]);
+
+  useEffect(() => {}, [country]);
 
   const handleChange = (e) => {
     e.preventDefault();
@@ -136,13 +138,17 @@ const Analytics = () => {
                 onClick={(e) => {
                   e.preventDefault();
                   setCountry('zw');
-                  console.log('Selectd', country);
+                  setBg(true);
                 }}
-                className="flex items-center mb-4 bg-[#010080] rounded-md p-4"
+                className={
+                  country !== 'zw'
+                    ? `flex items-center mb-4 rounded-md p-4 text-gray-600`
+                    : `flex items-center mb-4 rounded-md p-4 text-gray-100 bg-[#010080]`
+                }
               >
                 <label
-                  for="country-option-1"
-                  className="text-gray-100 block ml-2 text-sm font-medium dark:text-gray-300"
+                  htmlFor="country-option-1"
+                  className="block ml-2 text-sm font-medium dark:text-gray-300"
                 >
                   Zimbabwe
                 </label>
@@ -154,11 +160,15 @@ const Analytics = () => {
                   setCountry('za');
                   console.log('Selectd', country);
                 }}
-                className="flex items-center mb-4 bg-gray-300 rounded-md p-4"
+                className={
+                  country !== 'za'
+                    ? `flex items-center mb-4 rounded-md text-gray-600 p-4`
+                    : `flex items-center mb-4 rounded-md text-gray-100 p-4 bg-[#010080]`
+                }
               >
                 <label
-                  for="country-option-2"
-                  className="block ml-2 text-sm font-medium text-gray-100 dark:text-gray-300"
+                  htmlFor="country-option-2"
+                  className="block ml-2 text-sm font-medium  dark:text-gray-300"
                 >
                   South Africa
                 </label>
@@ -169,7 +179,7 @@ const Analytics = () => {
         {country === 'zw' ? (
           <>
             <div className="row mt-4 px-4">
-              {statusCards.map((item, index) => (
+              {statusCardsZW.map((item, index) => (
                 <div className="col-6" key={index}>
                   <StatusCard
                     icon={item.icon}
@@ -192,7 +202,7 @@ const Analytics = () => {
         ) : (
           <>
             <div className="row mt-4 px-4">
-              {statusCards.map((item, index) => (
+              {statusCardsZA.map((item, index) => (
                 <div className="col-6" key={index}>
                   <StatusCard
                     icon={item.icon}

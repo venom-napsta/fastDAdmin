@@ -2,46 +2,24 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import http from '../../services/httpService';
 // import customerList from '../ ../assets/JsonData/customers-list.json';
 import driverList from '../../assets/JsonData/drivers_list.json';
-// const baseURL = 'http://194.163.132.169:5000';
-
-const config = {
-  headers: {
-    'Content-Type': 'application/json',
-    Authorization:
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInJvbGUiOiJhZG1pbiIsImlhdCI6MTY2NTIzOTcyNiwiZXhwIjoxNjY1MjQzMzI2fQ.8T5VWi_HkoPeqF1Cx_A0fwS9ejLjGqLFbzD_PTfYqX4',
-  },
-};
+import { toast } from 'react-toastify';
 
 // Get All Drivers /drivers  GET
 export const getAllDrivers = createAsyncThunk(
   'driver/getAllDrivers',
   async (id = null, { rejectWithValue }) => {
     try {
-      const options = {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization:
-            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInJvbGUiOiJhZG1pbiIsImlhdCI6MTY2NTI0NTkxNSwiZXhwIjoxNjY1MjQ5NTE1fQ.xNIO2QSyxlXaY5dWoFRrFLRBCpgnydebsoaybAkm5lQ',
-        },
-      };
-
-      fetch(
-        'https://fastdapi.malingreatssmartsystems.co.zw/admin/drivers',
-        options
-      )
-        .then((response) => response.json())
-        .then((response) => {
-          console.log(response);
-          return response;
-        })
-        .catch((err) => {
-          console.error(err);
-          return rejectWithValue(err);
-        });
+      const res = await http.get('/admin/drivers');
+      const { data } = res;
+      if (data) {
+        console.log('Data Inside', data);
+      }
+      console.log('User Res', data);
+      return data;
     } catch (error) {
-      console.log(error);
-      return rejectWithValue(error.response.data.errors.message);
+      console.error('err', error);
+      toast('Unexpected Error Occurred, Please try again');
+      return rejectWithValue(error);
     }
   }
 );
@@ -137,8 +115,8 @@ const driverSlice = createSlice({
     },
     [getAllDrivers.fulfilled]: (state, action) => {
       state.loading = false;
-      console.log('Data Res', action.payload);
-      // state.drivers = action.payload.data;
+      console.log('Data Res', action.payload.data);
+      state.drivers = action.payload.data;
     },
     [getAllDrivers.rejected]: (state, action) => {
       state.loading = false;

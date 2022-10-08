@@ -7,7 +7,7 @@ export const getAllCustomers = createAsyncThunk(
   'users/getAllCustomers',
   async (arg, { rejectWithValue }) => {
     try {
-      const res = await http.get(`/customers`);
+      const res = await http.get(`admin/customers`);
       return res.data;
     } catch (error) {
       console.log(error);
@@ -47,7 +47,7 @@ const userSlice = createSlice({
     },
     [getAllCustomers.fulfilled]: (state, action) => {
       state.loading = false;
-      state.users = action.payload;
+      state.customers = action.payload.data;
     },
     [getAllCustomers.rejected]: (state, action) => {
       state.loading = false;

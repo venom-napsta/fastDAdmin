@@ -2,11 +2,15 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import logger from './logService';
 
+axios.defaults.baseURL = 'https://fastdapi.malingreatssmartsystems.co.zw';
 // // Alter defaults after instance has been created
-// const token = JSON.parse(localStorage.getItem('userToken'))
-//   ? JSON.parse(localStorage.getItem('userToken'))
-//   : null;
-// axios.defaults.headers.common['Authorization'] = token;
+const token = JSON.parse(localStorage.getItem('userToken'))
+  ? JSON.parse(localStorage.getItem('userToken'))
+  : null;
+axios.defaults.headers.common['Authorization'] = token;
+axios.defaults.headers.post['Content-Type'] =
+  'application/x-www-form-urlencoded';
+axios.defaults.headers.post['Content-Type'] = 'application/json';
 
 // null == success(usu. handled for auditing), error == fail
 axios.interceptors.response.use(null, (error) => {
@@ -16,14 +20,10 @@ axios.interceptors.response.use(null, (error) => {
     error.response.status < 500;
 
   if (!ExpectedError) {
-    // logger.log(error.message);
+    logger.log(error.message);
     logger.log(error);
 
-    // console.log('Logging the error', error);
-    // alert('An expected Error Occured');
-
-    toast.error('An expected Error Occured');
-    // toast == all colors, .err == red, .success == green
+    toast.error('An unexpected Error Occured');
   }
   toast(`Error !!!: ${error}`);
 

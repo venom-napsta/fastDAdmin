@@ -1,5 +1,5 @@
 import React, { Fragment, useState, useEffect, useMemo } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 // import Table from '../components/table/Table';
 
@@ -7,8 +7,23 @@ import { FaEdit, FaFilter, FaTrashAlt } from 'react-icons/fa';
 import Modal from '../components/common/Modal';
 import EditModal from '../components/common/EditModal';
 import DataTable from 'react-data-table-component';
+import { useHistory } from 'react-router-dom';
 
 const Transactions = () => {
+  const {
+    userInfo,
+    userToken,
+    loading: userLoading,
+  } = useSelector((state) => state.auth);
+  const history = useHistory();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (!userToken) {
+      history.replace('/login');
+    }
+  }, [userLoading, userInfo, userToken, history]);
+
   const deleteDriver = (drvr) => {
     console.log('Del Component', drvr);
   };

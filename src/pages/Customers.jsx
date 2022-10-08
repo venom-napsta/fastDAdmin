@@ -1,5 +1,5 @@
 import React, { Fragment, useState, useEffect, useMemo } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 // import Table from '../components/table/Table';
 
@@ -7,18 +7,38 @@ import { FaEdit, FaFilter, FaTrashAlt } from 'react-icons/fa';
 import Modal from '../components/common/Modal';
 import EditModal from '../components/common/EditModal';
 import DataTable from 'react-data-table-component';
+import { useHistory } from 'react-router-dom';
+import { getAllCustomers } from '../features/slice/customerSlice';
 
 const Customers = () => {
+  const { customers, loading, error } = useSelector((state) => state.customer);
+  const {
+    userInfo,
+    userToken,
+    loading: userLoading,
+  } = useSelector((state) => state.auth);
+  const history = useHistory();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (!userToken) {
+      history.replace('/login');
+    }
+  }, [userLoading, userInfo, userToken, history]);
+
+  useEffect(() => {
+    dispatch(getAllCustomers());
+  }, []);
+
   const deleteDriver = (drvr) => {
     console.log('Del Component', drvr);
   };
 
-  const { customers, loading, error } = useSelector((state) => state.customer);
   const [driver, setDriver] = useState({});
   const [showModal, setShowModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
 
-  const [dataShow, setDataShow] = useState(customers[0]);
+  const [dataShow, setDataShow] = useState(customers);
   const [searchValue, setSearchValue] = useState('');
   const [timeFilter, setTimeFilter] = useState('');
   const [resetPaginationToggle, setResetPaginationToggle] = useState(false);
@@ -33,10 +53,15 @@ const Customers = () => {
         sortable: true,
         width: '80px',
       },
-
       {
-        name: 'Name',
-        selector: (row) => row.name,
+        name: 'Firstname',
+        selector: (row) => row.firstname,
+        filterable: true,
+        sortable: true,
+      },
+      {
+        name: 'Lastname',
+        selector: (row) => row.lastname,
         filterable: true,
         sortable: true,
       },
@@ -48,59 +73,33 @@ const Customers = () => {
       },
       {
         name: 'Contact',
-        selector: (row) => row.phone,
+        selector: (row) => row.phone_number,
       },
       {
-        name: 'Country',
-        selector: (row) => row.location,
+        name: 'IsActive',
+        selector: (row) => (row.is_active === true ? 'true' : 'false'),
+        filterable: true,
+      },
+      {
+        name: 'Is Verified',
+        selector: (row) => (row.is_verified === true ? 'true' : 'false'),
+        filterable: true,
+      },
+      {
+        name: 'Role',
+        selector: (row) => row.role,
         filterable: true,
         sortable: true,
-        // conditionalCellStyles: [
-        //   {
-        //     when: (row) => row.location === 'za',
-        //     style: {
-        //       backgroundColor: '#010080',
-        //       color: 'white',
-        //       '&:hover': {
-        //         cursor: 'not-allowed',
-        //       },
-        //     },
-        //   },
-        //   {
-        //     when: (row) => row.location === 'zw',
-        //     style: {
-        //       backgroundColor: '#ff6d1c',
-        //       color: 'white',
-        //       '&:hover': {
-        //         cursor: 'not-allowed',
-        //       },
-        //     },
-        //   },
-        // ],
       },
       {
-        name: 'Total Spent',
-        selector: (row) => row.total_spend,
+        name: 'Created At',
+        selector: (row) => row.created_at,
         filterable: true,
         sortable: true,
-        // right: true,
-        // conditional Styling
-        conditionalCellStyles: [
-          {
-            when: (row) => row.total_orders < 80000,
-            style: {
-              backgroundColor: 'rgba(63, 195, 128, 0.9)',
-              color: 'white',
-              '&:hover': {
-                cursor: 'pointer',
-              },
-            },
-          },
-        ],
       },
       {
-        name: 'Total Orders',
-        selector: (row) => row.total_orders,
+        name: 'Updated At',
+        selector: (row) => row.updated_at,
         filterable: true,
         sortable: true,
       },
@@ -373,6 +372,7 @@ const Customers = () => {
                     <DataTable
                       title=""
                       columns={columns}
+                      // data={customers}
                       data={dataShow}
                       selectableRows
                       onSelectedRowsChange={handleChange}

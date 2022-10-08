@@ -12,17 +12,16 @@ import {
 import { Button } from 'flowbite-react/lib/esm/components/Button';
 import { AiFillLock, AiOutlineGlobal } from 'react-icons/ai';
 import { Spinner } from 'flowbite-react/lib/cjs/components/Spinner';
-import { Dropdown } from 'flowbite-react/lib/esm/components/Dropdown';
 
 function Settings() {
   const { userInfo, userToken, loading } = useSelector((state) => state.auth);
   const history = useHistory();
 
-  // useEffect(() => {
-  //   if (!userToken) {
-  //     history.replace('/login');
-  //   }
-  // }, [loading, userInfo, userToken, history]);
+  useEffect(() => {
+    if (!userToken) {
+      history.replace('/login');
+    }
+  }, [loading, userInfo, userToken, history]);
 
   const [showModal, setShowModal] = useState(false);
 
@@ -63,11 +62,6 @@ function Settings() {
             <Button pill size="xl" color="dark">
               <FaTrash color="brown" />
             </Button>
-            {/* 
-            <Button pill size="lg" color="dark">
-              <FaEye color="gray" />
-              &nbsp;&nbsp; View
-            </Button> */}
           </div>
         </div>
       </div>{' '}
