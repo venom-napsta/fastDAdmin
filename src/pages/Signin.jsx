@@ -95,7 +95,7 @@ function Signin() {
                   ? `w-full h-14 border-1 rounded-md bg-transparent`
                   : `w-full h-14 border-1 border-red-600 rounded-md bg-transparent`
               }
-              placeholder="Contact Number e.g 000000001"
+              placeholder="Contact Number e.g 0123456789"
               type="text"
               required
               {...register('contact')}

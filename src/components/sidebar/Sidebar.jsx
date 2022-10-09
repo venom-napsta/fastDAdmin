@@ -52,22 +52,24 @@ const Sidebar = (props) => {
   return (
     <>
       {props.show ? (
-        <div ref={wrapperRef} className="sidebar overflow-auto">
-          <div className="sidebar__logo">
-            <img src={logo} alt="company logo" />
+        <div ref={wrapperRef} className="sidebar h-full justify-between">
+          <div className="pl-5  overflow-scroll">
+            <div className="sidebar__logo">
+              <img src={logo} alt="company logo" />
+            </div>
+            {sidebar_items.map((item, index) => (
+              <Link to={item.route} key={index}>
+                <SidebarItem
+                  title={item.display_name}
+                  icon={item.icon}
+                  active={index === activeItem}
+                />
+              </Link>
+            ))}
           </div>
-          {sidebar_items.map((item, index) => (
-            <Link to={item.route} key={index}>
-              <SidebarItem
-                title={item.display_name}
-                icon={item.icon}
-                active={index === activeItem}
-              />
-            </Link>
-          ))}
           <div
             onClick={props.onClose}
-            className="flex bg-[#0000a0] text-gray-50 content-center absolute bottom-0 right-0 left-0 p-4 mb-1  hover:bg-red-900"
+            className="flex bg-[#0000a0] text-gray-50 content-center bottom-0 w-full left-0 p-4 mb-1  hover:bg-blue-800"
           >
             Close <AiOutlineClose color="orange" size={30} />
           </div>

@@ -9,19 +9,28 @@ import EditModal from '../components/common/EditModal';
 import DataTable from 'react-data-table-component';
 import { useHistory } from 'react-router-dom';
 import { getAllUsers } from '../features/slice/userSlice';
+import AddUser from '../components/common/AddUser';
+import {
+  AiOutlineMail,
+  AiOutlinePhone,
+  AiOutlineUserAdd,
+} from 'react-icons/ai';
 
 const Users = () => {
+  useEffect(() => {
+    dispatch(getAllUsers());
+  }, []);
+
+  const { users, loading, error } = useSelector((state) => state.users);
   const {
     userInfo,
+    registeredUser,
     userToken,
+    regErr,
     loading: userLoading,
   } = useSelector((state) => state.auth);
   const history = useHistory();
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(getAllUsers());
-  }, []);
 
   useEffect(() => {
     if (!userToken) {
@@ -33,10 +42,10 @@ const Users = () => {
     console.log('Del Component', drvr);
   };
 
-  const { users, loading, error } = useSelector((state) => state.users);
   const [driver, setDriver] = useState({});
   const [showModal, setShowModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
+  const [showNewUserModal, setNewUserModal] = useState(false);
 
   const [dataShow, setDataShow] = useState(users);
   const [searchValue, setSearchValue] = useState('');
@@ -181,8 +190,8 @@ const Users = () => {
     selectAllRowsItemText: 'All users',
   };
 
-  const rowDisabledCriteria = (row) => row.approval_status === 'blocked';
-  // console.log('disab', row.approval_status === 'pending');
+  // const rowDisabledCriteria = (row) => row.approval_status === 'blocked';
+  // // console.log('disab', row.approval_status === 'pending');
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -254,8 +263,49 @@ const Users = () => {
         <div className="col-12">
           <div className="card">
             <div className="flex sm:flex-row flex-col">
-              <h1 className="ml-2 font-bold text-2xl">users</h1>
+              <h1 className="ml-2 font-bold text-2xl">Users Data</h1>
+              <button
+                className="bg-gray-300 p-3 rounded-md hover:bg-gray-400"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setNewUserModal(true);
+                }}
+              >
+                Add New User
+              </button>
+              <button
+                className="bg-gray-300 p-3 rounded-md hover:bg-gray-400"
+                onClick={(e) => {
+                  e.preventDefault();
+                  // setNewRoleModal(true);
+                }}
+              >
+                Add Role
+              </button>
             </div>
+            {registeredUser && (
+              <div
+                className="p-4 mb-4 text-sm text-green-700 bg-green-100 rounded-lg dark:bg-green-200 dark:text-green-800"
+                role="alert"
+              >
+                <div className="card__body sm:flex-row flex-col">
+                  <h4>Newly Registered User</h4>
+                  <div className="w-full h-10 border rounded-md p-2 mb-4 my-3 transform bg-transparent text-lg duration-200 focus-within:rounded-md">
+                    Name:{' '}
+                    {registeredUser.firstname + ' ' + registeredUser.lastname}
+                    <AiOutlineUserAdd className="absolute right-3 top-3 text-gray-400" />
+                  </div>
+                  <div className="w-full h-10 border rounded-md p-2 mb-4 my-3 transform bg-transparent text-lg duration-200 focus-within:rounded-md">
+                    Email: {registeredUser.email}
+                    <AiOutlineMail className="absolute right-4 top-3 text-gray-400" />
+                  </div>
+                  <div className="w-full h-10 border rounded-md p-2 mb-4 my-3 transform bg-transparent text-lg duration-200 focus-within:rounded-md">
+                    Phone: {registeredUser.phone_number}
+                    <AiOutlinePhone className="absolute right-4 top-3 text-gray-400" />
+                  </div>
+                </div>
+              </div>
+            )}
             <div className="card__body sm:flex-row flex-col">
               {/* <Table
                   limit="10"
@@ -341,9 +391,9 @@ const Users = () => {
                       title=""
                       columns={columns}
                       data={dataShow}
-                      selectableRows
+                      // selectableRows
                       onSelectedRowsChange={handleChange}
-                      selectableRowDisabled={rowDisabledCriteria}
+                      // selectableRowDisabled={rowDisabledCriteria}
                       onRowClicked={(row) => handleRowClick(row)}
                       className="text-2xl"
                       responsive
@@ -376,6 +426,9 @@ const Users = () => {
             showEditModal
             onClose={() => setShowEditModal(false)}
           />
+        )}
+        {showNewUserModal && (
+          <AddUser showModal onClose={() => setNewUserModal(false)} />
         )}
       </div>
     </Fragment>

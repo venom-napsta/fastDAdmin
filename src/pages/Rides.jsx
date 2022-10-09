@@ -8,6 +8,7 @@ import Modal from '../components/common/Modal';
 import EditModal from '../components/common/EditModal';
 import DataTable from 'react-data-table-component';
 import { useHistory } from 'react-router-dom';
+import { Spinner } from 'flowbite-react/lib/cjs/components/Spinner';
 
 const Rides = () => {
   const {
@@ -28,12 +29,12 @@ const Rides = () => {
     console.log('Del Component', drvr);
   };
 
-  const { customers, loading, error } = useSelector((state) => state.customer);
+  const { rides, loading, error } = useSelector((state) => state.rides);
   const [driver, setDriver] = useState({});
   const [showModal, setShowModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
 
-  const [dataShow, setDataShow] = useState(customers[0]);
+  const [dataShow, setDataShow] = useState(rides);
   const [searchValue, setSearchValue] = useState('');
   const [timeFilter, setTimeFilter] = useState('');
   const [resetPaginationToggle, setResetPaginationToggle] = useState(false);
@@ -237,7 +238,7 @@ const Rides = () => {
     e.preventDefault();
     if (searchString !== '') {
       setSearchValue(searchString);
-      const searchTable = customers.filter((o) =>
+      const searchTable = rides.filter((o) =>
         Object.keys(o).some((k) =>
           String(o[k]).toLowerCase().includes(searchString.toLowerCase())
         )
@@ -256,7 +257,7 @@ const Rides = () => {
     console.log('HandleFilter', timeFilter);
     e.preventDefault();
     if (option !== '') {
-      const searchTable = customers.filter((o) =>
+      const searchTable = rides.filter((o) =>
         Object.keys(o).some((k) =>
           String(o[k]).toLowerCase().includes(option.toLowerCase())
         )
@@ -271,7 +272,7 @@ const Rides = () => {
   const handleTimeClear = () => {
     if (timeFilter === '') {
       setTimeFilter('');
-      setDataShow(customers);
+      setDataShow(rides);
       setResetPaginationToggle(!resetPaginationToggle);
     }
   };
@@ -279,7 +280,7 @@ const Rides = () => {
   const handleClear = () => {
     if (searchValue) {
       setSearchValue('');
-      setDataShow(customers);
+      setDataShow(rides);
       setResetPaginationToggle(!resetPaginationToggle);
     }
   };
@@ -289,12 +290,7 @@ const Rides = () => {
     setShowModal(true);
   };
 
-  useEffect(() => {}, [
-    customers,
-    searchValue,
-    resetPaginationToggle,
-    dataShow,
-  ]);
+  useEffect(() => {}, [rides, searchValue, resetPaginationToggle, dataShow]);
 
   return (
     <Fragment>
@@ -309,7 +305,7 @@ const Rides = () => {
                   limit="10"
                   headData={customerTableHead}
                   renderHead={(item, index) => renderHead(item, index)}
-                  bodyData={customers}
+                  bodyData={rides}
                   renderBody={(item, index) => renderBody(item, index)}
                 /> */}
               <div className="flex flex-row justify-self-auto mb-4 sm:mb-3 topnav__search mx-2">
@@ -382,32 +378,36 @@ const Rides = () => {
                   </div>
                 </div>
               </div>
-              <div className="relative">
-                <div className="table-wrapper">
-                  <>
-                    <DataTable
-                      title=""
-                      columns={columns}
-                      data={dataShow}
-                      selectableRows
-                      onSelectedRowsChange={handleChange}
-                      selectableRowDisabled={rowDisabledCriteria}
-                      onRowClicked={(row) => handleRowClick(row)}
-                      className="text-2xl"
-                      responsive
-                      pagination
-                      paginationResetDefaultPage={resetPaginationToggle}
-                      paginationComponentOptions={paginationOptions}
-                      customStyles={customStyles}
-                      conditionalRowStyles={conditionalRowStyles}
-                      fixedHeader
-                      highlightOnHover
-                      paginationRowsPerPageOptions={[10, 50, 100]}
-                      pointerOnHover
-                    />
-                  </>
+              {loading ? (
+                <Spinner size="xl" color="blue" />
+              ) : (
+                <div className="relative">
+                  <div className="table-wrapper">
+                    <>
+                      <DataTable
+                        title=""
+                        columns={columns}
+                        data={dataShow}
+                        // selectableRows
+                        onSelectedRowsChange={handleChange}
+                        // selectableRowDisabled={rowDisabledCriteria}
+                        onRowClicked={(row) => handleRowClick(row)}
+                        className="text-2xl"
+                        responsive
+                        pagination
+                        paginationResetDefaultPage={resetPaginationToggle}
+                        paginationComponentOptions={paginationOptions}
+                        customStyles={customStyles}
+                        conditionalRowStyles={conditionalRowStyles}
+                        fixedHeader
+                        highlightOnHover
+                        paginationRowsPerPageOptions={[10, 50, 100]}
+                        pointerOnHover
+                      />
+                    </>
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
           </div>
         </div>

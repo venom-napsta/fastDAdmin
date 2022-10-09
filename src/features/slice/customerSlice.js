@@ -7,7 +7,8 @@ export const getAllCustomers = createAsyncThunk(
   'users/getAllCustomers',
   async (arg, { rejectWithValue }) => {
     try {
-      const res = await http.get(`admin/customers`);
+      const res = await http.get(`/admin/customers`);
+      console.log('customers res', res.data);
       return res.data;
     } catch (error) {
       console.log(error);
@@ -30,14 +31,6 @@ const userSlice = createSlice({
         cus._id === payload._id ? payload : cus
       );
       state.users = updatedCustomers;
-    },
-
-    // search user
-    searchUserProfile(state, { payload }) {
-      const updatedUsers = state.users.map((user) =>
-        user._id === payload._id ? payload : user
-      );
-      state.users = updatedUsers;
     },
   },
 

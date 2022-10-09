@@ -10,8 +10,10 @@ import DataTable from 'react-data-table-component';
 
 import { getAllDrivers } from '../features/slice/driverSlice';
 import { useHistory } from 'react-router-dom';
+import { Spinner } from 'flowbite-react/lib/cjs/components/Spinner';
 
 const Drivers = () => {
+  const { drivers, loading, error } = useSelector((state) => state.driver);
   const {
     userInfo,
     userToken,
@@ -28,8 +30,6 @@ const Drivers = () => {
   const deleteDriver = (drvr) => {
     console.log('Del Component', drvr);
   };
-
-  const { drivers, loading, error } = useSelector((state) => state.driver);
 
   const [driver, setDriver] = useState({});
   const [showModal, setShowModal] = useState(false);
@@ -408,32 +408,36 @@ const Drivers = () => {
                   </div>
                 </div>
               </div>
-              <div className="relative">
-                <div className="table-wrapper">
-                  <>
-                    <DataTable
-                      title=""
-                      columns={columns}
-                      data={drivers}
-                      // selectableRows
-                      onSelectedRowsChange={handleChange}
-                      // selectableRowDisabled={rowDisabledCriteria}
-                      onRowClicked={(row) => handleRowClick(row)}
-                      className="text-2xl"
-                      responsive
-                      pagination
-                      paginationResetDefaultPage={resetPaginationToggle}
-                      paginationComponentOptions={paginationOptions}
-                      customStyles={customStyles}
-                      conditionalRowStyles={conditionalRowStyles}
-                      fixedHeader
-                      highlightOnHover
-                      paginationRowsPerPageOptions={[10, 50, 100]}
-                      pointerOnHover
-                    />
-                  </>
+              {loading ? (
+                <Spinner size="xl" color="blue" />
+              ) : (
+                <div className="relative">
+                  <div className="table-wrapper">
+                    <>
+                      <DataTable
+                        title=""
+                        columns={columns}
+                        data={dataShow}
+                        // selectableRows
+                        onSelectedRowsChange={handleChange}
+                        // selectableRowDisabled={rowDisabledCriteria}
+                        onRowClicked={(row) => handleRowClick(row)}
+                        className="text-2xl"
+                        responsive
+                        pagination
+                        paginationResetDefaultPage={resetPaginationToggle}
+                        paginationComponentOptions={paginationOptions}
+                        customStyles={customStyles}
+                        conditionalRowStyles={conditionalRowStyles}
+                        fixedHeader
+                        highlightOnHover
+                        paginationRowsPerPageOptions={[10, 50, 100]}
+                        pointerOnHover
+                      />
+                    </>
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
           </div>
         </div>

@@ -11,9 +11,6 @@ export const getAllDrivers = createAsyncThunk(
     try {
       const res = await http.get('/admin/drivers');
       const { data } = res;
-      if (data) {
-        console.log('Data Inside', data);
-      }
       console.log('User Res', data);
       return data;
     } catch (error) {

@@ -223,7 +223,7 @@ const Reviews = () => {
       <FilterComponent />
       <DataTable
         columns={columns}
-        data={drivers}
+        data={[]}
         // selectableRows
         onSelectedRowsChange={handleChange}
         selectableRowDisabled={rowDisabledCriteria}

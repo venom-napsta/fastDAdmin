@@ -5,7 +5,14 @@ import http from '../../services/httpService';
 export const registerUser = createAsyncThunk(
   'auth/register',
   async (
-    { firstname, lastname, email, contact, password, password_confirmation },
+    {
+      firstname,
+      lastname,
+      email,
+      phone_number,
+      password,
+      password_confirmation,
+    },
     { rejectWithValue }
   ) => {
     try {
@@ -13,7 +20,7 @@ export const registerUser = createAsyncThunk(
         firstname,
         lastname,
         email,
-        contact,
+        phone_number,
         password,
         password_confirmation,
       });
@@ -25,8 +32,18 @@ export const registerUser = createAsyncThunk(
       return data;
     } catch (error) {
       console.log('Redux Res', error.response.data.errors[0].msg);
-      toast(`Error! ${error.response.message}`);
-      return rejectWithValue(error.response.message);
+      toast(
+        `Error! ${
+          error.response.message
+            ? error.response.message
+            : error.response.data.errors[0].msg
+        }`
+      );
+      return rejectWithValue(
+        error.response.message
+          ? error.response.message
+          : error.response.data.errors[0].msg
+      );
     }
   }
 );
@@ -86,6 +103,7 @@ const authSlice = createSlice({
     loading: false,
     error: null,
     registeredUser: null,
+    regErr: '',
   },
   reducers: {
     logout: (state, action) => {
@@ -119,11 +137,11 @@ const authSlice = createSlice({
     },
     [registerUser.fulfilled]: (state, { payload }) => {
       state.loading = false;
-      state.registeredUser = payload;
+      state.registeredUser = payload.data;
     },
     [registerUser.rejected]: (state, { payload }) => {
       state.loading = false;
-      state.error = payload;
+      state.regErr = payload;
     },
 
     // get user profile

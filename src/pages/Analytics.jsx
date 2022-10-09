@@ -142,7 +142,7 @@ const Analytics = () => {
                 }}
                 className={
                   country !== 'zw'
-                    ? `flex items-center mb-4 rounded-md p-4 text-gray-600`
+                    ? `flex items-center mb-4 rounded-md p-4 text-gray-600 hover:bg-gray-300`
                     : `flex items-center mb-4 rounded-md p-4 text-gray-100 bg-[#010080]`
                 }
               >
@@ -162,7 +162,7 @@ const Analytics = () => {
                 }}
                 className={
                   country !== 'za'
-                    ? `flex items-center mb-4 rounded-md text-gray-600 p-4`
+                    ? `flex items-center mb-4 rounded-md text-gray-600 p-4 hover:bg-gray-300`
                     : `flex items-center mb-4 rounded-md text-gray-100 p-4 bg-[#010080]`
                 }
               >
