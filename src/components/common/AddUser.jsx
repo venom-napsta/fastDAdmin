@@ -8,6 +8,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 
 import {
   AiFillLock,
+  AiOutlineFileAdd,
   AiOutlineMail,
   AiOutlinePhone,
   AiOutlineUpload,
@@ -166,6 +167,7 @@ function AddUser({ onClose, onSubmit }) {
                     className=" rounded-md w-full"
                     onChange={onChangeFile}
                   />
+                  <AiOutlineFileAdd className="absolute right-3 top-4 text-gray-400" />
                   <small className="text-red-600">{imgErr}</small>
                 </div>
                 <div className="w-full mb-6 transform bg-transparent text-lg duration-200 focus-within:border-[bg-primary]">

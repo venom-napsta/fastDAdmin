@@ -6,7 +6,7 @@ export const getAllRides = createAsyncThunk(
   'driver/getAllRides',
   async (id = null, { rejectWithValue }) => {
     try {
-      const res = await http.get(`/rides`);
+      const res = await http.get(`/admin/rides`);
       console.log('res drvr', res.data);
       return res.data;
     } catch (error) {
@@ -35,7 +35,7 @@ const rideSlice = createSlice({
     },
     [getAllRides.fulfilled]: (state, action) => {
       state.loading = false;
-      state.rides = action.payload[0];
+      state.rides = action.payload.data;
       // state.rides = action.payload; //for real data
     },
     [getAllRides.rejected]: (state, action) => {

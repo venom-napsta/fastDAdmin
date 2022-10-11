@@ -10,6 +10,7 @@ import DataTable from 'react-data-table-component';
 import { useHistory } from 'react-router-dom';
 import { getAllUsers } from '../features/slice/userSlice';
 import AddUser from '../components/common/AddUser';
+import NewRoleModal from '../components/common/NewRoleModal.jsx';
 import {
   AiOutlineMail,
   AiOutlinePhone,
@@ -46,6 +47,7 @@ const Users = () => {
   const [showModal, setShowModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [showNewUserModal, setNewUserModal] = useState(false);
+  const [newUserRoleModal, setNewUserRoleModal] = useState(false);
 
   const [dataShow, setDataShow] = useState(users);
   const [searchValue, setSearchValue] = useState('');
@@ -277,7 +279,7 @@ const Users = () => {
                 className="bg-gray-300 p-3 rounded-md hover:bg-gray-400"
                 onClick={(e) => {
                   e.preventDefault();
-                  // setNewRoleModal(true);
+                  setNewUserRoleModal(true);
                 }}
               >
                 Add Role
@@ -429,6 +431,9 @@ const Users = () => {
         )}
         {showNewUserModal && (
           <AddUser showModal onClose={() => setNewUserModal(false)} />
+        )}
+        {newUserRoleModal && (
+          <NewRoleModal showModal onClose={() => setNewUserRoleModal(false)} />
         )}
       </div>
     </Fragment>

@@ -20,7 +20,7 @@ export const getAllCustomers = createAsyncThunk(
 const userSlice = createSlice({
   name: 'customers',
   initialState: {
-    customers: [customerList],
+    customers: customerList,
     loading: false,
     error: null,
   },

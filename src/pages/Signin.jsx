@@ -15,7 +15,6 @@ import { login } from '../features/slice/authSlice';
 
 import logo from '../assets/Logo.png';
 import { Spinner } from 'flowbite-react/lib/cjs/components/Spinner';
-import { toast } from 'react-toastify';
 
 function Signin() {
   const dispatch = useDispatch();
@@ -62,10 +61,6 @@ function Signin() {
   };
 
   useEffect(() => {
-    if (loginErr) {
-      console.log('login err');
-    }
-
     if (userToken) {
       console.log('User Logged In', userInfo);
       history.push('/');
@@ -119,7 +114,11 @@ function Signin() {
             <small className="text-red-600">{errors.password?.message}</small>
           </div>
 
-          {loginErr && <p className="text-red-600 mb-5">{loginErr}</p>}
+          {loginErr && (
+            <p className="text-red-600 mb-5">
+              {loginErr?.message}, Please try again.
+            </p>
+          )}
           {loading ? (
             <button
               type="submit"

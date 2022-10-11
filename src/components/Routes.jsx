@@ -10,6 +10,7 @@ import Analytics from '../pages/Analytics';
 import Settings from '../pages/Settings';
 import Reviews from '../pages/Reviews';
 import Drivers from '../pages/Drivers';
+import Driver from '../pages/Driver';
 import Rides from '../pages/Rides';
 
 const Routes = () => {
@@ -23,6 +24,8 @@ const Routes = () => {
       <Route path="/rides" exact component={Rides} />
       <Route path="/users" exact component={Users} />
       <Route path="/drivers" exact component={Drivers} />
+      <Route path="/drivers/driver/:id" exact component={Driver} />
+
       <Route path="/reviews" exact component={Reviews} />
       <Route path="/settings" exact component={Settings} />
       <Redirect from="*" to="/login" />

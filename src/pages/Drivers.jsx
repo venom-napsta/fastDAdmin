@@ -9,7 +9,7 @@ import EditModal from '../components/common/EditModal';
 import DataTable from 'react-data-table-component';
 
 import { getAllDrivers } from '../features/slice/driverSlice';
-import { useHistory } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { Spinner } from 'flowbite-react/lib/cjs/components/Spinner';
 
 const Drivers = () => {
@@ -315,6 +315,7 @@ const Drivers = () => {
     setShowModal(true);
   };
 
+  const navigateTo = (row) => history.push(`/drivers/driver/${row.id}`);
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getAllDrivers());
@@ -421,7 +422,8 @@ const Drivers = () => {
                         // selectableRows
                         onSelectedRowsChange={handleChange}
                         // selectableRowDisabled={rowDisabledCriteria}
-                        onRowClicked={(row) => handleRowClick(row)}
+                        // onRowClicked={(row) => handleRowClick(row)}
+                        onRowClicked={navigateTo}
                         className="text-2xl"
                         responsive
                         pagination

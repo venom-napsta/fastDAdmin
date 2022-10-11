@@ -1,5 +1,6 @@
 import React, { Fragment, useState, useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import format from 'date-fns/format';
 
 // import Table from '../components/table/Table';
 
@@ -13,10 +14,13 @@ import { Spinner } from 'flowbite-react/lib/cjs/components/Spinner';
 
 const Customers = () => {
   useEffect(() => {
-    dispatch(getAllCustomers());
+    async function fetchData() {
+      await dispatch(getAllCustomers());
+    }
+    fetchData();
   }, []);
-
   const { customers, loading, error } = useSelector((state) => state.customer);
+
   const {
     userInfo,
     userToken,
@@ -78,12 +82,12 @@ const Customers = () => {
       },
       {
         name: 'IsActive',
-        selector: (row) => (row.is_active === true ? 'true' : 'false'),
+        selector: (row) => (row.is_active === true ? 'Yes' : 'No'),
         filterable: true,
       },
       {
         name: 'Is Verified',
-        selector: (row) => (row.is_verified === true ? 'true' : 'false'),
+        selector: (row) => (row.is_verified === true ? 'Yes' : 'No'),
         filterable: true,
       },
       {
@@ -92,18 +96,22 @@ const Customers = () => {
         filterable: true,
         sortable: true,
       },
-      {
-        name: 'Created At',
-        selector: (row) => row.created_at,
-        filterable: true,
-        sortable: true,
-      },
-      {
-        name: 'Updated At',
-        selector: (row) => row.updated_at,
-        filterable: true,
-        sortable: true,
-      },
+      // {
+      //   name: 'Created At',
+      //   selector: (row) => {
+      //     return format(new Date(row?.created_at), 'MM-dd-yy/HH:mm');
+      //   },
+      //   filterable: true,
+      //   sortable: true,
+      // },
+      // {
+      //   name: 'Updated At',
+      //   selector: (row) => {
+      //     return format(new Date(row?.updated_at), 'MM-dd-yy/HH:mm');
+      //   },
+      //   filterable: true,
+      //   sortable: true,
+      // },
       {
         name: 'Action',
         right: true,
@@ -276,6 +284,8 @@ const Customers = () => {
 
   useEffect(() => {}, [
     customers,
+    loading,
+    error,
     searchValue,
     resetPaginationToggle,
     dataShow,
@@ -370,33 +380,37 @@ const Customers = () => {
               {loading ? (
                 <Spinner size="xl" color="blue" />
               ) : (
-                <div className="relative">
-                  <div className="table-wrapper">
-                    <>
-                      <DataTable
-                        title=""
-                        columns={columns}
-                        // data={customers}
-                        data={dataShow}
-                        selectableRows
-                        onSelectedRowsChange={handleChange}
-                        selectableRowDisabled={rowDisabledCriteria}
-                        onRowClicked={(row) => handleRowClick(row)}
-                        className="text-2xl"
-                        responsive
-                        pagination
-                        paginationResetDefaultPage={resetPaginationToggle}
-                        paginationComponentOptions={paginationOptions}
-                        customStyles={customStyles}
-                        conditionalRowStyles={conditionalRowStyles}
-                        fixedHeader
-                        highlightOnHover
-                        paginationRowsPerPageOptions={[10, 50, 100]}
-                        pointerOnHover
-                      />
-                    </>
-                  </div>
-                </div>
+                <>
+                  {customers?.length > 0 && (
+                    <div className="relative">
+                      <div className="table-wrapper">
+                        <>
+                          <DataTable
+                            title=""
+                            columns={columns}
+                            // data={customers}
+                            data={dataShow}
+                            selectableRows
+                            onSelectedRowsChange={handleChange}
+                            selectableRowDisabled={rowDisabledCriteria}
+                            onRowClicked={(row) => handleRowClick(row)}
+                            className="text-2xl"
+                            responsive
+                            pagination
+                            paginationResetDefaultPage={resetPaginationToggle}
+                            paginationComponentOptions={paginationOptions}
+                            customStyles={customStyles}
+                            conditionalRowStyles={conditionalRowStyles}
+                            fixedHeader
+                            highlightOnHover
+                            paginationRowsPerPageOptions={[10, 50, 100]}
+                            pointerOnHover
+                          />
+                        </>
+                      </div>
+                    </div>
+                  )}
+                </>
               )}
             </div>
           </div>

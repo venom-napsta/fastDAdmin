@@ -2,7 +2,6 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import http from '../../services/httpService';
 // import customerList from '../ ../assets/JsonData/customers-list.json';
 import driverList from '../../assets/JsonData/drivers_list.json';
-import { toast } from 'react-toastify';
 
 // Get All Drivers /drivers  GET
 export const getAllDrivers = createAsyncThunk(
@@ -15,7 +14,6 @@ export const getAllDrivers = createAsyncThunk(
       return data;
     } catch (error) {
       console.error('err', error);
-      toast('Unexpected Error Occurred, Please try again');
       return rejectWithValue(error);
     }
   }

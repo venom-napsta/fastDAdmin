@@ -9,15 +9,21 @@ import EditModal from '../components/common/EditModal';
 import DataTable from 'react-data-table-component';
 import { useHistory } from 'react-router-dom';
 import { Spinner } from 'flowbite-react/lib/cjs/components/Spinner';
+import { getAllRides } from '../features/slice/rideSlice';
 
 const Rides = () => {
+  const history = useHistory();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getAllRides());
+  }, []);
+  const { rides, loading, error } = useSelector((state) => state.rides);
   const {
     userInfo,
     userToken,
     loading: userLoading,
   } = useSelector((state) => state.auth);
-  const history = useHistory();
-  const dispatch = useDispatch();
 
   useEffect(() => {
     if (!userToken) {
@@ -29,7 +35,6 @@ const Rides = () => {
     console.log('Del Component', drvr);
   };
 
-  const { rides, loading, error } = useSelector((state) => state.rides);
   const [driver, setDriver] = useState({});
   const [showModal, setShowModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);

@@ -65,7 +65,6 @@ export const login = createAsyncThunk(
       return data;
     } catch (error) {
       console.error('err', error);
-      toast('Unexpected Error Occurred, Please try again');
       return rejectWithValue(error);
     }
   }
