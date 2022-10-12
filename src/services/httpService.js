@@ -2,7 +2,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import logger from './logService';
 
-// axios.defaults.baseURL = 'https://fastdapi.malingreatssmartsystems.co.zw';
+axios.defaults.baseURL = 'https://fastdapi.malingreatssmartsystems.co.zw';
 // // Alter defaults after instance has been created
 const token = JSON.parse(localStorage.getItem('userToken'))
   ? JSON.parse(localStorage.getItem('userToken'))

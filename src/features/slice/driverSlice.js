@@ -24,7 +24,7 @@ export const getDriver = createAsyncThunk(
   'driver/getDriverById',
   async ({ id }, { rejectWithValue }) => {
     try {
-      const res = await http.get(`/drivers/${id}`);
+      const res = await http.get(`/admin/drivers/${id}`);
       return res.data;
     } catch (error) {
       console.log(error);

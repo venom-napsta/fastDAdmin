@@ -9,7 +9,7 @@ import EditModal from '../components/common/EditModal';
 import DataTable from 'react-data-table-component';
 
 import { getAllDrivers } from '../features/slice/driverSlice';
-import { Link, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { Spinner } from 'flowbite-react/lib/cjs/components/Spinner';
 
 const Drivers = () => {

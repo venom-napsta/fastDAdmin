@@ -1,100 +1,280 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { AiOutlineUserAdd } from 'react-icons/ai';
+import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
+import { getDriver } from '../features/slice/driverSlice';
 
-const Driver = () => {
-  let { id } = useParams();
+const Tabs = ({ color }) => {
+  const [openTab, setOpenTab] = useState(1);
+  const [openHistTab, setOpenHistTab] = useState(1);
+  const [view, setView] = useState('');
+
   return (
-    <div>
-      Driver:{id}
-      <div className="border-b border-gray-200 dark:border-gray-700">
-        <ul className="flex flex-wrap -mb-px text-sm font-medium text-center text-gray-500 dark:text-gray-400">
-          <li className="mr-2">
-            <a
-              href="#"
-              className="inline-flex p-4 rounded-t-lg border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 group"
-            >
-              <svg
-                aria-hidden="true"
-                className="mr-2 w-5 h-5 text-gray-400 group-hover:text-gray-500 dark:text-gray-500 dark:group-hover:text-gray-300"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
+    <>
+      <div className="flex flex-wrap">
+        <div className="w-full">
+          <ul
+            className="flex xs:flex-col mb-0 list-none flex-wrap pt-3 pb-4 flex-row"
+            role="tablist"
+          >
+            <li className="-mb-px mr-2 last:mr-0 flex-auto text-center">
+              <a
+                className={
+                  'text-xs font-bold uppercase px-5 py-3 shadow-lg rounded block leading-normal ' +
+                  (openTab === 1
+                    ? `text-white bg-[${color}] hover:text-gray-300`
+                    : 'text-' + color + '-600 bg-white')
+                }
+                onClick={(e) => {
+                  e.preventDefault();
+                  setOpenTab(1);
+                }}
+                data-toggle="tab"
+                href="#link1"
+                role="tablist"
               >
-                <path
-                  fill-rule="evenodd"
-                  d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z"
-                  clip-rule="evenodd"
-                ></path>
-              </svg>
-              Profile
-            </a>
-          </li>
-          <li className="mr-2">
-            <a
-              href="#"
-              className="inline-flex p-4 text-blue-600 rounded-t-lg border-b-2 border-blue-600 active dark:text-blue-500 dark:border-blue-500 group"
-              aria-current="page"
-            >
-              <svg
-                aria-hidden="true"
-                className="mr-2 w-5 h-5 text-blue-600 dark:text-blue-500"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
+                <p className="flex">
+                  Profile
+                  <AiOutlineUserAdd
+                    className="relative right-8 top-0 text-gray-400"
+                    size={20}
+                  />
+                </p>
+              </a>
+            </li>
+            <li className="-mb-px mr-2 last:mr-0 flex-auto text-center">
+              <a
+                className={
+                  'text-xs font-bold uppercase px-5 py-3 shadow-lg rounded block leading-normal ' +
+                  (openTab === 2
+                    ? `text-white bg-[${color}] hover:text-gray-300`
+                    : 'text-' + color + '-600 bg-white')
+                }
+                onClick={(e) => {
+                  e.preventDefault();
+                  setOpenTab(2);
+                }}
+                data-toggle="tab"
+                href="#link2"
+                role="tablist"
               >
-                <path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path>
-              </svg>
-              Dashboard
-            </a>
-          </li>
-          <li className="mr-2">
-            <a
-              href="#"
-              className="inline-flex p-4 rounded-t-lg border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 group"
-            >
-              <svg
-                aria-hidden="true"
-                className="mr-2 w-5 h-5 text-gray-400 group-hover:text-gray-500 dark:text-gray-500 dark:group-hover:text-gray-300"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
+                <p className="flex">
+                  Documents
+                  <AiOutlineUserAdd
+                    className="relative right-8 m-0 p-0 text-gray-400"
+                    size={20}
+                  />
+                </p>
+              </a>
+            </li>
+            <li className="-mb-px mr-2 last:mr-0 flex-auto text-center">
+              <a
+                className={
+                  'text-xs font-bold uppercase px-5 py-3 shadow-lg rounded block leading-normal ' +
+                  (openTab === 3
+                    ? `text-white bg-[${color}] hover:text-gray-300`
+                    : 'text-' + color + '-600 bg-white')
+                }
+                onClick={(e) => {
+                  e.preventDefault();
+                  setOpenTab(3);
+                }}
+                data-toggle="tab"
+                href="#link3"
+                role="tablist"
               >
-                <path d="M5 4a1 1 0 00-2 0v7.268a2 2 0 000 3.464V16a1 1 0 102 0v-1.268a2 2 0 000-3.464V4zM11 4a1 1 0 10-2 0v1.268a2 2 0 000 3.464V16a1 1 0 102 0V8.732a2 2 0 000-3.464V4zM16 3a1 1 0 011 1v7.268a2 2 0 010 3.464V16a1 1 0 11-2 0v-1.268a2 2 0 010-3.464V4a1 1 0 011-1z"></path>
-              </svg>
-              Settings
-            </a>
-          </li>
-          <li className="mr-2">
-            <a
-              href="#"
-              className="inline-flex p-4 rounded-t-lg border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 group"
-            >
-              <svg
-                aria-hidden="true"
-                className="mr-2 w-5 h-5 text-gray-400 group-hover:text-gray-500 dark:text-gray-500 dark:group-hover:text-gray-300"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"></path>
-                <path
-                  fill-rule="evenodd"
-                  d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z"
-                  clip-rule="evenodd"
-                ></path>
-              </svg>
-              Contacts
-            </a>
-          </li>
-          <li>
-            <a className="inline-block p-4 text-gray-400 rounded-t-lg cursor-not-allowed dark:text-gray-500">
-              Disabled
-            </a>
-          </li>
-        </ul>
+                <p className="flex">
+                  History
+                  <AiOutlineUserAdd
+                    className="relative right-8 m-0 p-0 text-gray-400"
+                    size={20}
+                  />
+                </p>
+              </a>
+            </li>
+          </ul>
+          <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded">
+            <div className="px-4 py-5 flex-auto">
+              <div className="tab-content tab-space">
+                <div className={openTab === 1 ? 'block' : 'hidden'} id="link1">
+                  <p>Show full user profile here.</p>
+                </div>
+                <div className={openTab === 2 ? 'block' : 'hidden'} id="link2">
+                  <p>Show all user Documents here. Including Images</p>
+                </div>
+                <div className={openTab === 3 ? 'block' : 'hidden'} id="link3">
+                  {/* <p>
+                    Efficiently unleash cross-media information without
+                    cross-media value. Quickly maximize timely deliverables for
+                    real-time schemas.
+                    <br />
+                    <br /> Dramatically maintain clicks-and-mortar solutions
+                    without functional solutions.
+                  </p> */}
+                  <div className="w-full">
+                    <div>
+                      <ul
+                        className="flex xs:flex-col mb-0 list-none flex-wrap pt-3 pb-4 flex-row"
+                        role="tablistHist"
+                      >
+                        <li className="-mb-px mr-2 last:mr-0 flex-auto text-center">
+                          <a
+                            className={
+                              'text-xs font-bold uppercase px-5 py-3 shadow-lg rounded block leading-normal ' +
+                              (openHistTab === 1
+                                ? `text-white bg-[${color}] hover:text-gray-300`
+                                : 'text-' + color + '-600 bg-white')
+                            }
+                            onClick={(e) => {
+                              e.preventDefault();
+                              setOpenHistTab(1);
+                            }}
+                            data-toggle="tab"
+                            href="#histLink1"
+                            role="tablist"
+                          >
+                            <p className="flex">
+                              Ride Status
+                              <AiOutlineUserAdd
+                                className="relative right-8 top-0 text-gray-400"
+                                size={20}
+                              />
+                            </p>
+                          </a>
+                        </li>
+                        <li className="-mb-px mr-2 last:mr-0 flex-auto text-center">
+                          <a
+                            className={
+                              'text-xs font-bold uppercase px-5 py-3 shadow-lg rounded block leading-normal ' +
+                              (openHistTab === 2
+                                ? `text-white bg-[${color}] hover:text-gray-300`
+                                : 'text-' + color + '-600 bg-white')
+                            }
+                            onClick={(e) => {
+                              e.preventDefault();
+                              setOpenHistTab(2);
+                            }}
+                            data-toggle="tab"
+                            href="#histLink2"
+                            role="tablist"
+                          >
+                            <p className="flex">
+                              Ride History
+                              <AiOutlineUserAdd
+                                className="relative right-8 m-0 p-0 text-gray-400"
+                                size={20}
+                              />
+                            </p>
+                          </a>
+                        </li>
+                        <li className="-mb-px mr-2 last:mr-0 flex-auto text-center">
+                          <a
+                            className={
+                              'text-xs font-bold uppercase px-5 py-3 shadow-lg rounded block leading-normal ' +
+                              (openHistTab === 3
+                                ? `text-white bg-[${color}] hover:text-gray-300`
+                                : 'text-' + color + '-600 bg-white')
+                            }
+                            onClick={(e) => {
+                              e.preventDefault();
+                              setOpenHistTab(3);
+                            }}
+                            data-toggle="tab"
+                            href="#histLink3"
+                            role="tablist"
+                          >
+                            <p className="flex">
+                              Transaction History
+                              <AiOutlineUserAdd
+                                className="relative right-8 m-0 p-0 text-gray-400"
+                                size={20}
+                              />
+                            </p>
+                          </a>
+                        </li>
+                      </ul>
+                      <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded">
+                        <div className="px-4 py-5 flex-auto">
+                          <div className="tab-content tab-space">
+                            <div
+                              className={openHistTab === 1 ? 'block' : 'hidden'}
+                              id="histLink1"
+                            >
+                              <p>Show Driver Ride Status</p>
+                            </div>
+                            <div
+                              className={openHistTab === 2 ? 'block' : 'hidden'}
+                              id="histLink2"
+                            >
+                              <p>Show Ride History</p>
+                            </div>
+                            <div
+                              className={openHistTab === 3 ? 'block' : 'hidden'}
+                              id="histLink3"
+                            >
+                              <div className="w-full">
+                                <div>
+                                  <p>Driver Trans Hist</p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
-export default Driver;
+export default function Driver() {
+  let { driverId } = useParams();
+  const dispatch = useDispatch();
+
+  const [driver, setDriver] = useState({
+    approval_status: 'pending',
+  });
+  useEffect(() => {
+    // dispatch(getDriver(driverId))
+    // dispatch(getDriverRides(driverId))
+    // dispatch(getDriverDocs(driverId))
+    // dispatch(getDriverHistory(driverId))
+    // dispatch(getDriverTransactions(driverId))
+  }, []);
+  return (
+    <React.Fragment>
+      <div className="flex justify-between items-center mb-3">
+        <div>Driver: {driverId}</div>
+        <div className="m-2">
+          {driver?.approval_status === 'pending' ? (
+            <>
+              <button className="px-3 bg-green-500 rounded-md p-2 mx-2 text-white hover:text-[#010080]">
+                Approve
+              </button>
+              <button className="px-3 bg-red-500 rounded-md p-2 mx-2 text-white hover:text-[#010080]">
+                Reject
+              </button>
+            </>
+          ) : (
+            <>
+              {driver?.approval_status === 'rejected' ? (
+                <>
+                  <button className="px-3 bg-red-500 rounded-md p-2 mx-2 text-white hover:text-[#010080]">
+                    Reject
+                  </button>
+                </>
+              ) : null}
+            </>
+          )}
+        </div>
+      </div>
+      <Tabs color="#010080" />
+    </React.Fragment>
+  );
+}

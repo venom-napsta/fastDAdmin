@@ -24,7 +24,7 @@ const Routes = () => {
       <Route path="/rides" exact component={Rides} />
       <Route path="/users" exact component={Users} />
       <Route path="/drivers" exact component={Drivers} />
-      <Route path="/drivers/driver/:id" exact component={Driver} />
+      <Route path="/drivers/driver/:driverId" exact component={Driver} />
 
       <Route path="/reviews" exact component={Reviews} />
       <Route path="/settings" exact component={Settings} />
