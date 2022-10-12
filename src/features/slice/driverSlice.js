@@ -14,7 +14,9 @@ export const getAllDrivers = createAsyncThunk(
       return data;
     } catch (error) {
       console.error('err', error);
-      return rejectWithValue(error);
+      return rejectWithValue(
+        error?.response?.data?.errors?.message || error?.message || error
+      );
     }
   }
 );
@@ -22,9 +24,25 @@ export const getAllDrivers = createAsyncThunk(
 // Get Driver By Id /driver/":"driverId GET
 export const getDriver = createAsyncThunk(
   'driver/getDriverById',
-  async ({ id }, { rejectWithValue }) => {
+  async (driverId, { rejectWithValue }) => {
     try {
-      const res = await http.get(`/admin/drivers/${id}`);
+      const res = await http.get(`/admin/drivers/${driverId}`);
+      console.log('Driver Data', res.data);
+      return res.data;
+    } catch (error) {
+      console.log('get drvr err: ', error);
+      return rejectWithValue(
+        error?.response?.data?.errors?.message || error?.message || error
+      );
+    }
+  }
+);
+
+export const getDriverDocuments = createAsyncThunk(
+  'driver/getDriverDocuments',
+  async (driverId, { rejectWithValue }) => {
+    try {
+      const res = await http.get(`/admin/drivers/${driverId}/documents`);
       return res.data;
     } catch (error) {
       console.log(error);
@@ -56,19 +74,6 @@ export const getDriverVehicles = createAsyncThunk(
   async ({ driverId }, { rejectWithValue }) => {
     try {
       const res = await http.get(`/drivers/${driverId}/vehicles}`);
-      return res.data;
-    } catch (error) {
-      console.log(error);
-      return rejectWithValue(error.response.data);
-    }
-  }
-);
-
-export const getDriverDocuments = createAsyncThunk(
-  'driver/getDriverDocuments',
-  async ({ id, data }, { rejectWithValue }) => {
-    try {
-      const res = await http.get(`/driver/${id}/documents}`);
       return res.data;
     } catch (error) {
       console.log(error);
@@ -124,7 +129,7 @@ const driverSlice = createSlice({
     },
     [getDriver.fulfilled]: (state, action) => {
       state.loading = false;
-      state.driver = action.payload;
+      state.driver = action.payload?.data;
     },
     [getDriver.rejected]: (state, action) => {
       state.loading = false;

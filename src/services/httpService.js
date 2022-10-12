@@ -20,12 +20,16 @@ axios.interceptors.response.use(null, (error) => {
     error?.response?.status < 500;
 
   if (!ExpectedError) {
+    logger.log(error);
     logger.log(error?.message);
-    // logger.log(error);
 
     // toast.error('An unexpected Error Occured');
   }
-  toast(`Request Failed !!!: ${error?.message}`);
+  toast(
+    `Request Failed !!!: ${
+      error?.response?.data?.errors?.message || error?.message
+    }`
+  );
 
   return Promise.reject(error);
 });

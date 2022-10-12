@@ -2,19 +2,27 @@ import React, { useEffect, useState } from 'react';
 import { AiOutlineUserAdd } from 'react-icons/ai';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { getDriver } from '../features/slice/driverSlice';
+import { getDriver, getDriverDocuments } from '../features/slice/driverSlice';
 
-const Tabs = ({ color }) => {
+const Tabs = ({
+  color,
+  driver,
+  loadingDriver,
+  loadingDriverErr,
+  driverDocs,
+  loadingDriverDocs,
+  loadingDriverDocsErr,
+}) => {
   const [openTab, setOpenTab] = useState(1);
   const [openHistTab, setOpenHistTab] = useState(1);
-  const [view, setView] = useState('');
+  // const [view, setView] = useState('');
 
   return (
     <>
       <div className="flex flex-wrap">
         <div className="w-full">
           <ul
-            className="flex xs:flex-col mb-0 list-none flex-wrap pt-3 pb-4 flex-row"
+            className="flex mb-0 list-none flex-wrap pt-3 pb-4 flex-row"
             role="tablist"
           >
             <li className="-mb-px mr-2 last:mr-0 flex-auto text-center">
@@ -97,10 +105,93 @@ const Tabs = ({ color }) => {
             <div className="px-4 py-5 flex-auto">
               <div className="tab-content tab-space">
                 <div className={openTab === 1 ? 'block' : 'hidden'} id="link1">
-                  <p>Show full user profile here.</p>
+                  {loadingDriver ? (
+                    <p>loading...</p>
+                  ) : (
+                    <>
+                      {loadingDriverErr !== null ? (
+                        <em>Error: {loadingDriverErr}</em>
+                      ) : (
+                        <div>
+                          <div className="flex pb-3 items-center justify-center">
+                            <h1 className="font-bold text-2xl">
+                              Driver Details
+                            </h1>
+                          </div>
+                          <div className="flex sm:flex-row xs:flex-col justify-center items-center">
+                            <p className="p-6">
+                              <img
+                                className="p-2 rounded-full ring-2 ring-gray-300 dark:ring-gray-500"
+                                src="/favicon-32x32.png"
+                                alt={`${driver.firstname}`}
+                                width={150}
+                              />
+                            </p>
+                            <div className="capitalize">
+                              <p className="p-2">
+                                <b>Full Name</b>: {driver?.firstname} :{' '}
+                                {driver?.lastname}
+                              </p>
+                              <p className="p-2">
+                                <b>National ID</b>: {driver?.national_id}
+                              </p>
+                              <p className="p-2">
+                                <b>Phone Number</b>: {driver?.phone_number}
+                              </p>
+                              <p className="p-2">
+                                <b>Email</b>: {driver?.email}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </>
+                  )}
                 </div>
                 <div className={openTab === 2 ? 'block' : 'hidden'} id="link2">
-                  <p>Show all user Documents here. Including Images</p>
+                  {loadingDriverDocs ? (
+                    <p>loading...</p>
+                  ) : (
+                    <>
+                      {loadingDriverDocsErr !== null ? (
+                        <em>Error: {loadingDriverDocsErr}</em>
+                      ) : (
+                        <div>
+                          {driverDocs.length > 0 ? (
+                            <>
+                              <div className="flex pb-3 items-center justify-center">
+                                <h1 className="font-bold text-2xl">
+                                  Driver Documents
+                                </h1>
+                              </div>
+                              <div className="flex sm:flex-row xs:flex-col justify-center items-center">
+                                <p className="p-6">
+                                  <img
+                                    className="p-2 rounded-full ring-2 ring-gray-300 dark:ring-gray-500"
+                                    src="/favicon-32x32.png"
+                                    alt={`${driver.firstname}`}
+                                    width={150}
+                                  />
+                                </p>
+                                <div className="capitalize">
+                                  <ul>
+                                    <li>Doc1</li>
+                                    <li>Doc2</li>
+                                    <li>Doc3</li>
+                                  </ul>
+                                </div>
+                              </div>
+                            </>
+                          ) : (
+                            <>
+                              No Docs, Driver has not uploaded any documents
+                              yet.
+                            </>
+                          )}
+                        </div>
+                      )}
+                    </>
+                  )}
                 </div>
                 <div className={openTab === 3 ? 'block' : 'hidden'} id="link3">
                   {/* <p>
@@ -115,7 +206,7 @@ const Tabs = ({ color }) => {
                     <div>
                       <ul
                         className="flex xs:flex-col mb-0 list-none flex-wrap pt-3 pb-4 flex-row"
-                        role="tablistHist"
+                        role="tablist"
                       >
                         <li className="-mb-px mr-2 last:mr-0 flex-auto text-center">
                           <a
@@ -235,13 +326,52 @@ const Tabs = ({ color }) => {
 
 export default function Driver() {
   let { driverId } = useParams();
+  driverId = parseInt(driverId);
   const dispatch = useDispatch();
 
+  const [loadingDriver, setLoadingDriver] = useState(true);
+  const [loadingDriverErr, setLoadingDriverErr] = useState(null);
+  const [loadingDriverDocs, setLoadingDriverDocs] = useState(true);
+  const [loadingDriverDocsErr, setLoadingDriverDocsErr] = useState(null);
+
+  const [driverDocs, setDriverDocs] = useState([]);
   const [driver, setDriver] = useState({
     approval_status: 'pending',
   });
   useEffect(() => {
-    // dispatch(getDriver(driverId))
+    dispatch(getDriver(driverId))
+      .unwrap()
+      .then((res) => {
+        console.log('User Wrap', res);
+        setDriver(res.data);
+        setLoadingDriver(false);
+      })
+      .catch((error) => {
+        console.log('Drv Err: ', error);
+        setLoadingDriverErr(
+          error?.errors?.message ||
+            error.message ||
+            error?.response?.data?.errors?.message
+        );
+        setLoadingDriver(false);
+      });
+
+    dispatch(getDriverDocuments(driverId))
+      .unwrap()
+      .then((res) => {
+        console.log('Docs Wrap', res);
+        setDriverDocs(res.data);
+        setLoadingDriverDocs(false);
+      })
+      .catch((error) => {
+        console.log('Docs Err: ', error);
+        setLoadingDriverDocsErr(
+          error?.errors?.message ||
+            error.message ||
+            error?.response?.data?.errors?.message
+        );
+        setLoadingDriverDocs(false);
+      });
     // dispatch(getDriverRides(driverId))
     // dispatch(getDriverDocs(driverId))
     // dispatch(getDriverHistory(driverId))
@@ -274,7 +404,15 @@ export default function Driver() {
           )}
         </div>
       </div>
-      <Tabs color="#010080" />
+      <Tabs
+        color="#010080"
+        driver={driver}
+        loadingDriver={loadingDriver}
+        loadingDriverErr={loadingDriverErr}
+        driverDocs={driverDocs}
+        loadingDriverDocs={loadingDriverDocs}
+        loadingDriverDocsErr={loadingDriverDocsErr}
+      />
     </React.Fragment>
   );
 }
