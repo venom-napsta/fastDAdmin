@@ -195,7 +195,7 @@ const Analytics = () => {
                 options={chartOptionsZW.options}
                 series={chartOptionsZW.series}
                 type="line"
-                height="100%"
+                height="200%"
               />
             </div>
           </>
@@ -218,7 +218,7 @@ const Analytics = () => {
                 options={chartOptionsZA.options}
                 series={chartOptionsZA.series}
                 type="line"
-                height="100%"
+                height="200%"
               />
             </div>
           </>

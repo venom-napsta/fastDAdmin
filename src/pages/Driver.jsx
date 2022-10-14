@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { AiOutlineUserAdd } from 'react-icons/ai';
+import {
+  AiOutlineCar,
+  AiOutlineFile,
+  AiOutlineHistory,
+  AiOutlineTransaction,
+  AiOutlineUserAdd,
+} from 'react-icons/ai';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { getDriver, getDriverDocuments } from '../features/slice/driverSlice';
@@ -68,7 +74,7 @@ const Tabs = ({
               >
                 <p className="flex">
                   Documents
-                  <AiOutlineUserAdd
+                  <AiOutlineFile
                     className="relative right-8 m-0 p-0 text-gray-400"
                     size={20}
                   />
@@ -93,7 +99,7 @@ const Tabs = ({
               >
                 <p className="flex">
                   History
-                  <AiOutlineUserAdd
+                  <AiOutlineHistory
                     className="relative right-8 m-0 p-0 text-gray-400"
                     size={20}
                   />
@@ -226,7 +232,7 @@ const Tabs = ({
                           >
                             <p className="flex">
                               Ride Status
-                              <AiOutlineUserAdd
+                              <AiOutlineCar
                                 className="relative right-8 top-0 text-gray-400"
                                 size={20}
                               />
@@ -251,7 +257,7 @@ const Tabs = ({
                           >
                             <p className="flex">
                               Ride History
-                              <AiOutlineUserAdd
+                              <AiOutlineHistory
                                 className="relative right-8 m-0 p-0 text-gray-400"
                                 size={20}
                               />
@@ -276,7 +282,7 @@ const Tabs = ({
                           >
                             <p className="flex">
                               Transaction History
-                              <AiOutlineUserAdd
+                              <AiOutlineTransaction
                                 className="relative right-8 m-0 p-0 text-gray-400"
                                 size={20}
                               />
@@ -343,15 +349,16 @@ export default function Driver() {
       .unwrap()
       .then((res) => {
         console.log('User Wrap', res);
-        setDriver(res.data);
+        setDriver(res?.data);
         setLoadingDriver(false);
       })
       .catch((error) => {
         console.log('Drv Err: ', error);
         setLoadingDriverErr(
           error?.errors?.message ||
-            error.message ||
-            error?.response?.data?.errors?.message
+            error?.message ||
+            error?.response?.data?.errors?.message ||
+            error
         );
         setLoadingDriver(false);
       });
@@ -360,7 +367,7 @@ export default function Driver() {
       .unwrap()
       .then((res) => {
         console.log('Docs Wrap', res);
-        setDriverDocs(res.data);
+        setDriverDocs(res?.data);
         setLoadingDriverDocs(false);
       })
       .catch((error) => {
@@ -368,7 +375,8 @@ export default function Driver() {
         setLoadingDriverDocsErr(
           error?.errors?.message ||
             error.message ||
-            error?.response?.data?.errors?.message
+            error?.response?.data?.errors?.message ||
+            error
         );
         setLoadingDriverDocs(false);
       });
@@ -376,7 +384,7 @@ export default function Driver() {
     // dispatch(getDriverDocs(driverId))
     // dispatch(getDriverHistory(driverId))
     // dispatch(getDriverTransactions(driverId))
-  }, []);
+  }, [dispatch, driverId]);
   return (
     <React.Fragment>
       <div className="flex justify-between items-center mb-3">

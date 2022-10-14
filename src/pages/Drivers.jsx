@@ -318,7 +318,7 @@ const Drivers = () => {
   const navigateTo = (row) => history.push(`/drivers/driver/${row.id}`);
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(getAllDrivers());
+    dispatch(getAllDrivers()).unwrap();
   }, [dispatch]);
 
   useEffect(() => {}, [drivers, searchValue, resetPaginationToggle, dataShow]);
