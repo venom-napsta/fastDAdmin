@@ -1,6 +1,7 @@
 import React, { Fragment, useState, useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import format from 'date-fns/format';
+import isWithinInterval from 'date-fns/isWithinInterval';
 
 // import Table from '../components/table/Table';
 
@@ -11,6 +12,7 @@ import DataTable from 'react-data-table-component';
 import { useHistory } from 'react-router-dom';
 import { getAllCustomers } from '../features/slice/customerSlice';
 import { Spinner } from 'flowbite-react/lib/cjs/components/Spinner';
+import { parseISO } from 'date-fns';
 
 const Customers = () => {
   useEffect(() => {
@@ -96,22 +98,22 @@ const Customers = () => {
         filterable: true,
         sortable: true,
       },
-      // {
-      //   name: 'Created At',
-      //   selector: (row) => {
-      //     return format(new Date(row?.created_at), 'MM-dd-yy/HH:mm');
-      //   },
-      //   filterable: true,
-      //   sortable: true,
-      // },
-      // {
-      //   name: 'Updated At',
-      //   selector: (row) => {
-      //     return format(new Date(row?.updated_at), 'MM-dd-yy/HH:mm');
-      //   },
-      //   filterable: true,
-      //   sortable: true,
-      // },
+      {
+        name: 'Created At',
+        selector: (row) => {
+          return format(new Date(row?.created_at), 'MM-dd-yy/HH:mm');
+        },
+        filterable: true,
+        sortable: true,
+      },
+      {
+        name: 'Updated At',
+        selector: (row) => {
+          return format(new Date(row?.updated_at), 'MM-dd-yy/HH:mm');
+        },
+        filterable: true,
+        sortable: true,
+      },
       {
         name: 'Action',
         right: true,
@@ -243,21 +245,40 @@ const Customers = () => {
   };
 
   const handleTimeFilter = (e) => {
-    e.preventDefault();
+    // e.preventDefault();
 
-    let option = e.target.value;
-    console.log('HandleFilter', timeFilter);
-    e.preventDefault();
-    if (option !== '') {
-      const searchTable = customers.filter((o) =>
-        Object.keys(o).some((k) =>
-          String(o[k]).toLowerCase().includes(option.toLowerCase())
-        )
-      );
-      setDataShow([...searchTable]);
-      setResetPaginationToggle(!resetPaginationToggle);
-    } else if (option === '') {
-      handleTimeClear();
+    // let option = e.target.value;
+    // console.log('HandleFilter', timeFilter);
+    // e.preventDefault();
+    // if (option !== '') {
+    //   const searchTable = customers.filter((o) =>
+    //     Object.keys(o).some((k) =>
+    //       String(o[k]).toLowerCase().includes(option.toLowerCase())
+    //     )
+    //   );
+    const timeF = customers.filter((cust) =>
+      isWithinInterval(new Date(cust.created_at), {
+        start: new Date(2022, 9, 5),
+        end: new Date(2022, 9, 6),
+      })
+    );
+    setDataShow([...timeF]);
+    setResetPaginationToggle(!resetPaginationToggle);
+    // } else if (option === '') {
+    //   handleTimeClear();
+    // }
+
+    let x = isWithinInterval(new Date(customers.created_at), {
+      start: new Date(2022, 9, 5),
+      end: new Date(2022, 9, 6),
+    });
+    if (x) {
+      console.log(x);
+      console.log('in range', new Date(customers[0].created_at));
+    } else {
+      console.log('not in range', x);
+      console.log('not in range working: ', new Date(2022, 10, 14));
+      console.log('not in range created at: ', new Date(customers.created_at));
     }
   };
 
@@ -390,7 +411,6 @@ const Customers = () => {
                             columns={columns}
                             // data={customers}
                             data={dataShow}
-                            selectableRows
                             onSelectedRowsChange={handleChange}
                             selectableRowDisabled={rowDisabledCriteria}
                             onRowClicked={(row) => handleRowClick(row)}

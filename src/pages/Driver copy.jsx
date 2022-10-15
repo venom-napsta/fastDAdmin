@@ -149,42 +149,6 @@ const Tabs = ({
                               </p>
                             </div>
                           </div>
-                          <hr className="mb-4" />
-                          <div className="flex pb-3 items-center justify-center">
-                            <h1 className="font-bold text-2xl">
-                              Driver Details
-                            </h1>
-                          </div>
-                          <div className="flex sm:flex-row xs:flex-col justify-center items-center">
-                            <p className="p-2">
-                              <b>No Vehicles Found.</b>
-                            </p>
-                          </div>
-                          {/* <div className="flex sm:flex-row xs:flex-col justify-center items-center">
-                            <p className="p-6">
-                              <img
-                                className="p-2 rounded-full ring-2 ring-gray-300 dark:ring-gray-500"
-                                src="/favicon-32x32.png"
-                                alt={`${driver.firstname}`}
-                                width={150}
-                              />
-                            </p>
-                            <div className="capitalize">
-                              <p className="p-2">
-                                <b>Vehicle Plate</b>: {driver?.firstname} :{' '}
-                                {driver?.lastname}
-                              </p>
-                              <p className="p-2">
-                                <b>National ID</b>: {driver?.national_id}
-                              </p>
-                              <p className="p-2">
-                                <b>Phone Number</b>: {driver?.phone_number}
-                              </p>
-                              <p className="p-2">
-                                <b>Email</b>: {driver?.email}
-                              </p>
-                            </div>
-                          </div> */}
                         </div>
                       )}
                     </>
